@@ -122,10 +122,19 @@ df[["Height (m)", "Height (ft)","Weight (kg)", "Weight (lb)"]]
 df[["Height (ft)", "Weight (lb)"]].describe()
 
 # %% [markdown]
+# To validate the newly-engineered `Weight (lbs)` and `Height (ft)` features, I use the `.describe()` method, confirming that the new columns have a reasonable range of values and are correctly populated. This ensures the integrity of our dataset for subsequent analysis.
+
+# %% [markdown]
 # ---
 
 # %% [markdown]
 # #### Data Visualization
+
+# %% [markdown]
+#
+
+# %% [markdown]
+# ___
 
 # %% [markdown]
 # ## 3. Data Cleaning & Transformation
