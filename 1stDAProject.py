@@ -42,7 +42,7 @@ import pandas as pd
 
 # %%
 # Load the data into a pandas DataFrame using .read_csv()
-df = pd.read_csv("C:/Users/AxelC/Desktop/ME/Career/PROJECTS/Data Science & Analysis/--First DA Project/gym_members_exercise_tracking.csv")
+df = pd.read_csv("C:/Users/AxelC/Desktop/ME/Career/PROJECTS/Data Science & Analysis/da-proj-1-1/gym_members_exercise_tracking.csv")
 
 # Confirming successful load of the dataset by previewing the last 5 observations
 df.tail()
@@ -122,7 +122,9 @@ df[["Height (m)", "Height (ft)","Weight (kg)", "Weight (lb)"]]
 df[["Height (ft)", "Weight (lb)"]].describe()
 
 # %% [markdown]
-# To validate the newly-engineered `Weight (lbs)` and `Height (ft)` features, I use the `.describe()` method, confirming that the new columns have a reasonable range of values and are correctly populated. This ensures the integrity of our dataset for subsequent analysis.
+# I use the `.describe()` method to validate the newly-engineered `Weight (lbs)` and `Height (ft)` features, confirming that the new columns have a reasonable range of values and are correctly populated. This ensures the integrity of our dataset for subsequent analysis.
+#
+# > I will be using Imperial units in my analyses going foward.
 
 # %% [markdown]
 # ---
@@ -131,7 +133,57 @@ df[["Height (ft)", "Weight (lb)"]].describe()
 # #### Data Visualization
 
 # %% [markdown]
-#
+# Having performed the necessary data profiling and cleaning, I can now move on to Data Visualization. By visually exploring the dataset, I'll gain a deeper understanding of the health metrics and workout habits of the simulated gym members.
+
+# %% [markdown]
+# Firstly, I have determined that the first step of my visual analysis should be to examine the distribution of our numerical features individually. 
+
+# %% [markdown]
+# **Univariate analysis** will allow me to understand the central tendency, the spread of the data, and to easily spot any potential outliers. To accomplish this, I will generate histograms for each of the key numerical columns.
+
+# %%
+# Import Matplotlib and seaborn
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Define the numerical features for univariate analysis
+numerical_features = ['Age', 'Weight (lb)', 'Height (ft)', 'Calories_Burned', 'Session_Duration (hours)', 'Fat_Percentage', 'BMI']
+
+# Set the style for the plots
+sns.set_style("whitegrid")
+
+# Create a figure and a set of subplots
+# We will use a 3x3 grid for the 7 plots.
+fig, axes = plt.subplots(nrows=3, ncols=3, figsize=(18, 15))
+# Flatten the axes array to easily iterate through it
+axes = axes.flatten()
+
+# Iterate through the numerical features and create a histogram for each
+for i, feature in enumerate(numerical_features):
+    ax = axes[i]
+    # Use seaborn's histplot to create a histogram with a KDE curve
+    sns.histplot(data=df, x=feature, kde=True, ax=ax, color='skyblue')
+    ax.set_title(f'Distribution of {feature}', fontsize=14)
+    ax.set_xlabel(feature, fontsize=12)
+    ax.set_ylabel('Count', fontsize=12)
+
+# Hide any unused subplots
+for j in range(len(numerical_features), len(axes)):
+    axes[j].axis('off')
+
+# Set a main title for the entire figure
+fig.suptitle('Univariate Analysis: Histograms of Key Numerical Features', fontsize=20, y=1.02)
+
+# Adjust layout to prevent titles from overlapping
+plt.tight_layout()
+
+# Display the plots
+plt.show()
+
+# %% [markdown]
+# Next, I shift my focus onto the categorical data. I will use bar charts to compare a numerical variable's summary statistics across different categories, or simply to count how many members fall into each category. This helps me understand the composition of our dataset and how different groups behave.
+
+# %%
 
 # %% [markdown]
 # ___
