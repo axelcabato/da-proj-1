@@ -23,13 +23,13 @@
 
 # %% [markdown]
 # # 1. Introduction
-# The goal of this project is to utilize a [Kaggle](https://www.kaggle.com) dataset to perform Data Analysis and generate a report. Documenting my processes, insights, and conclusions within this Jupyter Notebook.
+# The goal of this project is to utilize a [Kaggle](https://www.kaggle.com) dataset to perform data analysis and generate a report. Documenting my processes, insights, and conclusions within this Jupyter Notebook.
 
 # %% [markdown]
 # This analysis...
 
 # %%
-# Import pandas
+# Import pandas library
 import pandas as pd
 
 # %% [markdown]
@@ -41,7 +41,7 @@ import pandas as pd
 # - [Kaggle](https://www.kaggle.com/datasets/valakhorasani/gym-members-exercise-dataset?select=gym_members_exercise_tracking.csv) Description: This dataset provides a detailed overview of gym members' exercise routines, physical attributes, and fitness metrics, including key performance indicators such as heart rate, calories burned, and workout duration.
 
 # %%
-# Load the data into a pandas DataFrame using .read_csv()
+# Load the data into a pandas DataFrame
 df = pd.read_csv("C:/Users/AxelC/Desktop/ME/Career/PROJECTS/Data Science & Analysis/da-proj-1-1/gym_members_exercise_tracking.csv")
 
 # Confirming successful load of the dataset by previewing the last 5 observations
@@ -60,19 +60,19 @@ df.info()
 
 print("\n")
 
-# Check the dataset for any missing values
+# Check for any missing values
 print("MISSING VALUES CHECK")
 print(df.isnull().sum())
 
 # %% [markdown]
-# Through our profiling of the dataset, we can confirm its structural integrity. It consists of 973 observations and 15 columns, with each column appropriately named and typed according to its quantitative or qualitative nature. A complete check for missing values across all fields revealed none. Also, this initial inspection of the data showed no signs of extreme outliers or data entry errors.
+# Through our profiling of the dataset, we can confirm its structural integrity. It consists of 973 observations and 15 columns, with each column appropriately named and typed according to its quantitative or qualitative nature. A complete check for missing values across all fields revealed none.
 
 # %%
-# Generate descriptive statistics for "BMI" & "Fat_Percentage" columns
+# Generate descriptive statistics
 df.describe()
 
 # %% [markdown]
-# All numerical features appear to have a reasonable range of values.
+# This initial inspection of the data showed no signs of extreme outliers or data entry errors and all numerical features appear to have a reasonable range of values.
 
 # %% [markdown]
 # For **BMI** and **Fat_Percentage**: 
@@ -81,20 +81,23 @@ df.describe()
 #     - This central tendency, combined with a reasonable standard deviation for each, suggests the absence of significant outliers, indicating a consistent and predictable spread of values for both metrics within the dataset.
 
 # %%
-# Return the frequency of each distinct row in the DataFrame
+# Return the frequency of each distinct row under "Gender" and "Workout_Type"
 df[["Gender", "Workout_Type"]].value_counts()
 
 # %% [markdown]
 # All categorical features contain a small and consistent set of unique values. Particularly for **Gender** and **Workout_Type**:
 # - For **Gender**, it is a binary categorical value with only two disctinct classes ("Male" and "Female"). The absence of additional unique values, such as inconsistent spellings, abbreviations, or missing value placeholders, confirms the high degree of data consistency for this feature.
-# - Similarly, **Workout_Type** also has two disctinct and consistently labeled classes: "Cardio" and "Strength". This categorical integrity ensures that the variable is ready for direct use in analysis or for a simple transformation into a quantitative format, such as one-hot encoding, without requiring a separate data cleaning stage.
+# - Similarly, **Workout_Type** also has a small amount of disctinct and consistently labeled classes: "Cardio", "Strength", "HIIT" and "Yoga". This categorical integrity ensures that the variable is ready for direct use in analysis or for a simple transformation into a quantitative format, such as one-hot encoding, without requiring a separate data cleaning stage.
+
+# %% [markdown]
+# ---
 
 # %% [markdown]
 # #### Recognizing the Data Source & Context
 
 # %% [markdown]
 # While clean in structure, the dataset contains several potential biases, limitations, and quirks that a data analyst must consider. The primary bias is that the dataset is simulated and was generated using averages from publicly available studies and industry reports. This means the data may under- or over-represent certain behaviors or characteristics.
-# - For instance, the randomization of Experience_Level and Workout_Frequency might not perfectly reflect the actual distribution of gym members, where, for example, a large number might be beginners who work out less frequently. **This synthetic nature is the most significant limitation, as it lacks the unpredictable and messy nuances of real human behavior.**
+# - For instance, the randomization of **Experience_Level** and **Workout_Frequency** might not perfectly reflect the actual distribution of gym members, where, for example, a large number might be beginners who work out less frequently. This synthetic nature is *the most significant limitation*, as it lacks the unpredictable and messy nuances of real human behavior.
 # - Any insights or models derived from this dataset would need to be validated with actual, real-world data before being applied to a genuine scenario.
 #
 # The dataset also has a few quirks that are uncommon in real-world data. It has **no missing values** and all categorical values are perfectly consistent, *which is highly unusual*. 
@@ -110,7 +113,7 @@ df[["Gender", "Workout_Type"]].value_counts()
 
 # %% [markdown]
 # To prepare the data for any audience who might be more familiar with imperial units, I will perform some feature engineering by constructing new attributes from the existing dataset.
-# - Specifically, I will convert the `Weight (kg)` and `Height (m)` variables from their current metric system to their imperial counterparts. This will be done to ensure the data is standardized for any subsequent statistical analysis and for enhanced data visualization tailored to our target audience.
+# - Specifically, I will convert the **Weight (kg)** and **Height (m)** variables from their current metric system to their imperial counterparts. This will be done to ensure the data is standardized for any subsequent statistical analysis and for enhanced data visualization tailored to our target audience.
 
 # %%
 df["Height (ft)"] = round(df["Height (m)"] * 3.28, 2)
@@ -122,7 +125,7 @@ df[["Height (m)", "Height (ft)","Weight (kg)", "Weight (lb)"]]
 df[["Height (ft)", "Weight (lb)"]].describe()
 
 # %% [markdown]
-# I use the `.describe()` method to validate the newly-engineered `Weight (lbs)` and `Height (ft)` features, confirming that the new columns have a reasonable range of values and are correctly populated. This ensures the integrity of our dataset for subsequent analysis.
+# I use the `.describe()` method to validate the newly-engineered **Weight (lbs)** and **Height (ft)** features, confirming that the new columns have a reasonable range of values and are correctly populated. This ensures the integrity of our dataset for subsequent analysis.
 #
 # > I will be using Imperial units in my analyses going foward.
 
