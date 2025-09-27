@@ -23,14 +23,10 @@
 
 # %% [markdown]
 # # 1. Introduction
-# The goal of this project is to utilize a [Kaggle](https://www.kaggle.com) dataset to perform Data Analysis and generate a report. Documenting my processes, insights, and conclusions within this Jupyter Notebook.
+# The goal of this project is to utilize a [Kaggle](https://www.kaggle.com) dataset to perform data analysis and generate a report. Documenting my processes, insights, and conclusions within this Jupyter Notebook.
 
 # %% [markdown]
 # This analysis...
-
-# %%
-# Import pandas
-import pandas as pd
 
 # %% [markdown]
 # ## 2. Dataset Loading & Exploratory Data Analysis
@@ -41,10 +37,21 @@ import pandas as pd
 # - [Kaggle](https://www.kaggle.com/datasets/valakhorasani/gym-members-exercise-dataset?select=gym_members_exercise_tracking.csv) Description: This dataset provides a detailed overview of gym members' exercise routines, physical attributes, and fitness metrics, including key performance indicators such as heart rate, calories burned, and workout duration.
 
 # %%
-# Load the data into a pandas DataFrame using .read_csv()
-df = pd.read_csv("C:/Users/AxelC/Desktop/ME/Career/PROJECTS/Data Science & Analysis/--First DA Project/gym_members_exercise_tracking.csv")
+# Import pathlib and pandas libraries
+from pathlib import Path
+import pandas as pd
 
-# Confirming successful load of the dataset by previewing the last 5 observations
+# Define the base directory
+BASE_DIR = Path.cwd()
+
+# Construct full file path to dataset using Path objects
+DATA_FILE_PATH = BASE_DIR / "data" / "gym_members_exercise_tracking.csv"
+
+# Use the path object in the read_csv function
+df = pd.read_csv(DATA_FILE_PATH)
+
+
+# Confirm successful load of the dataset by previewing the last 5 observations
 df.tail()
 
 # %% [markdown]
@@ -60,19 +67,19 @@ df.info()
 
 print("\n")
 
-# Check the dataset for any missing values
+# Check for any missing values
 print("MISSING VALUES CHECK")
 print(df.isnull().sum())
 
 # %% [markdown]
-# Through our profiling of the dataset, we can confirm its structural integrity. It consists of 973 observations and 15 columns, with each column appropriately named and typed according to its quantitative or qualitative nature. A complete check for missing values across all fields revealed none. Also, this initial inspection of the data showed no signs of extreme outliers or data entry errors.
+# Through our profiling of the dataset, we can confirm its structural integrity. It consists of 973 observations and 15 columns, with each column appropriately named and typed according to its quantitative or qualitative nature. A complete check for missing values across all fields revealed none.
 
 # %%
-# Generate descriptive statistics for "BMI" & "Fat_Percentage" columns
+# Generate descriptive statistics for numerical columns
 df.describe()
 
 # %% [markdown]
-# All numerical features appear to have a reasonable range of values.
+# This initial inspection of the data showed no signs of extreme outliers or data entry errors and all numerical features appear to have a reasonable range of values.
 
 # %% [markdown]
 # For **BMI** and **Fat_Percentage**: 
@@ -81,20 +88,23 @@ df.describe()
 #     - This central tendency, combined with a reasonable standard deviation for each, suggests the absence of significant outliers, indicating a consistent and predictable spread of values for both metrics within the dataset.
 
 # %%
-# Return the frequency of each distinct row in the DataFrame
+# Display the total count of each distinct row under "Gender" and "Workout_Type"
 df[["Gender", "Workout_Type"]].value_counts()
 
 # %% [markdown]
 # All categorical features contain a small and consistent set of unique values. Particularly for **Gender** and **Workout_Type**:
 # - For **Gender**, it is a binary categorical value with only two disctinct classes ("Male" and "Female"). The absence of additional unique values, such as inconsistent spellings, abbreviations, or missing value placeholders, confirms the high degree of data consistency for this feature.
-# - Similarly, **Workout_Type** also has two disctinct and consistently labeled classes: "Cardio" and "Strength". This categorical integrity ensures that the variable is ready for direct use in analysis or for a simple transformation into a quantitative format, such as one-hot encoding, without requiring a separate data cleaning stage.
+# - Similarly, **Workout_Type** also has a small amount of disctinct and consistently labeled classes: "Cardio", "Strength", "HIIT" and "Yoga". This categorical integrity ensures that the variable is ready for direct use in analysis or for a simple transformation into a quantitative format, such as one-hot encoding, without requiring a separate data cleaning stage.
+
+# %% [markdown]
+# ---
 
 # %% [markdown]
 # #### Recognizing the Data Source & Context
 
 # %% [markdown]
 # While clean in structure, the dataset contains several potential biases, limitations, and quirks that a data analyst must consider. The primary bias is that the dataset is simulated and was generated using averages from publicly available studies and industry reports. This means the data may under- or over-represent certain behaviors or characteristics.
-# - For instance, the randomization of Experience_Level and Workout_Frequency might not perfectly reflect the actual distribution of gym members, where, for example, a large number might be beginners who work out less frequently. **This synthetic nature is the most significant limitation, as it lacks the unpredictable and messy nuances of real human behavior.**
+# - For instance, the randomization of **Experience_Level** and **Workout_Frequency** might not perfectly reflect the actual distribution of gym members, where, for example, a large number might be beginners who work out less frequently. This synthetic nature is *the most significant limitation*, as it lacks the unpredictable and messy nuances of real human behavior.
 # - Any insights or models derived from this dataset would need to be validated with actual, real-world data before being applied to a genuine scenario.
 #
 # The dataset also has a few quirks that are uncommon in real-world data. It has **no missing values** and all categorical values are perfectly consistent, *which is highly unusual*. 
@@ -110,22 +120,233 @@ df[["Gender", "Workout_Type"]].value_counts()
 
 # %% [markdown]
 # To prepare the data for any audience who might be more familiar with imperial units, I will perform some feature engineering by constructing new attributes from the existing dataset.
-# - Specifically, I will convert the `Weight (kg)` and `Height (m)` variables from their current metric system to their imperial counterparts. This will be done to ensure the data is standardized for any subsequent statistical analysis and for enhanced data visualization tailored to our target audience.
+# - Specifically, I will convert the **Weight (kg)** and **Height (m)** variables from their current metric system to their imperial counterparts. This will be done to ensure the data is standardized for any subsequent statistical analysis and for enhanced data visualization tailored to our target audience.
 
 # %%
+# Meter to Feet Conversion
 df["Height (ft)"] = round(df["Height (m)"] * 3.28, 2)
+
+# Kilogram to Pound Conversion
 df["Weight (lb)"] = round(df["Weight (kg)"] * 2.2)
 
-df[["Height (m)", "Height (ft)","Weight (kg)", "Weight (lb)"]]
+# Verify post-conversaion values are correct
+df[["Height (m)", "Height (ft)", "Weight (kg)", "Weight (lb)"]]
 
 # %%
 df[["Height (ft)", "Weight (lb)"]].describe()
+
+# %% [markdown]
+# I use the `.describe()` method to validate the newly-engineered **Weight (lbs)** and **Height (ft)** features, confirming that the new columns have a reasonable range of values and are correctly populated. This ensures the integrity of our dataset for subsequent analysis.
+#
+# > I will be using Imperial units in my analyses going foward.
 
 # %% [markdown]
 # ---
 
 # %% [markdown]
 # #### Data Visualization
+
+# %% [markdown]
+# Having performed the necessary data profiling and cleaning, I can now move on to Data Visualization. By visually exploring the dataset, I'll gain a deeper understanding of the health metrics and workout habits of the simulated gym members.
+
+# %% [markdown]
+# Firstly, I have determined that the first step of my visual analysis should be to examine the distribution of our numerical features individually, using *Univariate Analysis*.
+
+# %% [markdown]
+# ##### Univariate Analysis
+
+# %% [markdown]
+# This type of analysis will allow me to understand the central tendency and the spread of the data, and to easily spot any potential outliers. To accomplish this, I will generate histograms for each of the key numerical columns.
+
+# %%
+# Import the Matplotlib and seaborn
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Define the numerical features for univariate analysis
+numerical_features = ["Age", "Weight (lb)", "Height (ft)", "Calories_Burned",
+                      "Session_Duration (hours)", "Fat_Percentage", "BMI"]
+
+# Set the style for the plots
+sns.set_style("whitegrid")
+
+# Create a figure and a set of subplots (3x3 grid for 7 plots)
+fig, axes = plt.subplots(nrows=3, ncols=3, figsize=(18, 15))
+
+# Flatten the axes array to easily iterate through it
+axes = axes.flatten()
+
+# Iterate through the numerical features and create a histogram for each
+for i, feature in enumerate(numerical_features):
+    ax = axes[i]
+    # Use seaborn's histplot to create a histogram with a KDE curve
+    sns.histplot(data=df, x=feature, kde=True, ax=ax, color="skyblue")
+    ax.set_title(f"Distribution of {feature}", fontsize=14)
+    ax.set_xlabel(feature, fontsize=12)
+    ax.set_ylabel("Count", fontsize=12)
+
+# Hide any unused subplots
+for j in range(len(numerical_features), len(axes)):
+    axes[j].axis("off")
+
+# Set a main title for the entire figure
+fig.suptitle(
+    "Univariate Analysis: Histograms of Key Numerical Features", fontsize=20, y=1.02)
+
+# Adjust layout to prevent titles from overlapping
+plt.tight_layout()
+
+# Display the plots
+plt.show()
+
+
+# %% [markdown]
+# ###### Key Variable Insights
+
+# %% [markdown]
+# 1. **Age**
+#     - Suggests the gym has a broad membership base, heavily concentrated in the 20 to 50 age range, with few very young or very old members.
+# 2. **Calories_Burned**
+#     - The average calories burned is approximately 905 kcal. The majority of sessions fall within one standard deviation (±272.64) of this mean, indicating consistent performance for most members.
+# 3. **Session_Duration (hours)**
+#     - Shows that the typical workout duration is slightly over an hour, with very few sessions extending past 1.5 hours (as the 75th percentile is 1.46 hours), and few very short sessions (minimum 0.5 hours).
+# 4. **Body Mass Index  (BMI)**
+#     - The majority of members have a BMI near the average of 24.91, which is at the upper end of the 'Normal' weight category. The right skew and the large maximum value suggest a small number of members with significantly higher BMI values, which could be an important factor to analyze in relation to exercise performance or health outcomes.
+
+# %% [markdown]
+# The univariate analysis confirms that the gym's member base is middle-aged, with an average age of 38.68 years. Members demonstrate moderate commitment, with typical workout durations around 1.26 hours, burning an average of 905 calories per session. While most members fall within a healthy-to-average BMI range, the presence of a few high-BMI outliers suggests an interesting area for further investigation.
+
+# %% [markdown]
+# ##### Categorical Analysis
+
+# %% [markdown]
+# Next, I move onto Categorical Analysis. I will utilize bar charts to analyze the counts and proportions of each categorical variable to help me understand the composition of the dataset and how different groups behave.
+
+# %%
+def add_value_labels(ax, position="on_top", fmt='{:.0f}'):
+    """
+    Adds value labels to each bar in a plot.
+
+    Args:
+        ax (plt.Axes): The axes object to add labels to.
+        position (str): The position of the labels.
+                        'on_top' (default) places labels above the bars.
+                        'within' places labels inside the bars.
+        fmt (str): The format string for the labels (e.g., '{:.0f}' for integers,
+                   '{:.1f}' for one decimal place).
+    """
+    # Loop over each bar (patch) in the axes
+    for p in ax.patches:
+        # Get the height of the bar
+        height = p.get_height()
+        # Define the x-coordinate for the text (center of the bar)
+        x = p.get_x() + p.get_width() / 2.
+
+        if position == 'on_top':
+            # Position the text slightly above the bar
+            y = height + 1
+            # Add the text label
+            ax.text(x, y, fmt.format(height),
+                    ha='center', va='bottom', fontsize=10)
+        elif position == 'within':
+            # Position the text in the middle of the bar
+            y = height / 2
+            # Add the text label with white color for contrast
+            ax.text(x, y, fmt.format(height), ha='center',
+                    va='center', color='white', fontsize=10)
+
+
+def create_count_and_bar_charts(df):
+    """
+    Generates a set of categorical charts with labels placed on top of or within the bars.
+
+    Args:
+        df (pd.DataFrame): The DataFrame containing the data for the plots.
+    """
+    # Set the visual style for the plots using seaborn
+    sns.set_style("whitegrid")
+
+    # Create a figure with a 2x2 grid of subplots
+    fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(18, 12))
+    # Flatten the axes array to easily iterate through them
+    axes = axes.flatten()
+
+    # --- Plot 1: Count of Gender (Labels on top) ---
+    # Add hue=x to avoid Seaborn deprecation warning.
+    sns.countplot(x='Gender', hue='Gender', data=df,
+                  ax=axes[0], palette='viridis')
+    axes[0].set_title('Distribution of Members by Gender', fontsize=14)
+    axes[0].set_xlabel('Gender', fontsize=12)
+    axes[0].set_ylabel('Count', fontsize=12)
+    # Add labels using the utility function, placed on top
+    add_value_labels(axes[0], position='within')
+
+    # --- Plot 2: Count of Workout Type (Labels within) ---
+    # Add hue=x to avoid Seaborn deprecation warning.
+    sns.countplot(x='Workout_Type', hue='Workout_Type',
+                  data=df, ax=axes[1], palette='plasma')
+    axes[1].set_title('Frequency of Different Workout Types', fontsize=14)
+    axes[1].set_xlabel('Workout Type', fontsize=12)
+    axes[1].set_ylabel('Count', fontsize=12)
+    # Rotate x-axis labels for readability
+    axes[1].tick_params(axis='x', rotation=45)
+    # Add labels using the utility function, placed within the bars
+    add_value_labels(axes[1], position='within')
+
+    # --- Plot 3: Average Calories Burned by Workout Type (Labels within) ---
+    # Add hue=x to avoid Seaborn deprecation warning.
+    sns.barplot(x='Workout_Type', y='Calories_Burned', hue='Workout_Type',
+                data=df, ax=axes[2], palette='cividis', errorbar=None)
+    axes[2].set_title('Average Calories Burned by Workout Type', fontsize=14)
+    axes[2].set_xlabel('Workout Type', fontsize=12)
+    axes[2].set_ylabel('Average Calories Burned', fontsize=12)
+    # Rotate x-axis labels for readability
+    axes[2].tick_params(axis='x', rotation=45)
+    # Add labels using the utility function, placed within, formatted to one decimal place
+    add_value_labels(axes[2], position='within', fmt='{:.1f}')
+
+    # --- Plot 4: Average Session Duration by Experience Level (Labels on top) ---
+    # Add hue=x to avoid Seaborn deprecation warning.
+    sns.barplot(x='Experience_Level', y='Session_Duration (hours)', hue='Experience_Level',
+                data=df, ax=axes[3], palette='magma', errorbar=None, legend=False)
+    axes[3].set_title(
+        'Average Session Duration by Experience Level', fontsize=14)
+    axes[3].set_xlabel('Experience Level', fontsize=12)
+    axes[3].set_ylabel('Average Session Duration (hours)', fontsize=12)
+    # Ensure x-axis labels are integers
+    axes[3].xaxis.set_major_locator(plt.MaxNLocator(integer=True))
+
+    # Add a main title for the entire figure
+    fig.suptitle('Categorical Analysis: Enhanced Bar Charts',
+                 fontsize=20, y=1.02)
+
+    # Automatically adjust subplot parameters to give a tight layout
+    plt.tight_layout()
+
+    # Display the plots
+    plt.show()
+
+
+create_count_and_bar_charts(df)
+
+# %% [markdown]
+# ##### Results
+
+# %% [markdown]
+# 1. **Gender**
+#     - The gym membership population is nearly evenly split between genders, though Male members are slightly more prevalent. 
+# 2. **Workout_Type**
+#     - The data shows a very balanced distribution across the four types of workouts, suggesting that the gym members are not overwhelmingly focused on a single type of training.
+# 3. **Experience_Level**
+#     - The majority of the members fall into the lower and intermediate experience categories (Levels 1 and 2), with a notable drop-off for the most experienced group.
+# 4. **Workout_Frequency (days/week)**
+#     - The most popular workout frequencies are 3 and 4 days per week, accounting for over two-thirds of the members. Very high frequency (5 days/week) is the least common.
+
+# %% [markdown]
+# The categorical profile of the gym’s membership reveals a highly balanced and broad audience, with a near-equal gender split and a diverse range of member engagement across all Workout_Types (Cardio, Strength, HIIT, and Yoga are equally popular). Crucially, the membership base is concentrated among Beginners and Intermediates (Experience Levels 1 and 2 make up over 80%), indicating that the primary audience is not highly specialized and whose needs should guide program and training service development. This broad base demonstrates a healthy level of commitment, with the majority of members attending a sustainable 3 to 4 days per week, suggesting a positive balance between fitness goals and personal life.
+
+# %% [markdown]
+# ___
 
 # %% [markdown]
 # ## 3. Data Cleaning & Transformation
@@ -153,7 +374,8 @@ import pandas as pd
 df = pd.read_csv('gym_members_exercise_tracking.csv')
 
 # Identify numerical columns to scale
-numerical_cols = ['Age', 'Weight (kg)', 'Height (m)', 'Max_BPM', 'Avg_BPM', 'Resting_BPM', 'Session_Duration (hours)', 'Calories_Burned', 'Fat_Percentage', 'Water_Intake (liters)', 'Workout_Frequency (days/week)', 'Experience_Level', 'BMI']
+numerical_cols = ['Age', 'Weight (kg)', 'Height (m)', 'Max_BPM', 'Avg_BPM', 'Resting_BPM', 'Session_Duration (hours)',
+                  'Calories_Burned', 'Fat_Percentage', 'Water_Intake (liters)', 'Workout_Frequency (days/week)', 'Experience_Level', 'BMI']
 
 # Create a StandardScaler object
 scaler = StandardScaler()
