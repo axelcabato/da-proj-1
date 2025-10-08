@@ -147,10 +147,10 @@ df[["Height (ft)", "Weight (lb)"]].describe()
 # #### Data Visualization
 
 # %% [markdown]
-# Having performed the necessary data profiling and cleaning, I can now move on to Data Visualization. By visually exploring the dataset, I'll gain a deeper understanding of the health metrics and workout habits of the simulated gym members.
+# Having performed the necessary data profiling and cleaning, I can now move on to Data Visualization. By visually exploring the dataset, I'll gain a deeper understanding of the health metrics and workout habits of the simulated gym members, hoping to identify opportunities for improvement and growth.
 
 # %% [markdown]
-# Firstly, I have determined that the first step of my visual analysis should be to examine the distribution of our numerical features individually, using *Univariate Analysis*.
+# I have determined that the first step of my visual analysis should be to examine the distribution of our numerical features individually, using *Univariate Analysis*.
 
 # %% [markdown]
 # ##### Univariate Analysis
@@ -201,20 +201,20 @@ plt.show()
 
 
 # %% [markdown]
-# ###### Key Variable Insights
+# ##### Some Key Insights:
 
 # %% [markdown]
-# 1. **Age**
-#     - Suggests the gym has a broad membership base, heavily concentrated in the 20 to 50 age range, with few very young or very old members.
-# 2. **Calories_Burned**
-#     - The average calories burned is approximately 905 kcal. The majority of sessions fall within one standard deviation (±272.64) of this mean, indicating consistent performance for most members.
-# 3. **Session_Duration (hours)**
-#     - Shows that the typical workout duration is slightly over an hour, with very few sessions extending past 1.5 hours (as the 75th percentile is 1.46 hours), and few very short sessions (minimum 0.5 hours).
-# 4. **Body Mass Index  (BMI)**
-#     - The majority of members have a BMI near the average of 24.91, which is at the upper end of the 'Normal' weight category. The right skew and the large maximum value suggest a small number of members with significantly higher BMI values, which could be an important factor to analyze in relation to exercise performance or health outcomes.
+# 1. **Experience_Level**
+#     The overwhelming concentration of members at the beginner and intermediate levels (over 80%) confirms the necessity of retention-focused, introductory programming to maximize member lifetime value.
+# 2. **Workout_Frequency (days/week)**
+#     The primary commitment level of 3 to 4 days per week suggests that members prioritize a sustainable habit, making scheduling and promotion efforts most effective when centered around this moderate frequency.
+# 3. **Calories_Burned**
+#     The consistent, near-normal distribution of calories burned (mean ≈ 905 kcal) across the membership confirms that the general workout environment successfully standardizes performance effort regardless of individual body metrics.
+# 4. **BMI**
+#     The significant positive skew and extreme outliers in BMI identify a small yet critical high-risk cohort whose specialized health needs diverge sharply from the average member's, demanding tailored nutritional or low-impact intervention.
 
 # %% [markdown]
-# The univariate analysis confirms that the gym's member base is middle-aged, with an average age of 38.68 years. Members demonstrate moderate commitment, with typical workout durations around 1.26 hours, burning an average of 905 calories per session. While most members fall within a healthy-to-average BMI range, the presence of a few high-BMI outliers suggests an interesting area for further investigation.
+# In conclusion, the typical member is a moderately aged adult (mean age = 38.7) who engages in a consistently focused workout, characterized by a symmetrical distribution of session durations centered around 1.26 hours and a predictable energy expenditure averaging about 905 calories. This observed consistency, supported by well-defined heart rate metrics, implies that the gym's general programming effectively standardizes training intensity relative to time spent, successfully driving uniform effort across the central population. The primary outlier and strategic concern is the significant positive skew in BMI and Weight, which isolates a small yet vital cohort of high-risk members whose specialized health needs diverge sharply from the average, requiring targeted, low-impact training and nutritional guidance for long-term retention.
 
 # %% [markdown]
 # ##### Categorical Analysis
@@ -330,20 +330,20 @@ def create_count_and_bar_charts(df):
 create_count_and_bar_charts(df)
 
 # %% [markdown]
-# ##### Results
+# ##### Insights
 
 # %% [markdown]
 # 1. **Gender**
-#     - The gym membership population is nearly evenly split between genders, though Male members are slightly more prevalent. 
+#     - The near-perfect gender parity suggests the gym's offering and environment successfully appeal to both male and female members, confirming its success in avoiding bias toward a single demographic.
 # 2. **Workout_Type**
-#     - The data shows a very balanced distribution across the four types of workouts, suggesting that the gym members are not overwhelmingly focused on a single type of training.
+#     - The balanced distribution across all four primary workout types indicates a healthy diversification in member interests, validating the breadth of the gym's program or equipment offerings.
 # 3. **Experience_Level**
-#     - The majority of the members fall into the lower and intermediate experience categories (Levels 1 and 2), with a notable drop-off for the most experienced group.
+#     - The strong bias toward beginners and intermediates signifies a critical opportunity for the gym to drive revenue through specialized, guided training services and retention-focused onboarding programs.
 # 4. **Workout_Frequency (days/week)**
-#     - The most popular workout frequencies are 3 and 4 days per week, accounting for over two-thirds of the members. Very high frequency (5 days/week) is the least common.
+#     - The primary workout frequency of 3 to 4 days per week indicates that members prioritize a sustainable, moderate level of commitment, which should be the target focus for class scheduling and promotional campaigns.
 
 # %% [markdown]
-# The categorical profile of the gym’s membership reveals a highly balanced and broad audience, with a near-equal gender split and a diverse range of member engagement across all Workout_Types (Cardio, Strength, HIIT, and Yoga are equally popular). Crucially, the membership base is concentrated among Beginners and Intermediates (Experience Levels 1 and 2 make up over 80%), indicating that the primary audience is not highly specialized and whose needs should guide program and training service development. This broad base demonstrates a healthy level of commitment, with the majority of members attending a sustainable 3 to 4 days per week, suggesting a positive balance between fitness goals and personal life.
+# The categorical landscape reveals the gym's successful positioning as a general-purpose facility, evidenced by its near-perfect gender parity and the equally high demand for all four primary workout types, including Strength, Cardio, HIIT, and Yoga. The significant concentration of beginner and intermediate members (over 80%) presents a major revenue opportunity for specialized coaching, but concurrently highlights a critical retention risk if these novice groups lack the adequate structural support needed to maintain their moderate 3-4 days/week commitment. Therefore, the strategic focus should be less on expanding niche programming and more on developing structured, guided pathways—especially for high-demand areas like foundational HIIT and Yoga—to convert beginners into long-term, high-value members.
 
 # %% [markdown]
 # ___
