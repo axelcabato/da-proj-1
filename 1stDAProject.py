@@ -79,13 +79,7 @@ print(df.isnull().sum())
 df.describe()
 
 # %% [markdown]
-# This initial inspection of the data showed no signs of extreme outliers or data entry errors and all numerical features appear to have a reasonable range of values.
-
-# %% [markdown]
-# For **BMI** and **Fat_Percentage**: 
-# - The minimum and maximum values for both are physiologically plausible, confirming the data is within a realistic human-centric scale.
-# - They also exhibit a symmetrical distribution, as evidenced by their mean and median values being in close proximity. 
-#     - This central tendency, combined with a reasonable standard deviation for each, suggests the absence of significant outliers, indicating a consistent and predictable spread of values for both metrics within the dataset.
+# This initial inspection showed no obvious data entry errors; however, further univariate analysis revealed a critical positive skew and extreme outliers in **BMI** and **Weight** which will be analyzed as a high-risk cohort.
 
 # %%
 # Display the total count of each distinct row under "Gender" and "Workout_Type"
@@ -147,7 +141,7 @@ df[["Height (ft)", "Weight (lb)"]].describe()
 # #### Data Visualization
 
 # %% [markdown]
-# Having performed the necessary data profiling and cleaning, I can now move on to Data Visualization. By visually exploring the dataset, I'll gain a deeper understanding of the health metrics and workout habits of the simulated gym members, hoping to identify opportunities for improvement and growth.
+# Having performed the necessary data profiling and cleaning, I can now move on to Data Visualization. By visually exploring the dataset, I'll gain a deeper understanding of the health metrics and workout habits of the simulated gym members.
 
 # %% [markdown]
 # I have determined that the first step of my visual analysis should be to examine the distribution of our numerical features individually, using *Univariate Analysis*.
@@ -204,17 +198,17 @@ plt.show()
 # ##### Some Key Insights:
 
 # %% [markdown]
-# 1. **Experience_Level**
-#     The overwhelming concentration of members at the beginner and intermediate levels (over 80%) confirms the necessity of retention-focused, introductory programming to maximize member lifetime value.
-# 2. **Workout_Frequency (days/week)**
-#     The primary commitment level of 3 to 4 days per week suggests that members prioritize a sustainable habit, making scheduling and promotion efforts most effective when centered around this moderate frequency.
+# 1. **Age**
+#     - The symmetrical distribution, centered around 39 years old, confirms the fitness market's primary demographic appeal lies consistently within the active adult range (18-59), with minimal concentration at the extremes.
+# 2. **Workout_Frequency (days/week)** (Histogram not shown above)
+#     - The high concentration of members engaging in exercise 3 to 4 days per week (nearly 70%) reveals a general population trend toward a sustainable, moderate habit rather than extreme commitment.
 # 3. **Calories_Burned**
-#     The consistent, near-normal distribution of calories burned (mean ≈ 905 kcal) across the membership confirms that the general workout environment successfully standardizes performance effort regardless of individual body metrics.
-# 4. **BMI**
-#     The significant positive skew and extreme outliers in BMI identify a small yet critical high-risk cohort whose specialized health needs diverge sharply from the average member's, demanding tailored nutritional or low-impact intervention.
+#     - The high standard deviation in calorie expenditure, despite a moderate average session duration of only 1.26 hours, implies that intensity, personal physiology, and efficiency are the primary drivers of performance variation, not simply workout time.
+# 4. **BMI & Fat_Percentage**
+#     - While Fat_Percentage exhibits a balanced, near-symmetrical distribution indicative of a typical gym population, the BMI feature displays a critical positive skew that, when combined with high-value outliers, mandates a strategic intervention for a vulnerable, high-risk cohort of members.
 
 # %% [markdown]
-# In conclusion, the typical member is a moderately aged adult (mean age = 38.7) who engages in a consistently focused workout, characterized by a symmetrical distribution of session durations centered around 1.26 hours and a predictable energy expenditure averaging about 905 calories. This observed consistency, supported by well-defined heart rate metrics, implies that the gym's general programming effectively standardizes training intensity relative to time spent, successfully driving uniform effort across the central population. The primary outlier and strategic concern is the significant positive skew in BMI and Weight, which isolates a small yet vital cohort of high-risk members whose specialized health needs diverge sharply from the average, requiring targeted, low-impact training and nutritional guidance for long-term retention.
+# In conclusion, the typical gym member is a moderately aged adult, centered around 39 years old, who achieves a consistent performance baseline during workouts, characterized by a steady session duration averaging 1.26 hours and a predictable energy expenditure of approximately 905 calories. This population exhibits a healthy cardiovascular profile, with Resting BPM tightly distributed around 62 beats per minute, confirming the overall fitness level; however, the significant positive skew and high range observed in Weight (from 40 kg to 129.9 kg) isolates a vital minority cohort whose specialized physical needs deviate sharply from the average, requiring tailored high-impact or low-impact programming. Ultimately, the tight clustering of core metrics (Age, Heart Rate, Session Duration) suggests that intensity and individual physiology are the primary drivers of performance variation, not simply time spent exercising.
 
 # %% [markdown]
 # ##### Categorical Analysis
@@ -329,24 +323,119 @@ def create_count_and_bar_charts(df):
 
 create_count_and_bar_charts(df)
 
+
 # %% [markdown]
 # ##### Insights
 
 # %% [markdown]
 # 1. **Gender**
-#     - The near-perfect gender parity suggests the gym's offering and environment successfully appeal to both male and female members, confirming its success in avoiding bias toward a single demographic.
+#     - The near-perfect gender parity (Male 52.5%, Female 47.5%) confirms the general fitness market's appeal is broadly balanced and successfully attracts both demographics equally.
 # 2. **Workout_Type**
-#     - The balanced distribution across all four primary workout types indicates a healthy diversification in member interests, validating the breadth of the gym's program or equipment offerings.
+#     - The remarkably even distribution across all four primary exercise types (ranging from 22.7% to 26.5%) suggests a highly diversified and heterogeneous demand for various fitness methodologies in the overall market.
 # 3. **Experience_Level**
-#     - The strong bias toward beginners and intermediates signifies a critical opportunity for the gym to drive revenue through specialized, guided training services and retention-focused onboarding programs.
+#     - The overwhelming concentration of members at the Beginner (Level 1) and Intermediate (Level 2) stages (≈80%) signifies a clear market-wide imperative to focus on retention and guided training pathways for novice users.
 # 4. **Workout_Frequency (days/week)**
-#     - The primary workout frequency of 3 to 4 days per week indicates that members prioritize a sustainable, moderate level of commitment, which should be the target focus for class scheduling and promotional campaigns.
+#     - The vast majority of members (nearly 70%) commit to exercising 3 or 4 days per week, indicating that sustainable, moderate attendance is the dominant commitment pattern across the population.
 
 # %% [markdown]
-# The categorical landscape reveals the gym's successful positioning as a general-purpose facility, evidenced by its near-perfect gender parity and the equally high demand for all four primary workout types, including Strength, Cardio, HIIT, and Yoga. The significant concentration of beginner and intermediate members (over 80%) presents a major revenue opportunity for specialized coaching, but concurrently highlights a critical retention risk if these novice groups lack the adequate structural support needed to maintain their moderate 3-4 days/week commitment. Therefore, the strategic focus should be less on expanding niche programming and more on developing structured, guided pathways—especially for high-demand areas like foundational HIIT and Yoga—to convert beginners into long-term, high-value members.
+# Based on the data, I can conclude that the overall fitness market demonstrates balanced appeal and diverse interests, evidenced by near-perfect gender parity and an even distribution of demand across all four major workout categories. Furthermore, the commitment profile is strongly anchored in sustainability, with almost 70% of members consistently engaging in a moderate schedule of three to four workout days per week. This widespread moderate commitment, combined with the fact that 80% of the population is classified as Beginner or Intermediate, establishes a clear, unified market vulnerability that necessitates immediate investment in standardized, supportive programming for novice retention.
+
+# %% [markdown]
+# ##### Bivariate Analysis
+
+# %% [markdown]
+# *intro text*
+
+# %%
+# --- Helper function for adding labels to bars (omitted for brevity) ---
+def add_value_labels(ax, fmt='{:.0f}'):
+    for p in ax.patches:
+        height = p.get_height()
+        ax.text(p.get_x() + p.get_width() / 2., height + 10,
+                fmt.format(height), ha="center", va="bottom", fontsize=9)
+
+# --- Bivariate Analysis Setup (omitted for brevity) ---
+numerical_cols = ['Age', 'Weight (kg)', 'Height (m)', 'Max_BPM', 'Avg_BPM', 'Resting_BPM', 'Session_Duration (hours)', 'Calories_Burned', 'Water_Intake (liters)', 'BMI', 'Fat_Percentage']
+correlation_matrix = df[numerical_cols].corr()
+workout_type_summary = df.groupby('Workout_Type')['Calories_Burned'].mean().sort_values(ascending=False).reset_index()
+
+# --- Visualization Code Generation for 4 Key Plots with fixes ---
+fig, axes = plt.subplots(2, 2, figsize=(15, 12))
+plt.suptitle('Key Bivariate Relationships in Gym Member Data', fontsize=18, y=1.05)
+
+# --- Plot 1: Correlation Heatmap ---
+sns.heatmap(
+    correlation_matrix[['Calories_Burned', 'Session_Duration (hours)', 'Avg_BPM', 'Weight (kg)']].T,
+    annot=True, cmap='viridis', fmt=".2f", linewidths=.5, linecolor='black',
+    ax=axes[0, 0]
+)
+axes[0, 0].set_title('1. Correlation with Key Performance Metrics', fontsize=14)
+axes[0, 0].tick_params(axis='y', rotation=0)
+axes[0, 0].tick_params(axis='x', rotation=45)
+
+# --- Plot 2: Bar plot: Avg Calories Burned by Workout Type (FIXES APPLIED) ---
+sns.barplot(
+    x='Workout_Type', y='Calories_Burned', data=workout_type_summary,
+    hue='Workout_Type', ax=axes[0, 1], palette='flare'
+)
+axes[0, 1].set_title('2. Average Calories Burned by Workout Type', fontsize=14)
+axes[0, 1].set_xlabel('Workout Type')
+axes[0, 1].set_ylabel('Average Calories Burned')
+axes[0, 1].tick_params(axis='x', rotation=45)
+# FIX for 'AttributeError: 'NoneType' object has no attribute 'remove''
+if axes[0, 1].legend_ is not None:
+    axes[0, 1].legend_.remove()
+add_value_labels(axes[0, 1])
+
+# --- Plot 3: Box Plot: Calories Burned by Experience Level (FIXES APPLIED) ---
+sns.boxplot(
+    x='Experience_Level', y='Calories_Burned', data=df,
+    order=[3, 2, 1], hue='Experience_Level', ax=axes[1, 0], palette='magma'
+)
+axes[1, 0].set_title('3. Calories Burned Distribution by Experience Level', fontsize=14)
+axes[1, 0].set_xlabel('Experience Level (3=Advanced, 1=Beginner)')
+axes[1, 0].set_ylabel('Calories Burned')
+# FIX for 'AttributeError: 'NoneType' object has no attribute 'remove''
+if axes[1, 0].legend_ is not None:
+    axes[1, 0].legend_.remove()
+
+# --- Plot 4: Scatter Plot: Avg_BPM vs. Calories_Burned ---
+sns.scatterplot(
+    x='Avg_BPM', y='Calories_Burned', data=df,
+    hue='Session_Duration (hours)', size='Session_Duration (hours)',
+    sizes=(20, 200), palette='crest', ax=axes[1, 1], legend='full'
+)
+axes[1, 1].set_title('4. Relationship between Average BPM and Calories Burned', fontsize=14)
+axes[1, 1].set_xlabel('Average BPM')
+axes[1, 1].set_ylabel('Calories Burned')
+axes[1, 1].legend(title='Duration (hrs)', loc='upper left')
+
+# FIX: Use standard plt.tight_layout()
+plt.tight_layout()
+plt.savefig('4_key_bivariate_plots_fixed.png')
+plt.close()
+
+# %% [markdown]
+# ##### Insights
+
+# %% [markdown]
+# 1. **Session Duration vs. Calories Burned**
+#     - The exceptionally high positive correlation (0.91) between session duration and calories burned confirms that time commitment is the single most dominant factor determining total energy expenditure during a workout.
+# 2. **Workout Type vs. Calories Burned**
+#     - The analysis reveals that High-Intensity Interval Training (HIIT) yields the highest average calorie burn (926 kcal), subtly surpassing traditional Strength and Yoga regimens, thus challenging the market's assumption that traditional steady-state Cardio is the most calorically effective workout.
+# 3. **Experience Level vs. Calories/Duration**
+#     - Advanced members (Level 3) demonstrate a dramatic 74% increase in average calorie burn and 74% longer session duration compared to Beginners (Level 1), indicating that experience profoundly impacts both workout length and efficiency.
+# 4. **Calories Burned vs. Fat Percentage**
+#     - The strong negative correlation (−0.60) between daily calories burned and overall body fat percentage confirms that consistent, high energy expenditure is a highly effective physiological predictor for lower body fat composition across the general population.
+
+# %% [markdown]
+# The bivariate relationships conclusively demonstrate that workout output is governed by a simple Duration-Intensity-Result model, where time commitment is the highest correlator of calories burned, while a strong negative correlation links high energy expenditure to lower body fat. The data further reveals that market demand is optimized by higher-burn workouts like HIIT and Strength training, signaling a shift away from traditional Cardio as the presumed calorie king, and that Experience Level serves as the most pronounced differentiator in both duration and resulting energy output. This disparity presents a unified and lucrative market opportunity to design progressive training programs that systematically bridge the 74% gap between Beginner performance and Advanced member retention.
 
 # %% [markdown]
 # ___
+
+# %% [markdown]
+# *any blocks below this text is meant to added back into the final arrangement of the report at later date*
 
 # %% [markdown]
 # ## 3. Data Cleaning & Transformation
@@ -416,17 +505,3 @@ print(df.head())
 
 # %% [markdown]
 # ---
-
-# %% [markdown]
-# *any blocks below this text is meant to added back into the final arrangement of the report at later date*
-
-# %%
-# Import visualization libraries, Matplotlib & seaborn
-import matplotlib.pyplot as plt
-import seaborn as sns
-
-# %%
-sns.histplot(data=df, x="Age", stat="count").set(title="Age Histogram Plot")
-
-# %% [markdown]
-# Based on the histogram, we have fairly distributed range of observed individuals
