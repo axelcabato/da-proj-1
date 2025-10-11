@@ -1,5 +1,8 @@
 gemini-da.py
-.venv
+
 __pycache__
 *.pyc
 *ipynb_checkpoints
+.DS_Store
+*.log
+data/processed/
