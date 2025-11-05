@@ -79,16 +79,16 @@ print(df.isnull().sum())
 df.describe()
 
 # %% [markdown]
-# This initial inspection showed no obvious data entry errors; however, further univariate analysis revealed a critical positive skew and extreme outliers in **BMI** and **Weight** which will be analyzed as a high-risk cohort.
+# This initial inspection showed no obvious data entry errors; however, further univariate analysis will reveal a critical positive skew and extreme outliers in `BMI` and `Weight` which will be analyzed as a high-risk cohort.
 
 # %%
 # Display the total count of each distinct row under "Gender" and "Workout_Type"
 df[["Gender", "Workout_Type"]].value_counts()
 
 # %% [markdown]
-# All categorical features contain a small and consistent set of unique values. Particularly for **Gender** and **Workout_Type**:
-# - For **Gender**, it is a binary categorical value with only two disctinct classes ("Male" and "Female"). The absence of additional unique values, such as inconsistent spellings, abbreviations, or missing value placeholders, confirms the high degree of data consistency for this feature.
-# - Similarly, **Workout_Type** also has a small amount of disctinct and consistently labeled classes: "Cardio", "Strength", "HIIT" and "Yoga". This categorical integrity ensures that the variable is ready for direct use in analysis or for a simple transformation into a quantitative format, such as one-hot encoding, without requiring a separate data cleaning stage.
+# The categorical features of `Gender` and `Workout_Type` contain a small and consistent set of unique values.:
+# - For `Gender`, it is a binary categorical value with only two disctinct classes ("Male" and "Female"). The absence of additional unique values, such as inconsistent spellings, abbreviations, or missing value placeholders, confirms the high degree of data consistency for this feature.
+# - Similarly, `Workout_Type` also has a small amount of disctinct and consistently labeled classes: "Cardio", "Strength", "HIIT" and "Yoga". This categorical integrity ensures that the variable is ready for direct use in analysis or for a simple transformation into a quantitative format, such as one-hot encoding, without requiring a separate data cleaning stage.
 
 # %% [markdown]
 # ---
@@ -97,17 +97,19 @@ df[["Gender", "Workout_Type"]].value_counts()
 # #### Recognizing the Data Source & Context
 
 # %% [markdown]
-# While clean in structure, the dataset contains several potential biases, limitations, and quirks that a data analyst must consider. The primary bias is that the dataset is simulated and was generated using averages from publicly available studies and industry reports. This means the data may under- or over-represent certain behaviors or characteristics.
-# - For instance, the randomization of **Experience_Level** and **Workout_Frequency** might not perfectly reflect the actual distribution of gym members, where, for example, a large number might be beginners who work out less frequently. This synthetic nature is *the most significant limitation*, as it lacks the unpredictable and messy nuances of real human behavior.
-# - Any insights or models derived from this dataset would need to be validated with actual, real-world data before being applied to a genuine scenario.
+# While clean in structure, the dataset contains several potential biases, limitations, and quirks that a data analyst must consider. The primary bias is that the dataset was simulated and generated using averages from publicly available studies and industry reports. This means the data may under- or over-represent certain behaviors or characteristics.
+# - For instance, the randomization of `Experience_Level` and `Workout_Frequency` might not perfectly reflect the actual distribution of gym members, where, for example, a large number might be beginners who work out less frequently. This synthetic nature is *the most significant limitation*, as it lacks the unpredictable and messy nuances of real human behavior.
 #
-# The dataset also has a few quirks that are uncommon in real-world data. It has **no missing values** and all categorical values are perfectly consistent, *which is highly unusual*. 
+# **Any insights or models derived from this dataset would need to be validated with actual, real-world data before being applied to a genuine scenario.**
+#
+# The dataset also has a few quirks that are uncommon in real-world data:
+# - It **has no missing values** and **all categorical values are perfectly consistent**, *which is highly unusual*.
 #
 # Furthermore, the data is simplified and contains only the variables that were explicitly defined in the generation process. 
-# - For example, the **Workout_Type** column is limited to a small, consistent set of categories (*Cardio*, *Strength*, *Yoga*, *HIIT*), and does not reflect the full range of possible exercises performed by gym members.
+# - For example, the `Workout_Type` column is limited to a small, consistent set of categories (*Cardio*, *Strength*, *Yoga*, *HIIT*), and does not reflect the full range of possible exercises performed by gym members.
 
 # %% [markdown]
-# > This foundational understanding will serve as a solid basis for our deeper exploratory data analysis.
+# > This foundational understanding will serve as a solid basis for our deeper exploratory data analysis of this dataset.
 
 # %% [markdown]
 # ---
@@ -130,7 +132,7 @@ df[["Height (m)", "Height (ft)", "Weight (kg)", "Weight (lb)"]]
 df[["Height (ft)", "Weight (lb)"]].describe()
 
 # %% [markdown]
-# I use the `.describe()` method to validate the newly-engineered **Weight (lbs)** and **Height (ft)** features, confirming that the new columns have a reasonable range of values and are correctly populated. This ensures the integrity of our dataset for subsequent analysis.
+# I use the `.describe()` method to validate the newly-engineered Weight (lbs)** and **Height (ft)** features, confirming that the new columns have a reasonable range of values and are correctly populated. This ensures the integrity of our dataset for subsequent analysis.
 #
 # > I will be using Imperial units in my analyses going foward.
 
@@ -141,10 +143,10 @@ df[["Height (ft)", "Weight (lb)"]].describe()
 # #### Data Visualization
 
 # %% [markdown]
-# Having performed the necessary data profiling and cleaning, I can now move on to Data Visualization. By visually exploring the dataset, I'll gain a deeper understanding of the health metrics and workout habits of the simulated gym members.
+# Having performed the necessary data profiling and cleaning, I can now move on to visually exploring the dataset. By doing so I'll gain a deeper understanding of the health metrics and workout habits of the simulated gym members.
 
 # %% [markdown]
-# I have determined that the first step of my visual analysis should be to examine the distribution of our numerical features individually, using *Univariate Analysis*.
+# My first step of my visual analysis should be to examine the distribution of our numerical features individually, using *Univariate Analysis*.
 
 # %% [markdown]
 # ##### Univariate Analysis
@@ -163,7 +165,7 @@ df_copy = df.copy()
 
 # Define the numerical features for univariate analysis
 numerical_features = ["Age", "Weight (lb)", "Height (ft)", "Calories_Burned",
-                      "Session_Duration (hours)", "Fat_Percentage", "BMI", "Avg_BPM"]
+                      "Session_Duration (hours)", "Fat_Percentage", "BMI", "Avg_BPM", "Resting_BPM"]
 
 # Set the style for the plots
 sns.set_style("whitegrid")
@@ -211,13 +213,13 @@ plt.close()
 # ##### Key Insights:
 
 # %% [markdown]
-# 1. **Age**
+# 1. `Age`
 #     - The distribution spans from 18 to 59 years with a mean of approximately 39 years, showing that the simulated sample was designed to represent individuals across the full active adult age spectrum. The relatively even distribution across this range suggests that the data generation process did not intentionally concentrate observations at any particular age, resulting in a sample that includes young adults, middle-aged individuals, and older adults in roughly similar proportions.
-# 2. **Workout_Frequency (days/week)** (Histogram not shown above)
+# 2. `Workout_Frequency (days/week)` (Histogram not shown above)
 #     - The distribution ranges from two to five days per week, with the values appearing distributed across these four levels, and notably excludes both very low frequency exercisers (one day per week) and daily exercisers (six to seven days per week). This bounded range reflects a design choice in the data generation process to focus the simulation on individuals who maintain moderate, consistent exercise schedules, thereby creating a sample that represents sustainable commitment patterns rather than the full spectrum of possible attendance behaviors.
-# 3. **Calories_Burned**
+# 3. `Calories_Burned`
 #     - The values exhibit substantial variation, ranging from approximately 300 to 1,700 calories per session, yet this variation shows an exceptionally strong positive correlation of 0.91 with Session_Duration, confirming that the data generation algorithm primarily tied caloric expenditure to workout length. While the simulation incorporated some additional variance beyond pure time-based calculation—likely representing programmed influences of workout intensity, type, and individual metabolic factors—approximately 83 percent of the calorie variation can be explained by session duration alone, with the remaining 17 percent reflecting other parameters built into the simulation model.
-# 4. **BMI & Fat_Percentage**
+# 4. `BMI & Fat_Percentage`
 #     - The values for each exhibit a relatively balanced spread from 10 percent to 35 percent around a mean of approximately 25 percent, while the BMI distribution displays a modest positive skew with most values concentrated in the 20 to 30 range and a tail extending toward higher values reaching approximately 50. This difference in distributional shapes suggests that the data generation process applied different randomization or constraint parameters to these two body composition metrics, with Fat_Percentage following a more symmetrical generation pattern while BMI incorporated a right-skewed distribution that produces occasional higher values within the simulated sample.
 
 # %% [markdown]
