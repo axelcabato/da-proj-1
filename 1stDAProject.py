@@ -208,7 +208,6 @@ plt.show()
 # 3. Close the figure and free up memory
 plt.close()
 
-
 # %% [markdown]
 # ##### Key Insights:
 
@@ -219,7 +218,7 @@ plt.close()
 #     - The distribution ranges from two to five days per week, with the values appearing distributed across these four levels, and notably excludes both very low frequency exercisers (one day per week) and daily exercisers (six to seven days per week). This bounded range reflects a design choice in the data generation process to focus the simulation on individuals who maintain moderate, consistent exercise schedules, thereby creating a sample that represents sustainable commitment patterns rather than the full spectrum of possible attendance behaviors.
 # 3. `Calories_Burned`
 #     - The values exhibit substantial variation, ranging from approximately 300 to 1,700 calories per session, yet this variation shows an exceptionally strong positive correlation of 0.91 with Session_Duration, confirming that the data generation algorithm primarily tied caloric expenditure to workout length. While the simulation incorporated some additional variance beyond pure time-based calculation—likely representing programmed influences of workout intensity, type, and individual metabolic factors—approximately 83 percent of the calorie variation can be explained by session duration alone, with the remaining 17 percent reflecting other parameters built into the simulation model.
-# 4. `BMI & Fat_Percentage`
+# 4. `BMI` & `Fat_Percentage`
 #     - The values for each exhibit a relatively balanced spread from 10 percent to 35 percent around a mean of approximately 25 percent, while the BMI distribution displays a modest positive skew with most values concentrated in the 20 to 30 range and a tail extending toward higher values reaching approximately 50. This difference in distributional shapes suggests that the data generation process applied different randomization or constraint parameters to these two body composition metrics, with Fat_Percentage following a more symmetrical generation pattern while BMI incorporated a right-skewed distribution that produces occasional higher values within the simulated sample.
 
 # %% [markdown]
@@ -232,309 +231,223 @@ plt.close()
 # Next, I move onto Categorical Analysis. I will utilize bar charts to analyze the counts and proportions of each categorical variable to help me understand the composition of the dataset and how different groups behave.
 
 # %%
-def add_value_labels(ax, position="on_top", fmt='{:.0f}'):
+# Set the visual style for all plots
+sns.set_style("whitegrid")
+
+# Create a figure with a 2x2 grid of subplots
+# figsize=(16, 12) means 16 inches wide by 12 inches tall
+fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(16, 12))
+
+# Flatten the 2D array of axes into a 1D array for easier iteration
+axes = axes.flatten()
+
+# Helper function to add labels inside bars
+def add_value_labels_inside(ax):
     """
-    Adds value labels to each bar in a plot.
-
-    Args:
-        ax (plt.Axes): The axes object to add labels to.
-        position (str): The position of the labels.
-                        'on_top' (default) places labels above the bars.
-                        'within' places labels inside the bars.
-        fmt (str): The format string for the labels (e.g., '{:.0f}' for integers,
-                   '{:.1f}' for one decimal place).
+    Adds value labels inside each bar in a bar plot.
+    
+    Parameters:
+    ax: The axes object containing the bar plot
     """
-    # Loop over each bar (patch) in the axes
-    for p in ax.patches:
-        # Get the height of the bar
-        height = p.get_height()
-        # Define the x-coordinate for the text (center of the bar)
-        x = p.get_x() + p.get_width() / 2.
+    # Loop through each bar (patch) in the axes
+    for patch in ax.patches:
+        # Get the height (value) of the bar
+        height = patch.get_height()
+        
+        # Calculate the x-coordinate (center of the bar)
+        x = patch.get_x() + patch.get_width() / 2
+        
+        # Calculate the y-coordinate (middle of the bar)
+        y = height / 2
+        
+        # Add the text label in the center of the bar
+        ax.text(
+            x, y,                    # Position (x, y)
+            f'{int(height)}',        # Text to display (the count)
+            ha='center',             # Horizontal alignment: center
+            va='center',             # Vertical alignment: center
+            fontsize=11,             # Font size
+            fontweight='bold',       # Make text bold
+            color='white'            # White text for contrast against colored bars
+        )
 
-        if position == 'on_top':
-            # Position the text slightly above the bar
-            y = height + 1
-            # Add the text label
-            ax.text(x, y, fmt.format(height),
-                    ha='center', va='bottom', fontsize=10)
-        elif position == 'within':
-            # Position the text in the middle of the bar
-            y = height / 2
-            # Add the text label with white color for contrast
-            ax.text(x, y, fmt.format(height), ha='center',
-                    va='center', color='white', fontsize=10)
+# --- PLOT 1: Gender Distribution ---
+sns.countplot(
+    data=df,
+    x='Gender',
+    hue='Gender',
+    ax=axes[0],
+    palette='viridis',
+    legend=False
+)
+axes[0].set_title('Gender Distribution', fontsize=14, fontweight='bold')
+axes[0].set_xlabel('Gender', fontsize=12)
+axes[0].set_ylabel('Count', fontsize=12)
 
+# Add value labels inside the bars
+add_value_labels_inside(axes[0])
 
-def create_count_and_bar_charts(df):
-    """
-    Generates a set of categorical charts with labels placed on top of or within the bars.
+# --- PLOT 2: Workout Type Distribution ---
+sns.countplot(
+    data=df,
+    x='Workout_Type',
+    hue='Workout_Type',
+    ax=axes[1],
+    palette='plasma',
+    legend=False
+)
+axes[1].set_title('Workout Types Distribution', fontsize=14, fontweight='bold')
+axes[1].set_xlabel('Workout Type', fontsize=12)
+axes[1].set_ylabel('Count', fontsize=12)
+axes[1].tick_params(axis='x', rotation=45)
 
-    Args:
-        df (pd.DataFrame): The DataFrame containing the data for the plots.
-    """
-    # Set the visual style for the plots using seaborn
-    sns.set_style("whitegrid")
+# Add value labels inside the bars
+add_value_labels_inside(axes[1])
 
-    # Create a figure with a 2x2 grid of subplots
-    fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(18, 12))
-    # Flatten the axes array to easily iterate through them
-    axes = axes.flatten()
+# --- PLOT 3: Experience Level Distribution ---
+sns.countplot(
+    data=df,
+    x='Experience_Level',
+    hue='Experience_Level',
+    ax=axes[2],
+    palette='magma',
+    legend=False,
+    order=[1, 2, 3]
+)
+axes[2].set_title('Experience Level Distribution', fontsize=14, fontweight='bold')
+axes[2].set_xlabel('Experience Level (1=Beginner, 2=Intermediate, 3=Advanced)', fontsize=12)
+axes[2].set_ylabel('Count', fontsize=12)
 
-    # --- Plot 1: Count of Gender (Labels on top) ---
-    # Add hue=x to avoid Seaborn deprecation warning.
-    sns.countplot(x='Gender', hue='Gender', data=df_copy,
-                  ax=axes[0], palette='viridis')
-    axes[0].set_title('Distribution of Members by Gender', fontsize=14)
-    axes[0].set_xlabel('Gender', fontsize=12)
-    axes[0].set_ylabel('Count', fontsize=12)
-    # Add labels using the utility function, placed on top
-    add_value_labels(axes[0], position='within')
+# Add value labels inside the bars
+add_value_labels_inside(axes[2])
 
-    # --- Plot 2: Count of Workout Type (Labels within) ---
-    # Add hue=x to avoid Seaborn deprecation warning.
-    sns.countplot(x='Workout_Type', hue='Workout_Type',
-                  data=df_copy, ax=axes[1], palette='plasma')
-    axes[1].set_title('Frequency of Different Workout Types', fontsize=14)
-    axes[1].set_xlabel('Workout Type', fontsize=12)
-    axes[1].set_ylabel('Count', fontsize=12)
-    # Rotate x-axis labels for readability
-    axes[1].tick_params(axis='x', rotation=45)
-    # Add labels using the utility function, placed within the bars
-    add_value_labels(axes[1], position='within')
+# --- PLOT 4: Workout Frequency Distribution ---
+sns.countplot(
+    data=df,
+    x='Workout_Frequency (days/week)',
+    hue='Workout_Frequency (days/week)',
+    ax=axes[3],
+    palette='cividis',
+    legend=False,
+    order=[2, 3, 4, 5]
+)
+axes[3].set_title('Workout Frequency Distribution', fontsize=14, fontweight='bold')
+axes[3].set_xlabel('Workout Frequency (days/week)', fontsize=12)
+axes[3].set_ylabel('Count', fontsize=12)
 
-    # --- Plot 3: Average Calories Burned by Workout Type (Labels within) ---
-    # Add hue=x to avoid Seaborn deprecation warning.
-    sns.barplot(x='Workout_Type', y='Calories_Burned', hue='Workout_Type',
-                data=df_copy, ax=axes[2], palette='cividis', errorbar=None)
-    axes[2].set_title('Average Calories Burned by Workout Type', fontsize=14)
-    axes[2].set_xlabel('Workout Type', fontsize=12)
-    axes[2].set_ylabel('Average Calories Burned', fontsize=12)
-    # Rotate x-axis labels for readability
-    axes[2].tick_params(axis='x', rotation=45)
-    # Add labels using the utility function, placed within, formatted to one decimal place
-    add_value_labels(axes[2], position='within', fmt='{:.1f}')
+# Add value labels inside the bars
+add_value_labels_inside(axes[3])
 
-    # --- Plot 4: Average Session Duration by Experience Level (Labels on top) ---
-    # Add hue=x to avoid Seaborn deprecation warning.
-    sns.barplot(x='Experience_Level', y='Session_Duration (hours)', hue='Experience_Level',
-                data=df_copy, ax=axes[3], palette='magma', errorbar=None, legend=False)
-    axes[3].set_title(
-        'Average Session Duration by Experience Level', fontsize=14)
-    axes[3].set_xlabel('Experience Level', fontsize=12)
-    axes[3].set_ylabel('Average Session Duration (hours)', fontsize=12)
-    # Ensure x-axis labels are integers
-    axes[3].xaxis.set_major_locator(plt.MaxNLocator(integer=True))
+# Add a main title for the entire figure
+fig.suptitle(
+    'Categorical Analysis: Distribution of Key Features',
+    fontsize=18,
+    fontweight='bold',
+    y=0.995
+)
 
-    # Add a main title for the entire figure
-    fig.suptitle('Categorical Analysis: Enhanced Bar Charts',
-                 fontsize=20, y=1.02)
+# Adjust layout to prevent overlapping elements
+plt.tight_layout()
 
-    # Automatically adjust subplot parameters to give a tight layout
-    plt.tight_layout()
-
-    # Display the plots
-    plt.show()
-
-
-create_count_and_bar_charts(df_copy)
-
-
-# %% [markdown]
-# ##### Insights
-
-# %% [markdown]
-# 1. **Gender**
-#     - The near-perfect gender parity (Male 52.5%, Female 47.5%) confirms the general fitness market's appeal is broadly balanced and successfully attracts both demographics equally.
-# 2. **Workout_Type**
-#     - The remarkably even distribution across all four primary exercise types (ranging from 22.7% to 26.5%) suggests a highly diversified and heterogeneous demand for various fitness methodologies in the overall market.
-# 3. **Experience_Level**
-#     - The overwhelming concentration of members at the Beginner (Level 1) and Intermediate (Level 2) stages (approximately 80%) signifies a clear market-wide imperative to focus on retention and guided training pathways for novice users.
-# 4. **Workout_Frequency (days/week)**
-#     - The vast majority of members (nearly 70%) commit to exercising 3 or 4 days per week, indicating that sustainable, moderate attendance is the dominant commitment pattern across the population.
-
-# %% [markdown]
-# Based on the data, I can conclude that the overall fitness market demonstrates balanced appeal and diverse interests, evidenced by near-perfect gender parity and an even distribution of demand across all four major workout categories. Furthermore, the commitment profile is strongly anchored in sustainability, with almost 70% of members consistently engaging in a moderate schedule of three to four workout days per week. This widespread moderate commitment, combined with the fact that 80% of the population is classified as Beginner or Intermediate, establishes a clear, unified market vulnerability that necessitates immediate investment in standardized, supportive programming for novice retention.
+# Save the figure to a file
+#plt.save
 
 # %% [markdown]
 # ##### Bivariate Analysis
 
 # %% [markdown]
-# Finally, I have decided to perform Bivariate Analysis to uncover any potential correlations and dependencies. By examining how one variable (like Workout Type) influences another (such as Calories Burned), we can gain insights into training patterns and physiological outcomes across the general fitness population. The following visualizations and statistical comparisons highlight key relationships that are crucial for understanding and optimizing individual exercise performance.
+# Finally, I have decided to perform Bivariate Analysis to uncover potential correlations and dependencies within the dataset. By examining how one variable (like Workout Type) relates to another (such as Calories Burned), I can identify the mathematical relationships programmed into the data generation process. The following visualizations and statistical comparisons highlight key relationships embedded in the dataset structure.
 
 # %%
-# --- Helper function for adding labels to bars ---
-def add_value_labels(ax, fmt='{:.0f}'):
-    """
-    Adds value labels to each bar in a plot.
-    """
-    for p in ax.patches:
-        height = p.get_height()
-        # Position the text slightly above the bar (height + 10 units)
-        ax.text(p.get_x() + p.get_width() / 2., height + 10,
-                fmt.format(height), ha="center", va="bottom", fontsize=9)
+# Set visual style
+sns.set_style("whitegrid")
 
-# --- Bivariate Analysis Setup ---
-numerical_cols = ['Age', 'Weight (kg)', 'Height (m)', 'Max_BPM', 'Avg_BPM', 'Resting_BPM',
-                  'Session_Duration (hours)', 'Calories_Burned', 'Water_Intake (liters)', 'BMI', 'Fat_Percentage']
-correlation_matrix = df_copy[numerical_cols].corr()
-workout_type_summary = df_copy.groupby('Workout_Type')['Calories_Burned'].mean(
-).sort_values(ascending=False).reset_index()
+# Prepare data for specific visualizations
+numerical_cols = ['Age', 'Weight (kg)', 'Height (m)', 'Max_BPM', 'Avg_BPM', 
+                  'Resting_BPM', 'Session_Duration (hours)', 'Calories_Burned', 
+                  'Water_Intake (liters)', 'BMI', 'Fat_Percentage']
+correlation_matrix = df[numerical_cols].corr()
+workout_type_summary = df.groupby('Workout_Type')['Calories_Burned'].mean().sort_values(ascending=False).reset_index()
 
-
-# --- Visualization Code Generation for 4 Key Plots ---
-fig, axes = plt.subplots(2, 2, figsize=(15, 12))
+# Create figure with 2x2 grid
+fig, axes = plt.subplots(2, 2, figsize=(16, 12))
 
 # --- Plot 1: Correlation Heatmap ---
 sns.heatmap(
-    correlation_matrix[['Calories_Burned',
-                        'Session_Duration (hours)', 'Avg_BPM', 'Weight (kg)']].T,
-    annot=True, fmt='.2f', cmap='coolwarm', cbar=True, ax=axes[0, 0]
+    correlation_matrix[['Calories_Burned', 'Session_Duration (hours)', 'Avg_BPM', 'Fat_Percentage']].T,
+    annot=True, fmt='.2f', cmap='coolwarm', cbar=True, 
+    linewidths=0.5, linecolor='black', ax=axes[0, 0]
 )
-axes[0, 0].set_title('1. Correlation Matrix of Key Variables', fontsize=14)
+axes[0, 0].set_title('Correlation Matrix: Key Variable Relationships', fontsize=14, fontweight='bold')
 axes[0, 0].tick_params(axis='y', rotation=0)
+axes[0, 0].tick_params(axis='x', rotation=45)
 
-# --- Plot 2: Average Calories Burned by Workout Type (Bar Plot) ---
-sns.barplot(x='Workout_Type', y='Calories_Burned', hue='Workout_Type',
-            data=workout_type_summary, ax=axes[0, 1], palette='viridis', errorbar=None, legend=False)
-axes[0, 1].set_title('2. Average Calories Burned by Workout Type', fontsize=14)
-axes[0, 1].set_xlabel('Workout Type')
-axes[0, 1].set_ylabel('Average Calories Burned')
+# --- Plot 2: Average Calories Burned by Workout Type ---
+sns.barplot(
+    data=workout_type_summary, x='Workout_Type', y='Calories_Burned',
+    hue='Workout_Type', ax=axes[0, 1], palette='viridis', legend=False
+)
+axes[0, 1].set_title('Average Calories Burned by Workout Type', fontsize=14, fontweight='bold')
+axes[0, 1].set_xlabel('Workout Type', fontsize=12)
+axes[0, 1].set_ylabel('Average Calories Burned', fontsize=12)
 axes[0, 1].tick_params(axis='x', rotation=45)
-# FIX for 'AttributeError: 'NoneType' object has no attribute 'remove''
-if axes[0, 1].legend_ is not None:
-    axes[0, 1].legend_.remove()
-add_value_labels(axes[0, 1])
 
-# --- Plot 3: Box Plot: Calories Burned by Experience Level ---
+# Add value labels inside bars
+for patch in axes[0, 1].patches:
+    height = patch.get_height()
+    axes[0, 1].text(
+        patch.get_x() + patch.get_width() / 2, height / 2,
+        f'{int(height)}', ha='center', va='center',
+        fontsize=11, fontweight='bold', color='white'
+    )
+
+# --- Plot 3: Box Plot - Calories Burned by Experience Level ---
 sns.boxplot(
-    x='Experience_Level', y='Calories_Burned', data=df_copy,
-    order=[3, 2, 1], hue='Experience_Level', ax=axes[1, 0], palette='magma', legend=False
+    data=df, x='Experience_Level', y='Calories_Burned',
+    order=[3, 2, 1], hue='Experience_Level', ax=axes[1, 0], 
+    palette='magma', legend=False
 )
-axes[1, 0].set_title(
-    '3. Calories Burned Distribution by Experience Level', fontsize=14)
-axes[1, 0].set_xlabel('Experience Level (3=Advanced, 1=Beginner)')
-axes[1, 0].set_ylabel('Calories Burned')
-# FIX for 'AttributeError: 'NoneType' object has no attribute 'remove''
-if axes[1, 0].legend_ is not None:
-    axes[1, 0].legend_.remove()
+axes[1, 0].set_title('Calories Burned Distribution by Experience Level', fontsize=14, fontweight='bold')
+axes[1, 0].set_xlabel('Experience Level (3=Advanced, 2=Intermediate, 1=Beginner)', fontsize=12)
+axes[1, 0].set_ylabel('Calories Burned', fontsize=12)
 
-# --- Plot 4: Scatter Plot: Avg_BPM vs. Calories_Burned ---
-sns.scatterplot(
-    x='Avg_BPM', y='Calories_Burned', data=df_copy,
+# --- Plot 4: Scatter Plot - Avg_BPM vs Calories_Burned ---
+scatter = sns.scatterplot(
+    data=df, x='Avg_BPM', y='Calories_Burned',
     hue='Session_Duration (hours)', size='Session_Duration (hours)',
-    sizes=(20, 200), palette='viridis', ax=axes[1, 1]
+    sizes=(20, 200), palette='viridis', ax=axes[1, 1], alpha=0.6
 )
-axes[1, 1].set_title('4. Avg_BPM vs. Calories_Burned (by Session Duration)', fontsize=14)
-axes[1, 1].set_xlabel('Average BPM')
-axes[1, 1].set_ylabel('Calories Burned')
-# Move legend out of the way
-axes[1, 1].legend(loc='lower right', bbox_to_anchor=(1.0, 0), title='Duration (hours)')
+axes[1, 1].set_title('Average BPM vs Calories Burned (by Session Duration)', fontsize=14, fontweight='bold')
+axes[1, 1].set_xlabel('Average BPM', fontsize=12)
+axes[1, 1].set_ylabel('Calories Burned', fontsize=12)
+axes[1, 1].legend(title='Duration (hrs)', loc='lower right', fontsize=9)
 
-# Add a main title for the entire figure
-plt.suptitle('Key Bivariate Relationships in Gym Member Data',
-             fontsize=18, y=1.05)
+# Add main title
+fig.suptitle('Key Bivariate Relationships', 
+             fontsize=18, fontweight='bold', y=0.995)
 
-# --- FINAL FIX: Use a more conservative rect to reserve more top and bottom margin space ---
-# This reserves 10% space at the top (1.00 - 0.90) for the suptitle
-# and 5% space at the bottom (0.05 - 0.00) for labels.
-plt.tight_layout(rect=[0, 0.05, 1, 0.90])
-plt.savefig('4_key_bivariate_plots_final.png')
+# Adjust layout
+plt.tight_layout()
+
+# Save and display
+plt.savefig('bivariate_analysis_plots.png', dpi=300, bbox_inches='tight')
 plt.show()
 plt.close()
 
 # %% [markdown]
-# ##### Insights
+# ##### Key Insights
+#
+# 1. `Session_Duration` vs. `Calories_Burned`
+#     - The correlation matrix reveals an exceptionally strong positive correlation of 0.91 between Session_Duration and Calories_Burned, confirming that the data generation algorithm primarily tied caloric expenditure to workout length. This relationship accounts for approximately 83 percent of the variance in calories burned, with the remaining 17 percent reflecting programmed influences of workout intensity, exercise type, and simulated individual metabolic differences.
+#
+# 2. `Workout_Type` vs. `Calories_Burned`
+#     - The average calories burned across workout types shows HIIT at 926 calories, followed by Strength at 905 calories, Cardio at 903 calories, and Yoga at 901 calories. This relatively narrow range (25-calorie spread) indicates the simulation programmed minimal differentiation in caloric output between workout modalities, with all four types clustering tightly around the overall mean of 905 calories.
+#
+# 3. `Experience_Level` vs. `Calories_Burned`
+#     - The box plot distribution reveals that Advanced members (Level 3) have median calorie burns approximately 400 calories higher than Beginners (Level 1), with Intermediate members (Level 2) falling between these extremes. This systematic progression reflects a design choice to model experience level as a strong predictor of workout output, with higher experience correlating with both longer session durations and greater caloric expenditure.
+#
+# 4. `Average_BPM` vs. `Calories_Burned`
+#     - The scatter plot demonstrates a positive relationship between Average_BPM and Calories_Burned, with color gradation showing that longer session durations correspond to both higher heart rates and greater caloric expenditure. This pattern indicates the simulation modeled cardiovascular intensity as interconnected with both workout duration and energy expenditure, creating a three-way relationship where time, heart rate, and calories increase together.
 
 # %% [markdown]
-# 1. **Session Duration vs. Calories Burned**
-#     - The exceptionally high positive correlation (0.91) between session duration and calories burned confirms that time commitment is the single most dominant factor determining total energy expenditure during a workout.
-# 2. **Workout Type vs. Calories Burned**
-#     - The analysis reveals that High-Intensity Interval Training (HIIT) yields the highest average calorie burn (926 kcal), subtly surpassing traditional Strength and Yoga regimens, thus challenging the market's assumption that traditional steady-state Cardio is the most calorically effective workout.
-# 3. **Experience Level vs. Calories/Duration**
-#     - Advanced members (Level 3) demonstrate a dramatic 74% increase in average calorie burn and 74% longer session duration compared to Beginners (Level 1), indicating that experience profoundly impacts both workout length and efficiency.
-# 4. **Calories Burned vs. Fat Percentage**
-#     - The strong negative correlation (–0.60) between daily calories burned and overall body fat percentage confirms that consistent, high energy expenditure is a highly effective physiological predictor for lower body fat composition across the general population.
-
-# %% [markdown]
-# The bivariate relationships conclusively demonstrate that workout output is governed by a simple Duration-Intensity-Result model, where time commitment is the highest correlator of calories burned, while a strong negative correlation links high energy expenditure to lower body fat. The data further reveals that market demand is optimized by higher-burn workouts like HIIT and Strength training, signaling a shift away from traditional Cardio as the presumed calorie king, and that Experience Level serves as the most pronounced differentiator in both duration and resulting energy output. This disparity presents a unified and valuable market opportunity to design progressive training programs that systematically bridge the 74 percent gap between Beginner performance and Advanced member retention.
-
-# %% [markdown]
-# #### Conclusion
-
-# %% [markdown]
-# The visualization analysis offers clear insights into gym member performance, establishing that the average session burns approximately 905 calories and that the Strength workout category dominates membership activity. Crucially, the bivariate analysis confirms that energy expenditure is highly predictable, demonstrating a strong, linear correlation between Session Duration and Calories Burned. This performance metric is significantly moderated by Experience Level, which acts as a reliable predictor of intensity, with advanced members consistently exhibiting 32 percent higher average calorie burn than beginners. Therefore, future programming efforts should prioritize intermediate and advanced-level strength programs to capitalize on the highest observed engagement and intensity, while simultaneously providing structured incentives for beginners to extend their session durations and boost their caloric output.
-
-# %% [markdown]
-# ___
-
-# %% [markdown]
-# *any blocks below this text is meant to added back into the final arrangement of the report at later date*
-
-# %% [markdown]
-# ## 3. Data Cleaning & Transformation
-
-# %% [markdown]
-# Since the dataset has no missing values, inconsistent formats, or clear outliers, we conclude it is "clean" and does not need to undergo any data cleansing.
-
-# %% [markdown]
-# ### Data Transformation
-
-# %% [markdown]
-# This section outlines the process of transforming the raw dataset to ensure it is in the optimal format for analysis and model building. While the dataset has high structural integrity with no missing values, several features require transformation to be used effectively. Specifically, we will address the conversion of categorical data into a numerical format, and the scaling of numerical features to standardize their range. This process ensures all variables are ready for potential use in machine learning models, preventing potential issues with feature bias and performance.
-
-# %% [markdown]
-# #### Feature Scaling
-
-# %% [markdown]
-# We standardize the numerical columns using `StandardScaler` from the `scikit-learn` library, transforming its values so that they have a **mean of 0** and a **standard deviation of 1**.
-
-# %%
-from sklearn.preprocessing import StandardScaler
-import pandas as pd
-
-# Load the dataset
-df = pd.read_csv('gym_members_exercise_tracking.csv')
-
-# Identify numerical columns to scale
-numerical_cols = ['Age', 'Weight (kg)', 'Height (m)', 'Max_BPM', 'Avg_BPM', 'Resting_BPM', 'Session_Duration (hours)',
-                  'Calories_Burned', 'Fat_Percentage', 'Water_Intake (liters)', 'Workout_Frequency (days/week)', 'Experience_Level', 'BMI']
-
-# Create a StandardScaler object
-scaler = StandardScaler()
-
-# Fit and transform the numerical data
-df[numerical_cols] = scaler.fit_transform(df[numerical_cols])
-
-# Display the scaled data (first 5 rows)
-print(df[numerical_cols].head())
-
-# %% [markdown]
-# #### Encoding Categorical Variables
-
-# %% [markdown]
-# We use `get_dummies()` from `pandas` to perform one-hot encoding.
-
-# %%
-# Identify categorical columns to encode
-categorical_cols = ['Gender', 'Workout_Type']
-
-# Perform one-hot encoding
-df = pd.get_dummies(df, columns=categorical_cols, drop_first=True)
-
-# Display the transformed DataFrame with the new columns
-print(df.head())
-
-# %% [markdown]
-# #### Binning/Discretization
-
-# %% [markdown]
-# #### Feature Engineering
-
-# %% [markdown]
-# #### Skewed Data Handling
-
-# %% [markdown]
-# #### Dimensionality Reduction
-
-# %% [markdown]
-# ---
+# In conclusion, the bivariate relationships within this simulated dataset demonstrate that the data generation algorithm was programmed with Session_Duration as the dominant predictor of caloric expenditure, accounting for 83 percent of the variance through a strong positive correlation of 0.91. The simulation incorporated secondary variation through Experience_Level, which shows systematic progression in energy output from beginner to advanced classifications, while Workout_Type shows minimal differentiation with all four modalities clustered within a 25-calorie range around the mean. These relationships reveal that the dataset structure prioritizes duration-based modeling of performance while incorporating modest influences from skill level and workout modality, creating a hierarchical system where time commitment drives the majority of caloric variation with experience and exercise type playing supporting roles.
