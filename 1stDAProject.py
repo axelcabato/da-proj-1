@@ -116,7 +116,7 @@ df[["Gender", "Workout_Type"]].value_counts()
 
 # %% [markdown]
 # To prepare the data for any audience who might be more familiar with imperial units, I will perform some feature engineering by constructing new attributes from the existing dataset.
-# - Specifically, I will convert the **Weight (kg)** and **Height (m)** variables from their current metric system to their imperial counterparts. This will be done to ensure the data is standardized for any subsequent statistical analysis and for enhanced data visualization tailored to our target audience.
+# - Specifically, I will convert the `Weight (kg)` and `Height (m)` variables from their current metric system to their imperial counterparts. This will be done to ensure the data is standardized for any subsequent statistical analysis and for enhanced data visualization tailored to our target audience.
 
 # %%
 # Meter to Feet Conversion
@@ -132,7 +132,7 @@ df[["Height (m)", "Height (ft)", "Weight (kg)", "Weight (lb)"]]
 df[["Height (ft)", "Weight (lb)"]].describe()
 
 # %% [markdown]
-# I use the `.describe()` method to validate the newly-engineered Weight (lbs)** and **Height (ft)** features, confirming that the new columns have a reasonable range of values and are correctly populated. This ensures the integrity of our dataset for subsequent analysis.
+# I use the `.describe()` method to validate the newly-engineered `Weight (lbs)` and `Height (ft)` features, confirming that the new columns have a reasonable range of values and are correctly populated. This ensures the integrity of our dataset for subsequent analysis.
 #
 # > I will be using Imperial units in my analyses going foward.
 
@@ -217,7 +217,7 @@ plt.close()
 # 2. `Workout_Frequency (days/week)` (Histogram not shown above)
 #     - The distribution ranges from two to five days per week, with the values appearing distributed across these four levels, and notably excludes both very low frequency exercisers (one day per week) and daily exercisers (six to seven days per week). This bounded range reflects a design choice in the data generation process to focus the simulation on individuals who maintain moderate, consistent exercise schedules, thereby creating a sample that represents sustainable commitment patterns rather than the full spectrum of possible attendance behaviors.
 # 3. `Calories_Burned`
-#     - The values exhibit substantial variation, ranging from approximately 300 to 1,700 calories per session, yet this variation shows an exceptionally strong positive correlation of 0.91 with Session_Duration, confirming that the data generation algorithm primarily tied caloric expenditure to workout length. While the simulation incorporated some additional variance beyond pure time-based calculation—likely representing programmed influences of workout intensity, type, and individual metabolic factors—approximately 83 percent of the calorie variation can be explained by session duration alone, with the remaining 17 percent reflecting other parameters built into the simulation model.
+#     - The values exhibit substantial variation, ranging from approximately 300 to 1,700 calories per session, yet this variation shows an exceptionally strong positive correlation of 0.91 with `Session_Duration`, confirming that the data generation algorithm primarily tied caloric expenditure to workout length. While the simulation incorporated some additional variance beyond pure time-based calculation (likely representing programmed influences of workout intensity, type, and individual metabolic factors), approximately 83 percent of the calorie variation can be explained by session duration alone, with the remaining 17 percent reflecting other parameters built into the simulation model.
 # 4. `BMI` & `Fat_Percentage`
 #     - The values for each exhibit a relatively balanced spread from 10 percent to 35 percent around a mean of approximately 25 percent, while the BMI distribution displays a modest positive skew with most values concentrated in the 20 to 30 range and a tail extending toward higher values reaching approximately 50. This difference in distributional shapes suggests that the data generation process applied different randomization or constraint parameters to these two body composition metrics, with Fat_Percentage following a more symmetrical generation pattern while BMI incorporated a right-skewed distribution that produces occasional higher values within the simulated sample.
 
@@ -356,7 +356,7 @@ plt.tight_layout()
 # ##### Bivariate Analysis
 
 # %% [markdown]
-# Finally, I have decided to perform Bivariate Analysis to uncover potential correlations and dependencies within the dataset. By examining how one variable (like Workout Type) relates to another (such as Calories Burned), I can identify the mathematical relationships programmed into the data generation process. The following visualizations and statistical comparisons highlight key relationships embedded in the dataset structure.
+# Finally, I have decided to perform Bivariate Analysis to uncover potential correlations and dependencies within the dataset. By examining how one variable (like **Workout Type**) relates to another (such as **Calories Burned**), I can identify the mathematical relationships programmed into the data generation process. The following visualizations and statistical comparisons highlight key relationships embedded in the dataset structure.
 
 # %%
 # Set visual style
@@ -434,20 +434,120 @@ plt.savefig('bivariate_analysis_plots.png', dpi=300, bbox_inches='tight')
 plt.show()
 plt.close()
 
+# Verify average calories burned by workout type
+print("=== WORKOUT TYPE CALORIE VERIFICATION ===")
+workout_stats = df.groupby('Workout_Type')['Calories_Burned'].agg(['mean', 'count']).sort_values('mean', ascending=False)
+workout_stats['mean'] = workout_stats['mean'].round(1)
+print(workout_stats)
+print(f"\nSpread (max - min): {workout_stats['mean'].max() - workout_stats['mean'].min():.1f} calories")
+
 # %% [markdown]
 # ##### Key Insights
 #
 # 1. `Session_Duration` vs. `Calories_Burned`
-#     - The correlation matrix reveals an exceptionally strong positive correlation of 0.91 between Session_Duration and Calories_Burned, confirming that the data generation algorithm primarily tied caloric expenditure to workout length. This relationship accounts for approximately 83 percent of the variance in calories burned, with the remaining 17 percent reflecting programmed influences of workout intensity, exercise type, and simulated individual metabolic differences.
+#     - The correlation matrix reveals an exceptionally strong positive correlation of 0.91 between the two, confirming that the data generation algorithm primarily tied caloric expenditure to workout length. This relationship accounts for approximately 83 percent of the variance in calories burned, with the remaining 17 percent reflecting programmed influences of workout intensity, exercise type, and simulated individual metabolic differences.
 #
 # 2. `Workout_Type` vs. `Calories_Burned`
-#     - The average calories burned across workout types shows HIIT at 926 calories, followed by Strength at 905 calories, Cardio at 903 calories, and Yoga at 901 calories. This relatively narrow range (25-calorie spread) indicates the simulation programmed minimal differentiation in caloric output between workout modalities, with all four types clustering tightly around the overall mean of 905 calories.
+#     - The average calories burned across workout types shows HIIT at 926 calories, followed by Cardio at 885 calories, Strength at 911 calories, and Yoga at 903 calories. This relatively narrow range (41-calorie spread) indicates the simulation programmed some degree of differentiation in caloric output between workout modalities, with all four types clustering tightly around the overall mean of 905 calories.
 #
 # 3. `Experience_Level` vs. `Calories_Burned`
 #     - The box plot distribution reveals that Advanced members (Level 3) have median calorie burns approximately 400 calories higher than Beginners (Level 1), with Intermediate members (Level 2) falling between these extremes. This systematic progression reflects a design choice to model experience level as a strong predictor of workout output, with higher experience correlating with both longer session durations and greater caloric expenditure.
 #
 # 4. `Average_BPM` vs. `Calories_Burned`
-#     - The scatter plot demonstrates a positive relationship between Average_BPM and Calories_Burned, with color gradation showing that longer session durations correspond to both higher heart rates and greater caloric expenditure. This pattern indicates the simulation modeled cardiovascular intensity as interconnected with both workout duration and energy expenditure, creating a three-way relationship where time, heart rate, and calories increase together.
+#     - The scatter plot demonstrates a positive relationship between the two, with color gradation showing that longer session durations correspond to both higher heart rates and greater caloric expenditure. This pattern indicates the simulation modeled cardiovascular intensity as interconnected with both workout duration and energy expenditure, creating a three-way relationship where time, heart rate, and calories increase together.
 
 # %% [markdown]
-# In conclusion, the bivariate relationships within this simulated dataset demonstrate that the data generation algorithm was programmed with Session_Duration as the dominant predictor of caloric expenditure, accounting for 83 percent of the variance through a strong positive correlation of 0.91. The simulation incorporated secondary variation through Experience_Level, which shows systematic progression in energy output from beginner to advanced classifications, while Workout_Type shows minimal differentiation with all four modalities clustered within a 25-calorie range around the mean. These relationships reveal that the dataset structure prioritizes duration-based modeling of performance while incorporating modest influences from skill level and workout modality, creating a hierarchical system where time commitment drives the majority of caloric variation with experience and exercise type playing supporting roles.
+# In conclusion, the bivariate relationships within this simulated dataset demonstrate that the data generation algorithm was programmed with `Session_Duration` as the dominant predictor of caloric expenditure, accounting for 83 percent of the variance through a strong positive correlation of 0.91. The simulation incorporated secondary variation through `Experience_Level`, which shows systematic progression in energy output from beginner to advanced classifications, while `Workout_Type` shows some degree of differentiation with all four modalities clustered within a 41-calorie range around the mean. These relationships reveal that the dataset structure prioritizes duration-based modeling of performance while incorporating modest influences from skill level and workout modality, creating a hierarchical system where time commitment drives the majority of caloric variation with experience and exercise type playing supporting roles.
+
+# %% [markdown]
+# ---
+
+# %% [markdown]
+# #### ~Data Transformation & Feature Engineering
+
+# %% [markdown]
+# Having completed the exploratory data analysis and visualization phases, I now move into data transformation to enhance the analytical value of this simulated dataset. This phase involves creating derived features that provide new perspectives on the data, standardizing measurements for fair comparison across different scales, and generating aggregated statistics that reveal patterns at the group level. These transformation steps prepare the dataset for deeper statistical analysis and demonstrate techniques commonly used in data analysis and engineering workflows to extract maximum insight from raw data.
+
+# %% [markdown]
+# ##### Creating Derived Features
+
+# %% [markdown]
+# Feature engineering involves creating new calculated columns from existing variables to provide additional analytical perspectives and answer specific business questions. By constructing metrics such as "Calorie Efficiency", BMI Classifications, and Composite Intensity Scores, I can transform raw measurements into meaningful indicators that support more nuanced analysis of workout performance and member characteristics.
+
+# %%
+# Calculate calorie efficiency (calories burned per hour)
+df['Calorie_Efficiency'] = df['Calories_Burned'] / df['Session_Duration (hours)']
+
+# Create BMI categories based on standard WHO classifications
+df['BMI_Category'] = pd.cut(
+    df['BMI'],
+    bins=[0, 18.5, 24.9, 29.9, 100],
+    labels=['Underweight', 'Normal', 'Overweight', 'Obese']
+)
+
+# Create Age Group categories
+df['Age_Group'] = pd.cut(
+    df['Age'],
+    bins=[0, 29, 44, 59],
+    labels=['Young Adult (18-29)', 'Middle-Aged (30-44)', 'Senior (45-59)']
+)
+
+# Create Intensity Score (normalized combination of heart rate metrics)
+df['Intensity_Score'] = (
+    (df['Avg_BPM'] - df['Resting_BPM']) / df['Max_BPM']
+) * 100
+
+
+# Verify new features were created successfully
+df[['Calorie_Efficiency', 'BMI_Category', 'Age_Group', 'Intensity_Score']].head(10)
+
+# %% [markdown]
+# **Features Created:**
+# - `Calorie_Efficiency`: Calories burned per hour of exercise
+# - `BMI_Category`: WHO standard weight classifications (Underweight, Normal, Overweight, Obese)
+# - `Age_Group`: Life-stage groupings for demographic analysis
+# - `Intensity_Score`: Percentage of heart rate capacity utilized during workout
+
+# %% [markdown]
+# ##### Normalize/Standardize Numerical Features
+
+# %% [markdown]
+# Variables in this dataset are measured on vastly different scales. Age ranges from 18 to 59, while Calories_Burned ranges from 300 to 1,700, making direct numerical comparisons problematic without standardization. Scaling transforms all features to a common range (typically mean of 0 and standard deviation of 1), ensuring that variables with larger numerical ranges don't artificially dominate analyses or visualizations that compare multiple metrics simultaneously.
+
+# %%
+from sklearn.preprocessing import StandardScaler
+
+# Select numerical columns to standardize (excluding categorical and derived category features)
+columns_to_scale: list = [
+    'Age', 'Weight (kg)', 'Height (m)', 'Max_BPM', 'Avg_BPM', 
+    'Resting_BPM', 'Session_Duration (hours)', 'Calories_Burned',
+    'Fat_Percentage', 'Water_Intake (liters)', 'Workout_Frequency (days/week)',
+    'Experience_Level', 'BMI', 'Calorie_Efficiency', 'Intensity_Score'
+]
+
+# Initialize the scaler
+scaler = StandardScaler()
+
+# Create new DataFrame with scaled values (preserving originals)
+df_scaled = df.copy()
+df_scaled[columns_to_scale] = scaler.fit_transform(df[columns_to_scale])
+
+# Verify standardization worked (mean ≈ 0, std ≈ 1)
+df_scaled[columns_to_scale].describe().loc[['mean', 'std']].round(2)
+
+# %% [markdown]
+# The standardized features now share a common scale with means approximately equal to 0 and standard deviations of 1. The original DataFrame `df` remains unchanged for interpretability, while `df_scaled` is available for any analyses requiring normalized inputs.
+
+# %% [markdown]
+# ##### Create Aggregated Summary Statistics
+
+# %% [markdown]
+# While individual observations provide granular detail, strategic decision-making requires understanding patterns at the group and category levels through statistical aggregation. By calculating summary metrics across combinations of categorical variables—such as average performance by `Gender` and `Workout_Type`, or session characteristics by `Experience_Level`—I can identify trends and differences that inform targeted recommendations for distinct member segments.
+
+# %%
+
+# %% [markdown]
+# #### ~Statistical Interpretation & Hypothesis Testing
+
+# %% [markdown]
+# #### Business Insights & Recommendations
