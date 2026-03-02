@@ -15,7 +15,7 @@
 
 # %% [markdown]
 # # Project Title
-# *all language subject to change*
+# *(all language subject to change)*
 #
 # **Author:** Axel Christian Cabato
 #
@@ -86,9 +86,11 @@ df.describe()
 df[["Gender", "Workout_Type"]].value_counts()
 
 # %% [markdown]
-# The categorical features of `Gender` and `Workout_Type` contain a small and consistent set of unique values.:
+# The categorical features of `Gender` and `Workout_Type` contain a small and consistent set of unique values:
 # - For `Gender`, it is a binary categorical value with only two disctinct classes ("Male" and "Female"). The absence of additional unique values, such as inconsistent spellings, abbreviations, or missing value placeholders, confirms the high degree of data consistency for this feature.
 # - Similarly, `Workout_Type` also has a small amount of disctinct and consistently labeled classes: "Cardio", "Strength", "HIIT" and "Yoga". This categorical integrity ensures that the variable is ready for direct use in analysis or for a simple transformation into a quantitative format, such as one-hot encoding, without requiring a separate data cleaning stage.
+#
+# The counts across all combinations (`Gender` × `Workout_Type`) range from 106 to 135 also, indicating a relatively balanced representation across groups. A favorable characteristic for subsequent comparative analyses.
 
 # %% [markdown]
 # ---
@@ -100,7 +102,7 @@ df[["Gender", "Workout_Type"]].value_counts()
 # While clean in structure, the dataset contains several potential biases, limitations, and quirks that a data analyst must consider. The primary bias is that the dataset was simulated and generated using averages from publicly available studies and industry reports. This means the data may under- or over-represent certain behaviors or characteristics.
 # - For instance, the randomization of `Experience_Level` and `Workout_Frequency` might not perfectly reflect the actual distribution of gym members, where, for example, a large number might be beginners who work out less frequently. This synthetic nature is *the most significant limitation*, as it lacks the unpredictable and messy nuances of real human behavior.
 #
-# **Any insights or models derived from this dataset would need to be validated with actual, real-world data before being applied to a genuine scenario.**
+# **Any insights or models derived from this dataset would need to be validated with *actual, real-world data* before being applied to a genuine scenario.**
 #
 # The dataset also has a few quirks that are uncommon in real-world data:
 # - It **has no missing values** and **all categorical values are perfectly consistent**, *which is highly unusual*.
@@ -165,14 +167,14 @@ df_copy = df.copy()
 
 # Define the numerical features for univariate analysis
 numerical_features = ["Age", "Weight (lb)", "Height (ft)", "Calories_Burned",
-                      "Session_Duration (hours)", "Fat_Percentage", "BMI", "Avg_BPM", "Resting_BPM"]
+                      "Session_Duration (hours)", "Fat_Percentage", "BMI", "Avg_BPM", 
+                      "Resting_BPM", "Workout_Frequency (days/week)"]
 
 # Set the style for the plots
 sns.set_style("whitegrid")
 
-# Create a figure and a set of subplots (3x3 grid for the 8 plots)
-# Note: Changing to 3x3 to accommodate 8 plots efficiently.
-fig, axes = plt.subplots(nrows=3, ncols=3, figsize=(18, 15))
+# Create a figure and a set of subplots (2x5 grid for 10 features)
+fig, axes = plt.subplots(nrows=2, ncols=5, figsize=(20, 10))
 
 # Flatten the axes array to easily iterate through it
 axes = axes.flatten()
@@ -186,7 +188,7 @@ for i, feature in enumerate(numerical_features):
     ax.set_xlabel(feature, fontsize=12)
     ax.set_ylabel("Count", fontsize=12)
 
-# Hide any unused subplots (in a 3x3 grid, there is 1 unused subplot for 8 features)
+# Hide any unused subplots
 for j in range(len(numerical_features), len(axes)):
     axes[j].axis("off")
 
@@ -198,7 +200,7 @@ fig.suptitle(
 # Apply tight layout for non-overlapping plots
 plt.tight_layout()
 
-# --- FINAL COMMANDS (Updated) ---
+# --- FINAL COMMANDS ---
 # 1. Save the figure to a file
 plt.savefig('univariate_histograms.png')
 
@@ -214,15 +216,15 @@ plt.close()
 # %% [markdown]
 # 1. `Age`
 #     - The distribution spans from 18 to 59 years with a mean of approximately 39 years, showing that the simulated sample was designed to represent individuals across the full active adult age spectrum. The relatively even distribution across this range suggests that the data generation process did not intentionally concentrate observations at any particular age, resulting in a sample that includes young adults, middle-aged individuals, and older adults in roughly similar proportions.
-# 2. `Workout_Frequency (days/week)` (Histogram not shown above)
+# 2. `Workout_Frequency (days/week)`
 #     - The distribution ranges from two to five days per week, with the values appearing distributed across these four levels, and notably excludes both very low frequency exercisers (one day per week) and daily exercisers (six to seven days per week). This bounded range reflects a design choice in the data generation process to focus the simulation on individuals who maintain moderate, consistent exercise schedules, thereby creating a sample that represents sustainable commitment patterns rather than the full spectrum of possible attendance behaviors.
 # 3. `Calories_Burned`
 #     - The values exhibit substantial variation, ranging from approximately 300 to 1,700 calories per session, yet this variation shows an exceptionally strong positive correlation of 0.91 with `Session_Duration`, confirming that the data generation algorithm primarily tied caloric expenditure to workout length. While the simulation incorporated some additional variance beyond pure time-based calculation (likely representing programmed influences of workout intensity, type, and individual metabolic factors), approximately 83 percent of the calorie variation can be explained by session duration alone, with the remaining 17 percent reflecting other parameters built into the simulation model.
 # 4. `BMI` & `Fat_Percentage`
-#     - The values for each exhibit a relatively balanced spread from 10 percent to 35 percent around a mean of approximately 25 percent, while the BMI distribution displays a modest positive skew with most values concentrated in the 20 to 30 range and a tail extending toward higher values reaching approximately 50. This difference in distributional shapes suggests that the data generation process applied different randomization or constraint parameters to these two body composition metrics, with Fat_Percentage following a more symmetrical generation pattern while BMI incorporated a right-skewed distribution that produces occasional higher values within the simulated sample.
+#     - The values for each exhibit a relatively balanced spread from 10 percent to 35 percent around a mean of approximately 25 percent, while the BMI distribution displays a modest positive skew with most values concentrated in the 20 to 30 range and a tail extending toward higher values reaching approximately 50. This difference in distributional shapes suggests that the data generation process applied different randomization or constraint parameters to these two body composition metrics, with `Fat_Percentage` following a more symmetrical generation pattern while BMI incorporated a right-skewed distribution that produces occasional higher values within the simulated sample.
 
 # %% [markdown]
-# In conclusion, this simulated dataset models a prototypical individual centered around 39 years of age who completes workout sessions averaging 1.26 hours in duration and expends approximately 905 calories per session. The simulated population exhibits cardiovascular metrics consistent with moderate fitness levels, with Resting BPM values tightly clustered around 62 beats per minute. The dataset incorporates substantial variation in body composition, with Weight values spanning from 88 pounds to 285.8 pounds, reflecting the simulation's design to represent individuals across a wide spectrum of body sizes. Notably, the strong positive correlation of 0.91 between Session Duration and Calories Burned demonstrates that the data generation algorithm primarily modeled energy expenditure as a function of workout length, with session duration explaining approximately 83 percent of caloric variation while the remaining variance reflects programmed influences of intensity, workout type, and simulated individual differences.
+# In conclusion, this simulated dataset models a prototypical individual centered around 39 years of age who completes workout sessions averaging 1.26 hours in duration and expends approximately 905 calories per session. The simulated population exhibits cardiovascular metrics consistent with moderate fitness levels, with Resting BPM values tightly clustered around 62 beats per minute. The dataset incorporates substantial variation in body composition, with `Weight (lb)` values spanning from 88 pounds to 285.8 pounds, reflecting the simulation's design to represent individuals across a wide spectrum of body sizes. Notably, the strong positive correlation of 0.91 between `Session_Duration` and `Calories_Burned` demonstrates that the data generation algorithm primarily modeled energy expenditure as a function of workout length, with session duration explaining approximately 83 percent of caloric variation while the remaining variance reflects programmed influences of intensity, workout type, and simulated individual differences.
 
 # %% [markdown]
 # ##### Categorical Analysis
@@ -235,7 +237,6 @@ plt.close()
 sns.set_style("whitegrid")
 
 # Create a figure with a 2x2 grid of subplots
-# figsize=(16, 12) means 16 inches wide by 12 inches tall
 fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(16, 12))
 
 # Flatten the 2D array of axes into a 1D array for easier iteration
@@ -350,13 +351,13 @@ fig.suptitle(
 plt.tight_layout()
 
 # Save the figure to a file
-#plt.save
+plt.savefig('categorical_analysis.png')
 
 # %% [markdown]
 # ##### Bivariate Analysis
 
 # %% [markdown]
-# Finally, I have decided to perform Bivariate Analysis to uncover potential correlations and dependencies within the dataset. By examining how one variable (like **Workout Type**) relates to another (such as **Calories Burned**), I can identify the mathematical relationships programmed into the data generation process. The following visualizations and statistical comparisons highlight key relationships embedded in the dataset structure.
+# Finally, I have decided to perform Bivariate Analysis to uncover potential correlations and dependencies within the dataset. By examining how one variable (like `Workout_Type`) relates to another (such as `Calories_Burned`), I can identify the mathematical relationships programmed into the data generation process. The following visualizations and statistical comparisons highlight key relationships embedded in the dataset structure.
 
 # %%
 # Set visual style
@@ -434,13 +435,6 @@ plt.savefig('bivariate_analysis_plots.png', dpi=300, bbox_inches='tight')
 plt.show()
 plt.close()
 
-# Verify average calories burned by workout type
-print("=== WORKOUT TYPE CALORIE VERIFICATION ===")
-workout_stats = df.groupby('Workout_Type')['Calories_Burned'].agg(['mean', 'count']).sort_values('mean', ascending=False)
-workout_stats['mean'] = workout_stats['mean'].round(1)
-print(workout_stats)
-print(f"\nSpread (max - min): {workout_stats['mean'].max() - workout_stats['mean'].min():.1f} calories")
-
 # %% [markdown]
 # ##### Key Insights
 #
@@ -463,7 +457,7 @@ print(f"\nSpread (max - min): {workout_stats['mean'].max() - workout_stats['mean
 # ---
 
 # %% [markdown]
-# #### ~Data Transformation & Feature Engineering
+# #### Data Transformation & Feature Engineering
 
 # %% [markdown]
 # Having completed the exploratory data analysis and visualization phases, I now move into data transformation to enhance the analytical value of this simulated dataset. This phase involves creating derived features that provide new perspectives on the data, standardizing measurements for fair comparison across different scales, and generating aggregated statistics that reveal patterns at the group level. These transformation steps prepare the dataset for deeper statistical analysis and demonstrate techniques commonly used in data analysis and engineering workflows to extract maximum insight from raw data.
@@ -504,7 +498,7 @@ df[['Calorie_Efficiency', 'BMI_Category', 'Age_Group', 'Intensity_Score']].head(
 # %% [markdown]
 # **Features Created:**
 # - `Calorie_Efficiency`: Calories burned per hour of exercise
-# - `BMI_Category`: WHO standard weight classifications (Underweight, Normal, Overweight, Obese)
+# - `BMI_Category`: Standard Body Mass Index (BMI) classifications (Underweight, Normal, Overweight, Obese). Based on the World Health Organization (WHO).
 # - `Age_Group`: Life-stage groupings for demographic analysis
 # - `Intensity_Score`: Percentage of heart rate capacity utilized during workout
 
@@ -512,7 +506,7 @@ df[['Calorie_Efficiency', 'BMI_Category', 'Age_Group', 'Intensity_Score']].head(
 # ##### Normalize/Standardize Numerical Features
 
 # %% [markdown]
-# Variables in this dataset are measured on vastly different scales. Age ranges from 18 to 59, while Calories_Burned ranges from 300 to 1,700, making direct numerical comparisons problematic without standardization. Scaling transforms all features to a common range (typically mean of 0 and standard deviation of 1), ensuring that variables with larger numerical ranges don't artificially dominate analyses or visualizations that compare multiple metrics simultaneously.
+# Variables in this dataset are measured on vastly different scales. Age ranges from 18 to 59, while `Calories_Burned` ranges from 300 to 1,700, making direct numerical comparisons problematic without standardization. Scaling transforms all features to a common range (typically, with a mean of zero and a standard deviation of one), ensuring that variables with larger numerical ranges do not artificially dominate analyses or visualizations that compare multiple metrics simultaneously.
 
 # %%
 from sklearn.preprocessing import StandardScaler
@@ -536,7 +530,7 @@ df_scaled[columns_to_scale] = scaler.fit_transform(df[columns_to_scale])
 df_scaled[columns_to_scale].describe().loc[['mean', 'std']].round(2)
 
 # %% [markdown]
-# The standardized features now share a common scale with means approximately equal to 0 and standard deviations of 1. The original DataFrame `df` remains unchanged for interpretability, while `df_scaled` is available for any analyses requiring normalized inputs.
+# The standardized features now share a common scale with means approximately equal to zero and standard deviations of one. The original DataFrame `df` remains unchanged for interpretability, while `df_scaled` is available for any analyses requiring normalized inputs.
 
 # %% [markdown]
 # ##### Create Aggregated Summary Statistics
@@ -545,9 +539,125 @@ df_scaled[columns_to_scale].describe().loc[['mean', 'std']].round(2)
 # While individual observations provide granular detail, strategic decision-making requires understanding patterns at the group and category levels through statistical aggregation. By calculating summary metrics across combinations of categorical variables—such as average performance by `Gender` and `Workout_Type`, or session characteristics by `Experience_Level`—I can identify trends and differences that inform targeted recommendations for distinct member segments.
 
 # %%
+# Summary 1: Performance metrics by Experience Level
+experience_summary = df.groupby('Experience_Level').agg({
+    'Calories_Burned': ['mean', 'median', 'std'],
+    'Session_Duration (hours)': 'mean',
+    'Calorie_Efficiency': 'mean',
+    'Workout_Frequency (days/week)': 'mean'
+}).round(2)
+
+print("=== PERFORMANCE BY EXPERIENCE LEVEL ===")
+print("(1 = Beginner, 2 = Intermediate, 3 = Advanced)\n")
+display(experience_summary)
+
+# Summary 2: Calories burned by Gender and Workout Type
+gender_workout_summary = df.groupby(['Gender', 'Workout_Type']).agg({
+    'Calories_Burned': 'mean',
+    'Session_Duration (hours)': 'mean',
+    'Intensity_Score': 'mean'
+}).round(2)
+
+print("\n=== PERFORMANCE BY GENDER AND WORKOUT TYPE ===\n")
+display(gender_workout_summary)
+
+# Summary 3: Age Group analysis
+age_group_summary = df.groupby('Age_Group').agg({
+    'Calories_Burned': 'mean',
+    'BMI': 'mean',
+    'Resting_BPM': 'mean',
+    'Workout_Frequency (days/week)': 'mean'
+}).round(2)
+
+print("\n=== HEALTH METRICS BY AGE GROUP ===\n")
+display(age_group_summary)
 
 # %% [markdown]
-# #### ~Statistical Interpretation & Hypothesis Testing
+# **Key Observations:**
+#
+# - `Experience_Level` shows clear progression: advanced members burn more calories, exercise longer, and work out more frequently than beginners.
+# - `Gender` × `Workout_Type` reveals whether certain exercise modalities show performance differences between male and female members.
+# - `Age_Group` comparisons highlight how fitness metrics and habits shift across life stages.
+#
+# These grouped summaries provide the foundation for targeted recommendations in the Business Insights section.
+
+# %% [markdown]
+# #### Statistical Interpretation & Hypothesis Testing
+
+# %% [markdown]
+# The exploratory analysis done previously revealed apparent differences in calorie expenditure across gender, workout type, and experience level. However, observed differences in sample data ***do not automatically*** indicate true population-level effects. They could result from random variation. Statistical hypothesis testing provides a rigorous framework to determine whether these patterns are statistically significant or likely attributable to chance.
+#
+# This section applies two common inferential tests:
+# - **Independent Samples T-Test**: Evaluates whether male and female members differ significantly in calories burned
+# - **One-Way ANOVA**: Evaluates whether significant differences exist in calories burned across the four workout types
+#
+# A significance threshold of α = 0.05 is used for all tests, meaning results with p-values below 0.05 are considered statistically significant.
+
+# %%
+from scipy import stats
+
+# ============================================================
+# TEST 1: Independent Samples T-Test (Gender vs Calories Burned)
+# ============================================================
+# H₀: No significant difference in calories burned between males and females
+# H₁: Significant difference exists in calories burned between males and females
+
+male_calories = df[df['Gender'] == 'Male']['Calories_Burned']
+female_calories = df[df['Gender'] == 'Female']['Calories_Burned']
+
+t_stat, t_pvalue = stats.ttest_ind(male_calories, female_calories)
+
+print("=" * 60)
+print("TEST 1: INDEPENDENT SAMPLES T-TEST")
+print("Question: Do males and females burn significantly different calories?")
+print("=" * 60)
+print(f"Male mean:    {male_calories.mean():.2f} calories")
+print(f"Female mean:  {female_calories.mean():.2f} calories")
+print(f"Difference:   {abs(male_calories.mean() - female_calories.mean()):.2f} calories")
+print(f"\nT-statistic:  {t_stat:.4f}")
+print(f"P-value:      {t_pvalue:.4f}")
+print(f"\nResult: {'SIGNIFICANT' if t_pvalue < 0.05 else 'NOT SIGNIFICANT'} (α = 0.05)")
+
+# ============================================================
+# TEST 2: One-Way ANOVA (Workout Type vs Calories Burned)
+# ============================================================
+# H₀: No significant difference in calories burned across workout types
+# H₁: At least one workout type differs significantly in calories burned
+
+cardio = df[df['Workout_Type'] == 'Cardio']['Calories_Burned']
+strength = df[df['Workout_Type'] == 'Strength']['Calories_Burned']
+hiit = df[df['Workout_Type'] == 'HIIT']['Calories_Burned']
+yoga = df[df['Workout_Type'] == 'Yoga']['Calories_Burned']
+
+f_stat, anova_pvalue = stats.f_oneway(cardio, strength, hiit, yoga)
+
+print("\n" + "=" * 60)
+print("TEST 2: ONE-WAY ANOVA")
+print("Question: Do workout types differ significantly in calories burned?")
+print("=" * 60)
+print(f"Cardio mean:   {cardio.mean():.2f} calories")
+print(f"Strength mean: {strength.mean():.2f} calories")
+print(f"HIIT mean:     {hiit.mean():.2f} calories")
+print(f"Yoga mean:     {yoga.mean():.2f} calories")
+print(f"\nF-statistic:   {f_stat:.4f}")
+print(f"P-value:       {anova_pvalue:.4f}")
+print(f"\nResult: {'SIGNIFICANT' if anova_pvalue < 0.05 else 'NOT SIGNIFICANT'} (α = 0.05)")
+
+# %% [markdown]
+# ##### Hypothesis Testing Results & Interpretation
+#
+# **Test 1 — Gender Comparison (T-Test):**
+# The independent samples t-test evaluated whether calorie expenditure differs significantly between male and female gym members. [Interpret based on your actual output: If p < 0.05, write "The results indicate a statistically significant difference..." If p ≥ 0.05, write "The results indicate no statistically significant difference..."]
+#
+# **Test 2 — Workout Type Comparison (ANOVA):**
+# The one-way ANOVA evaluated whether mean calorie expenditure varies significantly across the four workout modalities. [Interpret based on your actual output using the same logic as above.]
+#
+# *Important Caveats:*
+# - Statistical significance **does not** imply practical significance. A difference can be "real" but too small to matter in application.
+# - These tests assume the underlying data is approximately normally distributed. Given the synthetic nature of this dataset, this assumption is likely satisfied by design.
+# - As noted in the EDA, the dominant predictor of calories burned is session duration (r = 0.91). These group comparisons do not control for session length, meaning observed differences may partly reflect variation in how long different groups exercise rather than inherent differences in calorie-burning efficiency.
+#
+# These statistical tests confirm which exploratory observations reflect genuine patterns versus random variation, providing an evidence-based foundation for the business recommendations that follow.
 
 # %% [markdown]
 # #### Business Insights & Recommendations
