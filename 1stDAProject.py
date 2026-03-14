@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.17.3
 #   kernelspec:
 #     display_name: .venv
 #     language: python
@@ -161,54 +161,86 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# Load the dataset
-# Assuming the file is in the current working directory.
-df_copy = df.copy()
+# =============================================================================
+# UNIVARIATE ANALYSIS: DISTRIBUTION OF NUMERICAL FEATURES
+# =============================================================================
+# This cell creates histograms for each numerical variable to understand
+# their individual distributions, central tendencies, and potential outliers.
+# A KDE (Kernel Density Estimate) curve overlays each histogram to show
+# the smoothed distribution shape.
+# =============================================================================
 
-# Define the numerical features for univariate analysis
-numerical_features = ["Age", "Weight (lb)", "Height (ft)", "Calories_Burned",
-                      "Session_Duration (hours)", "Fat_Percentage", "BMI", "Avg_BPM", 
-                      "Resting_BPM", "Workout_Frequency (days/week)"]
-
-# Set the style for the plots
+# Set the visual style for all plots in this cell
 sns.set_style("whitegrid")
 
-# Create a figure and a set of subplots (2x5 grid for 10 features)
+# -----------------------------------------------------------------------------
+# DATA PREPARATION
+# -----------------------------------------------------------------------------
+
+# Create a copy of the DataFrame to avoid modifying the original
+df_copy = df.copy()
+
+# Define the numerical features to visualize
+# Note: Using imperial units (lb, ft) for audience accessibility
+numerical_features = [
+    "Age", "Weight (lb)", "Height (ft)", "Calories_Burned",
+    "Session_Duration (hours)", "Fat_Percentage", "BMI", "Avg_BPM", 
+    "Resting_BPM", "Workout_Frequency (days/week)"
+]
+
+# -----------------------------------------------------------------------------
+# FIGURE SETUP
+# -----------------------------------------------------------------------------
+
+# Create a 2x5 grid (10 subplots) to accommodate all numerical features
 fig, axes = plt.subplots(nrows=2, ncols=5, figsize=(20, 10))
 
-# Flatten the axes array to easily iterate through it
+# Flatten the 2D array of axes into 1D for easier iteration
 axes = axes.flatten()
 
-# Iterate through the numerical features and create a histogram for each
+# -----------------------------------------------------------------------------
+# GENERATE HISTOGRAMS
+# -----------------------------------------------------------------------------
+
+# Loop through each feature and create its histogram
 for i, feature in enumerate(numerical_features):
     ax = axes[i]
-    # Use seaborn's histplot to create a histogram with a KDE curve
-    sns.histplot(data=df_copy, x=feature, kde=True, ax=ax, color="skyblue")
+    
+    # Create histogram with KDE overlay
+    # KDE (Kernel Density Estimate) shows the smoothed probability distribution
+    sns.histplot(
+        data=df_copy,
+        x=feature,
+        kde=True,           # Add smoothed distribution curve
+        ax=ax,
+        color="skyblue"
+    )
+    
+    # Set labels and title for each subplot
     ax.set_title(f"Distribution of {feature}", fontsize=14)
     ax.set_xlabel(feature, fontsize=12)
     ax.set_ylabel("Count", fontsize=12)
 
-# Hide any unused subplots
+# Hide any unused subplots (if features < grid spaces)
 for j in range(len(numerical_features), len(axes)):
     axes[j].axis("off")
 
-# Set a main title for the entire figure
+# -----------------------------------------------------------------------------
+# FINAL FORMATTING
+# -----------------------------------------------------------------------------
+
+# Add overarching title for the entire figure
 fig.suptitle(
-    "Univariate Analysis: Histograms of Key Numerical Features", fontsize=20, y=1.02
+    "Univariate Analysis: Histograms of Key Numerical Features",
+    fontsize=20,
+    y=1.02
 )
 
-# Apply tight layout for non-overlapping plots
+# Prevent label overlap between subplots
 plt.tight_layout()
 
-# --- FINAL COMMANDS ---
-# 1. Save the figure to a file
-plt.savefig('univariate_histograms.png')
-
-# 2. Display the figure on the screen
+# Render the figure in the notebook
 plt.show()
-
-# 3. Close the figure and free up memory
-plt.close()
 
 # %% [markdown]
 # ##### Key Insights:
@@ -233,62 +265,83 @@ plt.close()
 # Next, I move onto Categorical Analysis. I will utilize bar charts to analyze the counts and proportions of each categorical variable to help me understand the composition of the dataset and how different groups behave.
 
 # %%
-# Set the visual style for all plots
+# =============================================================================
+# CATEGORICAL ANALYSIS: DISTRIBUTION OF CATEGORICAL FEATURES
+# =============================================================================
+# This cell visualizes the frequency distribution of categorical variables
+# using count plots (bar charts). Understanding these distributions helps
+# identify class balance and potential sampling biases in the dataset.
+# =============================================================================
+
+# Set the visual style for all plots in this cell
 sns.set_style("whitegrid")
 
-# Create a figure with a 2x2 grid of subplots
-fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(16, 12))
+# -----------------------------------------------------------------------------
+# HELPER FUNCTION
+# -----------------------------------------------------------------------------
 
-# Flatten the 2D array of axes into a 1D array for easier iteration
-axes = axes.flatten()
-
-# Helper function to add labels inside bars
 def add_value_labels_inside(ax):
     """
-    Adds value labels inside each bar in a bar plot.
+    Adds count labels inside each bar of a bar plot.
+    
+    Placing labels inside bars (rather than above) keeps the visualization
+    compact and makes values immediately readable without eye movement.
     
     Parameters:
-    ax: The axes object containing the bar plot
+        ax: matplotlib Axes object containing the bar plot
     """
-    # Loop through each bar (patch) in the axes
     for patch in ax.patches:
-        # Get the height (value) of the bar
         height = patch.get_height()
         
-        # Calculate the x-coordinate (center of the bar)
-        x = patch.get_x() + patch.get_width() / 2
+        # Position text at the center of each bar
+        x = patch.get_x() + patch.get_width() / 2  # Horizontal center
+        y = height / 2                              # Vertical center
         
-        # Calculate the y-coordinate (middle of the bar)
-        y = height / 2
-        
-        # Add the text label in the center of the bar
         ax.text(
-            x, y,                    # Position (x, y)
-            f'{int(height)}',        # Text to display (the count)
-            ha='center',             # Horizontal alignment: center
-            va='center',             # Vertical alignment: center
-            fontsize=11,             # Font size
-            fontweight='bold',       # Make text bold
-            color='white'            # White text for contrast against colored bars
+            x, y,
+            f'{int(height)}',    # Display count as whole number
+            ha='center',         # Horizontal alignment
+            va='center',         # Vertical alignment
+            fontsize=11,
+            fontweight='bold',
+            color='white'        # White text for contrast on colored bars
         )
 
-# --- PLOT 1: Gender Distribution ---
+# -----------------------------------------------------------------------------
+# FIGURE SETUP
+# -----------------------------------------------------------------------------
+
+# Create a 2x2 grid for four categorical variables
+fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(16, 12))
+
+# Flatten for easier indexing
+axes = axes.flatten()
+
+# -----------------------------------------------------------------------------
+# PLOT 1 (Top-Left): GENDER DISTRIBUTION
+# -----------------------------------------------------------------------------
+# Purpose: Verify balance between male and female gym members
+
 sns.countplot(
     data=df,
     x='Gender',
     hue='Gender',
     ax=axes[0],
     palette='viridis',
-    legend=False
+    legend=False           # Legend redundant when x-axis shows categories
 )
+
 axes[0].set_title('Gender Distribution', fontsize=14, fontweight='bold')
 axes[0].set_xlabel('Gender', fontsize=12)
 axes[0].set_ylabel('Count', fontsize=12)
 
-# Add value labels inside the bars
 add_value_labels_inside(axes[0])
 
-# --- PLOT 2: Workout Type Distribution ---
+# -----------------------------------------------------------------------------
+# PLOT 2 (Top-Right): WORKOUT TYPE DISTRIBUTION
+# -----------------------------------------------------------------------------
+# Purpose: Check representation across exercise modalities
+
 sns.countplot(
     data=df,
     x='Workout_Type',
@@ -297,15 +350,20 @@ sns.countplot(
     palette='plasma',
     legend=False
 )
+
 axes[1].set_title('Workout Types Distribution', fontsize=14, fontweight='bold')
 axes[1].set_xlabel('Workout Type', fontsize=12)
 axes[1].set_ylabel('Count', fontsize=12)
-axes[1].tick_params(axis='x', rotation=45)
+axes[1].tick_params(axis='x', rotation=45)  # Angle labels to prevent overlap
 
-# Add value labels inside the bars
 add_value_labels_inside(axes[1])
 
-# --- PLOT 3: Experience Level Distribution ---
+# -----------------------------------------------------------------------------
+# PLOT 3 (Bottom-Left): EXPERIENCE LEVEL DISTRIBUTION
+# -----------------------------------------------------------------------------
+# Purpose: Understand skill level composition of gym membership
+# Order: 1 → 2 → 3 (Beginner to Advanced) for intuitive left-to-right reading
+
 sns.countplot(
     data=df,
     x='Experience_Level',
@@ -313,16 +371,21 @@ sns.countplot(
     ax=axes[2],
     palette='magma',
     legend=False,
-    order=[1, 2, 3]
+    order=[1, 2, 3]        # Explicit ordering: Beginner → Intermediate → Advanced
 )
+
 axes[2].set_title('Experience Level Distribution', fontsize=14, fontweight='bold')
 axes[2].set_xlabel('Experience Level (1=Beginner, 2=Intermediate, 3=Advanced)', fontsize=12)
 axes[2].set_ylabel('Count', fontsize=12)
 
-# Add value labels inside the bars
 add_value_labels_inside(axes[2])
 
-# --- PLOT 4: Workout Frequency Distribution ---
+# -----------------------------------------------------------------------------
+# PLOT 4 (Bottom-Right): WORKOUT FREQUENCY DISTRIBUTION
+# -----------------------------------------------------------------------------
+# Purpose: Examine how often members exercise per week
+# Order: 2 → 5 days to show natural progression
+
 sns.countplot(
     data=df,
     x='Workout_Frequency (days/week)',
@@ -330,16 +393,20 @@ sns.countplot(
     ax=axes[3],
     palette='cividis',
     legend=False,
-    order=[2, 3, 4, 5]
+    order=[2, 3, 4, 5]     # Ascending order of workout frequency
 )
+
 axes[3].set_title('Workout Frequency Distribution', fontsize=14, fontweight='bold')
 axes[3].set_xlabel('Workout Frequency (days/week)', fontsize=12)
 axes[3].set_ylabel('Count', fontsize=12)
 
-# Add value labels inside the bars
 add_value_labels_inside(axes[3])
 
-# Add a main title for the entire figure
+# -----------------------------------------------------------------------------
+# FINAL FORMATTING
+# -----------------------------------------------------------------------------
+
+# Add overarching title for the entire figure
 fig.suptitle(
     'Categorical Analysis: Distribution of Key Features',
     fontsize=18,
@@ -347,11 +414,11 @@ fig.suptitle(
     y=0.995
 )
 
-# Adjust layout to prevent overlapping elements
+# Prevent label overlap between subplots
 plt.tight_layout()
 
-# Save the figure to a file
-plt.savefig('categorical_analysis.png')
+# Render the figure in the notebook
+plt.show()
 
 # %% [markdown]
 # ##### Bivariate Analysis
@@ -360,80 +427,165 @@ plt.savefig('categorical_analysis.png')
 # Finally, I have decided to perform Bivariate Analysis to uncover potential correlations and dependencies within the dataset. By examining how one variable (like `Workout_Type`) relates to another (such as `Calories_Burned`), I can identify the mathematical relationships programmed into the data generation process. The following visualizations and statistical comparisons highlight key relationships embedded in the dataset structure.
 
 # %%
-# Set visual style
+# =============================================================================
+# BIVARIATE ANALYSIS: KEY RELATIONSHIPS VISUALIZATION
+# =============================================================================
+# This cell creates a 2x2 grid of plots exploring relationships between
+# variables, particularly focusing on factors that influence Calories_Burned.
+# =============================================================================
+
+# Set the visual style for all plots in this cell
 sns.set_style("whitegrid")
 
-# Prepare data for specific visualizations
-numerical_cols = ['Age', 'Weight (lb)', 'Height (ft)', 'Max_BPM', 'Avg_BPM', 
-                  'Resting_BPM', 'Session_Duration (hours)', 'Calories_Burned', 
-                  'Water_Intake (liters)', 'BMI', 'Fat_Percentage']
-correlation_matrix = df[numerical_cols].corr()
-workout_type_summary = df.groupby('Workout_Type')['Calories_Burned'].mean().sort_values(ascending=False).reset_index()
+# -----------------------------------------------------------------------------
+# DATA PREPARATION
+# -----------------------------------------------------------------------------
 
-# Create figure with 2x2 grid
+# Define numerical columns for correlation analysis
+# Note: Using imperial units (lb, ft) for audience accessibility
+numerical_cols = [
+    'Age', 'Weight (lb)', 'Height (ft)', 'Max_BPM', 'Avg_BPM', 
+    'Resting_BPM', 'Session_Duration (hours)', 'Calories_Burned', 
+    'Water_Intake (liters)', 'BMI', 'Fat_Percentage'
+]
+
+# Calculate correlation matrix for all numerical features
+correlation_matrix = df[numerical_cols].corr()
+
+# Aggregate calories burned by workout type for bar chart comparison
+workout_type_summary = (
+    df.groupby('Workout_Type')['Calories_Burned']
+    .mean()
+    .sort_values(ascending=False)  # Highest calorie-burning workout first
+    .reset_index()
+)
+
+# -----------------------------------------------------------------------------
+# FIGURE SETUP
+# -----------------------------------------------------------------------------
+
+# Create 2x2 subplot grid with adequate spacing for labels
 fig, axes = plt.subplots(2, 2, figsize=(16, 12))
 
-# --- Plot 1: Correlation Heatmap ---
-sns.heatmap(
-    correlation_matrix[['Calories_Burned', 'Session_Duration (hours)', 'Avg_BPM', 'Fat_Percentage']].T,
-    annot=True, fmt='.2f', cmap='coolwarm', cbar=True, 
-    linewidths=0.5, linecolor='black', ax=axes[0, 0]
-)
-axes[0, 0].set_title('Correlation Matrix: Key Variable Relationships', fontsize=14, fontweight='bold')
-axes[0, 0].tick_params(axis='y', rotation=0)
-axes[0, 0].tick_params(axis='x', rotation=45)
+# -----------------------------------------------------------------------------
+# PLOT 1 (Top-Left): CORRELATION HEATMAP
+# -----------------------------------------------------------------------------
+# Purpose: Show how strongly each variable correlates with key metrics
+# Design choice: Transpose (.T) places target variables as rows for easier reading
 
-# --- Plot 2: Average Calories Burned by Workout Type ---
-sns.barplot(
-    data=workout_type_summary, x='Workout_Type', y='Calories_Burned',
-    hue='Workout_Type', ax=axes[0, 1], palette='viridis', legend=False
+# Select only the most analytically relevant variables for focused comparison
+key_variables = ['Calories_Burned', 'Session_Duration (hours)', 'Avg_BPM', 'Fat_Percentage']
+
+sns.heatmap(
+    correlation_matrix[key_variables].T,  # Transpose: key vars as rows
+    annot=True,                            # Display correlation coefficients
+    fmt='.2f',                             # Two decimal places
+    cmap='coolwarm',                       # Red = positive, Blue = negative correlation
+    cbar=True,                             # Include color scale reference
+    linewidths=0.5,                        # Grid line thickness
+    linecolor='black',                     # Grid line color
+    ax=axes[0, 0]
 )
-axes[0, 1].set_title('Average Calories Burned by Workout Type', fontsize=14, fontweight='bold')
+
+axes[0, 0].set_title('Correlation Matrix: Key Variable Relationships', 
+                     fontsize=14, fontweight='bold')
+axes[0, 0].tick_params(axis='y', rotation=0)   # Horizontal y-axis labels
+axes[0, 0].tick_params(axis='x', rotation=45)  # Angled x-axis labels for readability
+
+# -----------------------------------------------------------------------------
+# PLOT 2 (Top-Right): BAR CHART - CALORIES BY WORKOUT TYPE
+# -----------------------------------------------------------------------------
+# Purpose: Compare average calorie expenditure across workout modalities
+# Design choice: Sorted descending to quickly identify highest-burning activities
+
+sns.barplot(
+    data=workout_type_summary,
+    x='Workout_Type',
+    y='Calories_Burned',
+    hue='Workout_Type',      # Color-code by workout type
+    ax=axes[0, 1],
+    palette='viridis',       # Colorblind-friendly palette
+    legend=False             # Redundant legend (x-axis already labeled)
+)
+
+axes[0, 1].set_title('Average Calories Burned by Workout Type', 
+                     fontsize=14, fontweight='bold')
 axes[0, 1].set_xlabel('Workout Type', fontsize=12)
 axes[0, 1].set_ylabel('Average Calories Burned', fontsize=12)
 axes[0, 1].tick_params(axis='x', rotation=45)
 
-# Add value labels inside bars
+# Add value labels inside each bar for precise reading
 for patch in axes[0, 1].patches:
     height = patch.get_height()
     axes[0, 1].text(
-        patch.get_x() + patch.get_width() / 2, height / 2,
-        f'{int(height)}', ha='center', va='center',
+        patch.get_x() + patch.get_width() / 2,  # Center horizontally
+        height / 2,                              # Center vertically within bar
+        f'{int(height)}',                        # Display as whole number
+        ha='center', va='center',
         fontsize=11, fontweight='bold', color='white'
     )
 
-# --- Plot 3: Box Plot - Calories Burned by Experience Level ---
+# -----------------------------------------------------------------------------
+# PLOT 3 (Bottom-Left): BOX PLOT - CALORIES BY EXPERIENCE LEVEL
+# -----------------------------------------------------------------------------
+# Purpose: Show distribution and spread of calories burned across skill levels
+# Design choice: Ordered 3→2→1 (Advanced first) to show progression visually
+
 sns.boxplot(
-    data=df, x='Experience_Level', y='Calories_Burned',
-    order=[3, 2, 1], hue='Experience_Level', ax=axes[1, 0], 
-    palette='magma', legend=False
+    data=df,
+    x='Experience_Level',
+    y='Calories_Burned',
+    order=[3, 2, 1],          # Display: Advanced → Intermediate → Beginner
+    hue='Experience_Level',
+    ax=axes[1, 0],
+    palette='magma',
+    legend=False
 )
-axes[1, 0].set_title('Calories Burned Distribution by Experience Level', fontsize=14, fontweight='bold')
-axes[1, 0].set_xlabel('Experience Level (3=Advanced, 2=Intermediate, 1=Beginner)', fontsize=12)
+
+axes[1, 0].set_title('Calories Burned Distribution by Experience Level', 
+                     fontsize=14, fontweight='bold')
+axes[1, 0].set_xlabel('Experience Level (3=Advanced, 2=Intermediate, 1=Beginner)', 
+                      fontsize=12)
 axes[1, 0].set_ylabel('Calories Burned', fontsize=12)
 
-# --- Plot 4: Scatter Plot - Avg_BPM vs Calories_Burned ---
+# -----------------------------------------------------------------------------
+# PLOT 4 (Bottom-Right): SCATTER PLOT - BPM VS CALORIES
+# -----------------------------------------------------------------------------
+# Purpose: Explore relationship between heart rate intensity and calorie burn
+# Design choice: Point size AND color both encode session duration to emphasize
+#                its role as the dominant predictor of calories burned (r = 0.91)
+
 scatter = sns.scatterplot(
-    data=df, x='Avg_BPM', y='Calories_Burned',
-    hue='Session_Duration (hours)', size='Session_Duration (hours)',
-    sizes=(20, 200), palette='viridis', ax=axes[1, 1], alpha=0.6
+    data=df,
+    x='Avg_BPM',
+    y='Calories_Burned',
+    hue='Session_Duration (hours)',   # Color gradient by duration
+    size='Session_Duration (hours)',  # Larger points = longer sessions
+    sizes=(20, 200),                  # Size range (min, max)
+    palette='viridis',
+    ax=axes[1, 1],
+    alpha=0.6                         # Transparency to show overlapping points
 )
-axes[1, 1].set_title('Average BPM vs Calories Burned (by Session Duration)', fontsize=14, fontweight='bold')
+
+axes[1, 1].set_title('Average BPM vs Calories Burned (by Session Duration)', 
+                     fontsize=14, fontweight='bold')
 axes[1, 1].set_xlabel('Average BPM', fontsize=12)
 axes[1, 1].set_ylabel('Calories Burned', fontsize=12)
 axes[1, 1].legend(title='Duration (hrs)', loc='lower right', fontsize=9)
 
-# Add main title
+# -----------------------------------------------------------------------------
+# FINAL FORMATTING & OUTPUT
+# -----------------------------------------------------------------------------
+
+# Add overarching title for the entire figure
 fig.suptitle('Key Bivariate Relationships', 
              fontsize=18, fontweight='bold', y=0.995)
 
-# Adjust layout
+# Prevent label overlap between subplots
 plt.tight_layout()
 
-# Save and display
-plt.savefig('bivariate_analysis_plots.png', dpi=300, bbox_inches='tight')
+# Render the figure in the notebook
 plt.show()
-plt.close()
 
 # %% [markdown]
 # ##### Key Insights
