@@ -393,22 +393,13 @@ plt.show()
 # Finally, I have decided to perform Bivariate Analysis to uncover potential correlations and dependencies within the dataset. By examining how one variable (like `Workout_Type`) relates to another (such as `Calories_Burned`), I can identify the mathematical relationships programmed into the data generation process. The following visualizations and statistical comparisons highlight key relationships embedded in the dataset structure.
 
 # %%
-# =============================================================================
-# BIVARIATE ANALYSIS: KEY RELATIONSHIPS VISUALIZATION
-# =============================================================================
-# This cell creates a 2x2 grid of plots exploring relationships between
-# variables, particularly focusing on factors that influence Calories_Burned.
-# =============================================================================
-
 # Set the visual style for all plots in this cell
 sns.set_style("whitegrid")
 
-# -----------------------------------------------------------------------------
-# DATA PREPARATION
-# -----------------------------------------------------------------------------
+
+####  Data Preparation  ###
 
 # Define numerical columns for correlation analysis
-# Note: Using imperial units (lb, ft) for audience accessibility
 numerical_cols = [
     'Age', 'Weight (lb)', 'Height (ft)', 'Max_BPM', 'Avg_BPM', 
     'Resting_BPM', 'Session_Duration (hours)', 'Calories_Burned', 
@@ -426,16 +417,14 @@ workout_type_summary = (
     .reset_index()
 )
 
-# -----------------------------------------------------------------------------
-# FIGURE SETUP
-# -----------------------------------------------------------------------------
+
+###  Figure Setup  ###
 
 # Create 2x2 subplot grid with adequate spacing for labels
 fig, axes = plt.subplots(2, 2, figsize=(16, 12))
 
-# -----------------------------------------------------------------------------
-# PLOT 1 (Top-Left): CORRELATION HEATMAP
-# -----------------------------------------------------------------------------
+
+# Plot 1 (Top-Left): CORRELATION HEATMAP
 # Purpose: Show how strongly each variable correlates with key metrics
 # Design choice: Transpose (.T) places target variables as rows for easier reading
 
@@ -458,9 +447,7 @@ axes[0, 0].set_title('Correlation Matrix: Key Variable Relationships',
 axes[0, 0].tick_params(axis='y', rotation=0)   # Horizontal y-axis labels
 axes[0, 0].tick_params(axis='x', rotation=45)  # Angled x-axis labels for readability
 
-# -----------------------------------------------------------------------------
-# PLOT 2 (Top-Right): BAR CHART - CALORIES BY WORKOUT TYPE
-# -----------------------------------------------------------------------------
+## Plot 2 (Top-Right): BAR CHART - CALORIES BY WORKOUT TYPE
 # Purpose: Compare average calorie expenditure across workout modalities
 # Design choice: Sorted descending to quickly identify highest-burning activities
 
@@ -491,9 +478,7 @@ for patch in axes[0, 1].patches:
         fontsize=11, fontweight='bold', color='white'
     )
 
-# -----------------------------------------------------------------------------
-# PLOT 3 (Bottom-Left): BOX PLOT - CALORIES BY EXPERIENCE LEVEL
-# -----------------------------------------------------------------------------
+## Plot 3 (Bottom-Left): BOX PLOT - CALORIES BY EXPERIENCE LEVEL
 # Purpose: Show distribution and spread of calories burned across skill levels
 # Design choice: Ordered 3→2→1 (Advanced first) to show progression visually
 
@@ -508,18 +493,21 @@ sns.boxplot(
     legend=False
 )
 
-axes[1, 0].set_title('Calories Burned Distribution by Experience Level', 
-                     fontsize=14, fontweight='bold')
-axes[1, 0].set_xlabel('Experience Level (3=Advanced, 2=Intermediate, 1=Beginner)', 
-                      fontsize=12)
+axes[1, 0].set_title(
+    'Calories Burned Distribution by Experience Level', 
+    fontsize=14, 
+    fontweight='bold'
+    )
+axes[1, 0].set_xlabel(
+    'Experience Level (3=Advanced, 2=Intermediate, 1=Beginner)', 
+    fontsize=12
+    )
 axes[1, 0].set_ylabel('Calories Burned', fontsize=12)
 
-# -----------------------------------------------------------------------------
-# PLOT 4 (Bottom-Right): SCATTER PLOT - BPM VS CALORIES
-# -----------------------------------------------------------------------------
+## Plot 4 (Bottom-Right): SCATTER PLOT - BPM VS CALORIES
 # Purpose: Explore relationship between heart rate intensity and calorie burn
 # Design choice: Point size AND color both encode session duration to emphasize
-#                its role as the dominant predictor of calories burned (r = 0.91)
+#   its role as the dominant predictor of calories burned (r = 0.91)
 
 scatter = sns.scatterplot(
     data=df,
@@ -533,11 +521,15 @@ scatter = sns.scatterplot(
     alpha=0.6                         # Transparency to show overlapping points
 )
 
-axes[1, 1].set_title('Average BPM vs Calories Burned (by Session Duration)', 
-                     fontsize=14, fontweight='bold')
+axes[1, 1].set_title(
+    'Average BPM vs Calories Burned (by Session Duration)', 
+    fontsize=14, 
+    fontweight='bold'
+)
 axes[1, 1].set_xlabel('Average BPM', fontsize=12)
 axes[1, 1].set_ylabel('Calories Burned', fontsize=12)
-axes[1, 1].legend(title='Duration (hrs)', loc='lower right', fontsize=9)
+axes[1, 1].legend(
+    title='Duration (hrs)', loc='lower right', fontsize=9)
 
 # -----------------------------------------------------------------------------
 # FINAL FORMATTING & OUTPUT
