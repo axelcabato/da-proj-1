@@ -4,19 +4,19 @@ A comprehensive data analysis project exploring gym member workout patterns, phy
 
 ## Project Status
 
-🚧 **In Progress**
+**In Progress**
 
 This is my first data analysis portfolio project, developed as I transition into the data science field. The project intentionally follows industry-standard practices and demonstrates a methodical approach to extracting insights from data.
 
 | Phase | Status |
 |-------|--------|
-| Exploratory Data Analysis | ✅ Complete |
-| Data Visualization | ✅ Complete |
-| Feature Engineering | ✅ Complete |
-| Data Standardization | ✅ Complete |
-| Aggregated Statistics | 🔄 In Progress |
-| Hypothesis Testing | 🔄 In Progress |
-| Business Recommendations | 📋 Planned |
+| Exploratory Data Analysis | Complete |
+| Data Visualization | Complete |
+| Feature Engineering | Complete |
+| Data Standardization | Complete |
+| Aggregated Statistics | In Progress |
+| Hypothesis Testing | In Progress |
+| Business Recommendations | Planned |
 
 ## Project Overview
 
@@ -66,7 +66,6 @@ Created four derived features to enhance analytical depth:
 - One-way ANOVA (planned)
 
 ## Repository Structure
-
 ```
 ├── 1stDAProject.ipynb    # Main analysis notebook
 ├── 1stDAProject.py       # Python script version (Jupytext sync)
@@ -121,4 +120,4 @@ I welcome feedback from experienced data professionals and am eager to discuss t
 
 ---
 
-*This project is actively maintained. Last updated: February 2026*
+*This project is actively maintained. Last updated: March 2026*
