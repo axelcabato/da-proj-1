@@ -247,24 +247,14 @@ plt.show()
 # ##### Categorical Analysis
 
 # %% [markdown]
-# Next, I move onto Categorical Analysis. I will utilize bar charts to analyze the counts and proportions of each categorical variable to help me understand the composition of the dataset and how different groups behave.
+# Next, I move onto Categorical Analysis. I will utilize count plots (bar charts) to visualize the frequency distribution of the categorical variables. By understanding these distributions, it will allow me to understand how different groups behave as well as identify class balance and potential sampling biases present in the dataset.
 
 # %%
-# =============================================================================
-# CATEGORICAL ANALYSIS: DISTRIBUTION OF CATEGORICAL FEATURES
-# =============================================================================
-# This cell visualizes the frequency distribution of categorical variables
-# using count plots (bar charts). Understanding these distributions helps
-# identify class balance and potential sampling biases in the dataset.
-# =============================================================================
-
 # Set the visual style for all plots in this cell
 sns.set_style("whitegrid")
 
-# -----------------------------------------------------------------------------
-# HELPER FUNCTION
-# -----------------------------------------------------------------------------
 
+# HELPER FUNCTION
 def add_value_labels_inside(ax):
     """
     Adds count labels inside each bar of a bar plot.
@@ -292,9 +282,8 @@ def add_value_labels_inside(ax):
             color='white'        # White text for contrast on colored bars
         )
 
-# -----------------------------------------------------------------------------
-# FIGURE SETUP
-# -----------------------------------------------------------------------------
+
+###  Figure Setup  ###
 
 # Create a 2x2 grid for four categorical variables
 fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(16, 12))
@@ -302,9 +291,8 @@ fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(16, 12))
 # Flatten for easier indexing
 axes = axes.flatten()
 
-# -----------------------------------------------------------------------------
-# PLOT 1 (Top-Left): GENDER DISTRIBUTION
-# -----------------------------------------------------------------------------
+
+## Plot 1 (Top-Left): GENDER DISTRIBUTION
 # Purpose: Verify balance between male and female gym members
 
 sns.countplot(
@@ -322,9 +310,7 @@ axes[0].set_ylabel('Count', fontsize=12)
 
 add_value_labels_inside(axes[0])
 
-# -----------------------------------------------------------------------------
-# PLOT 2 (Top-Right): WORKOUT TYPE DISTRIBUTION
-# -----------------------------------------------------------------------------
+## Plot 2 (Top-Right): WORKOUT TYPE DISTRIBUTION
 # Purpose: Check representation across exercise modalities
 
 sns.countplot(
@@ -343,9 +329,7 @@ axes[1].tick_params(axis='x', rotation=45)  # Angle labels to prevent overlap
 
 add_value_labels_inside(axes[1])
 
-# -----------------------------------------------------------------------------
-# PLOT 3 (Bottom-Left): EXPERIENCE LEVEL DISTRIBUTION
-# -----------------------------------------------------------------------------
+## Plot 3 (Bottom-Left): EXPERIENCE LEVEL DISTRIBUTION
 # Purpose: Understand skill level composition of gym membership
 # Order: 1 → 2 → 3 (Beginner to Advanced) for intuitive left-to-right reading
 
@@ -356,7 +340,7 @@ sns.countplot(
     ax=axes[2],
     palette='magma',
     legend=False,
-    order=[1, 2, 3]        # Explicit ordering: Beginner → Intermediate → Advanced
+    order=[1, 2, 3]     # Explicit ordering: Beginner → Intermediate → Advanced
 )
 
 axes[2].set_title('Experience Level Distribution', fontsize=14, fontweight='bold')
@@ -365,9 +349,7 @@ axes[2].set_ylabel('Count', fontsize=12)
 
 add_value_labels_inside(axes[2])
 
-# -----------------------------------------------------------------------------
-# PLOT 4 (Bottom-Right): WORKOUT FREQUENCY DISTRIBUTION
-# -----------------------------------------------------------------------------
+## Plot 4 (Bottom-Right): WORKOUT FREQUENCY DISTRIBUTION
 # Purpose: Examine how often members exercise per week
 # Order: 2 → 5 days to show natural progression
 
@@ -387,9 +369,8 @@ axes[3].set_ylabel('Count', fontsize=12)
 
 add_value_labels_inside(axes[3])
 
-# -----------------------------------------------------------------------------
-# FINAL FORMATTING
-# -----------------------------------------------------------------------------
+
+###  Formatting  ###
 
 # Add overarching title for the entire figure
 fig.suptitle(
@@ -402,7 +383,7 @@ fig.suptitle(
 # Prevent label overlap between subplots
 plt.tight_layout()
 
-# Render the figure in the notebook
+# Render figure in notebook
 plt.show()
 
 # %% [markdown]
