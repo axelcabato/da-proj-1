@@ -154,60 +154,46 @@ df[["Height (ft)", "Weight (lb)"]].describe()
 # ##### Univariate Analysis
 
 # %% [markdown]
-# This type of analysis will allow me to understand the central tendency and the spread of the data, and to easily spot any potential outliers. To accomplish this, I will generate histograms for each of the key numerical columns.
+# This type of analysis will allow me to understand their individual distributions, central tendencies, and potential outliers. To accomplish this, I will generate histograms for each of the key numerical columns with a KDE (Kernal Density Estimate) curve to overlay each to show the smoothed distribution shape.
 
 # %%
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# =============================================================================
-# UNIVARIATE ANALYSIS: DISTRIBUTION OF NUMERICAL FEATURES
-# =============================================================================
-# This cell creates histograms for each numerical variable to understand
-# their individual distributions, central tendencies, and potential outliers.
-# A KDE (Kernel Density Estimate) curve overlays each histogram to show
-# the smoothed distribution shape.
-# =============================================================================
-
 # Set the visual style for all plots in this cell
 sns.set_style("whitegrid")
 
-# -----------------------------------------------------------------------------
-# DATA PREPARATION
-# -----------------------------------------------------------------------------
 
-# Create a copy of the DataFrame to avoid modifying the original
+###  Data Preparation  ###
+
+# Create a copy of the DataFrame to avoid modifying original
 df_copy = df.copy()
 
 # Define the numerical features to visualize
-# Note: Using imperial units (lb, ft) for audience accessibility
 numerical_features = [
     "Age", "Weight (lb)", "Height (ft)", "Calories_Burned",
     "Session_Duration (hours)", "Fat_Percentage", "BMI", "Avg_BPM", 
     "Resting_BPM", "Workout_Frequency (days/week)"
 ]
 
-# -----------------------------------------------------------------------------
-# FIGURE SETUP
-# -----------------------------------------------------------------------------
 
-# Create a 2x5 grid (10 subplots) to accommodate all numerical features
+###  Figure Setup  ###
+
+# Create a 2x5 grid (10 subplots) to accommodate all features
 fig, axes = plt.subplots(nrows=2, ncols=5, figsize=(20, 10))
 
 # Flatten the 2D array of axes into 1D for easier iteration
 axes = axes.flatten()
 
-# -----------------------------------------------------------------------------
-# GENERATE HISTOGRAMS
-# -----------------------------------------------------------------------------
+
+###  Generate Historigrams  ###
 
 # Loop through each feature and create its histogram
 for i, feature in enumerate(numerical_features):
     ax = axes[i]
     
     # Create histogram with KDE overlay
-    # KDE (Kernel Density Estimate) shows the smoothed probability distribution
     sns.histplot(
         data=df_copy,
         x=feature,
@@ -225,9 +211,8 @@ for i, feature in enumerate(numerical_features):
 for j in range(len(numerical_features), len(axes)):
     axes[j].axis("off")
 
-# -----------------------------------------------------------------------------
-# FINAL FORMATTING
-# -----------------------------------------------------------------------------
+
+###  Formatting  ###
 
 # Add overarching title for the entire figure
 fig.suptitle(
@@ -239,7 +224,7 @@ fig.suptitle(
 # Prevent label overlap between subplots
 plt.tight_layout()
 
-# Render the figure in the notebook
+# Render figure in notebook
 plt.show()
 
 # %% [markdown]
