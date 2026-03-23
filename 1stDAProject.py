@@ -125,7 +125,7 @@ df[["Gender", "Workout_Type"]].value_counts()
 df["Height (ft)"] = round(df["Height (m)"] * 3.28, 2)
 
 # Kilogram to Pound Conversion
-df["Weight (lb)"] = round(df["Weight (kg)"] * 2.2)
+df["Weight (lb)"] = round(df["Weight (kg)"] * 2.2, 2)
 
 # Verify post-conversaion values are correct
 df[["Height (m)", "Height (ft)", "Weight (kg)", "Weight (lb)"]]
@@ -203,9 +203,20 @@ for i, feature in enumerate(numerical_features):
     )
     
     # Set labels and title for each subplot
-    ax.set_title(f"Distribution of {feature}", fontsize=14)
-    ax.set_xlabel(feature, fontsize=12)
-    ax.set_ylabel("Count", fontsize=12)
+    ax.set_title(
+        f"Distribution of {feature}", 
+        fontsize=14
+    )
+
+    ax.set_xlabel(
+        feature, 
+        fontsize=12
+    )
+
+    ax.set_ylabel(
+        "Count", 
+        fontsize=12
+    )
 
 # Hide any unused subplots (if features < grid spaces)
 for j in range(len(numerical_features), len(axes)):
@@ -304,9 +315,21 @@ sns.countplot(
     legend=False           # Legend redundant when x-axis shows categories
 )
 
-axes[0].set_title('Gender Distribution', fontsize=14, fontweight='bold')
-axes[0].set_xlabel('Gender', fontsize=12)
-axes[0].set_ylabel('Count', fontsize=12)
+axes[0].set_title(
+    'Gender Distribution', 
+    fontsize=14, 
+    fontweight='bold'
+)
+
+axes[0].set_xlabel(
+    'Gender', 
+    fontsize=12
+)
+
+axes[0].set_ylabel(
+    'Count', 
+    fontsize=12
+)
 
 add_value_labels_inside(axes[0])
 
@@ -322,10 +345,27 @@ sns.countplot(
     legend=False
 )
 
-axes[1].set_title('Workout Types Distribution', fontsize=14, fontweight='bold')
-axes[1].set_xlabel('Workout Type', fontsize=12)
-axes[1].set_ylabel('Count', fontsize=12)
-axes[1].tick_params(axis='x', rotation=45)  # Angle labels to prevent overlap
+axes[1].set_title(
+    'Workout Types Distribution', 
+    fontsize=14, 
+    fontweight='bold'
+)
+
+axes[1].set_xlabel(
+    'Workout Type', 
+    fontsize=12
+)
+
+axes[1].set_ylabel(
+    'Count', 
+    fontsize=12
+)
+
+# Angle labels to prevent overlap
+axes[1].tick_params(
+    axis='x', 
+    rotation=45
+)  
 
 add_value_labels_inside(axes[1])
 
@@ -343,9 +383,21 @@ sns.countplot(
     order=[1, 2, 3]     # Explicit ordering: Beginner → Intermediate → Advanced
 )
 
-axes[2].set_title('Experience Level Distribution', fontsize=14, fontweight='bold')
-axes[2].set_xlabel('Experience Level (1=Beginner, 2=Intermediate, 3=Advanced)', fontsize=12)
-axes[2].set_ylabel('Count', fontsize=12)
+axes[2].set_title(
+    'Experience Level Distribution', 
+    fontsize=14, 
+    fontweight='bold'
+)
+
+axes[2].set_xlabel(
+    'Experience Level (1=Beginner, 2=Intermediate, 3=Advanced)', 
+    fontsize=12
+)
+
+axes[2].set_ylabel(
+    'Count', 
+    fontsize=12
+)
 
 add_value_labels_inside(axes[2])
 
@@ -363,9 +415,21 @@ sns.countplot(
     order=[2, 3, 4, 5]     # Ascending order of workout frequency
 )
 
-axes[3].set_title('Workout Frequency Distribution', fontsize=14, fontweight='bold')
-axes[3].set_xlabel('Workout Frequency (days/week)', fontsize=12)
-axes[3].set_ylabel('Count', fontsize=12)
+axes[3].set_title(
+    'Workout Frequency Distribution', 
+    fontsize=14, 
+    fontweight='bold'
+)
+
+axes[3].set_xlabel(
+    'Workout Frequency (days/week)', 
+    fontsize=12
+)
+
+axes[3].set_ylabel(
+    'Count', 
+    fontsize=12
+)
 
 add_value_labels_inside(axes[3])
 
@@ -435,15 +499,18 @@ sns.heatmap(
     correlation_matrix[key_variables].T,  # Transpose: key vars as rows
     annot=True,                            # Display correlation coefficients
     fmt='.2f',                             # Two decimal places
-    cmap='coolwarm',                       # Red = positive, Blue = negative correlation
+    cmap='coolwarm',                       # Red = positive, Blue = negative    correlation
     cbar=True,                             # Include color scale reference
     linewidths=0.5,                        # Grid line thickness
     linecolor='black',                     # Grid line color
     ax=axes[0, 0]
 )
 
-axes[0, 0].set_title('Correlation Matrix: Key Variable Relationships', 
-                     fontsize=14, fontweight='bold')
+axes[0, 0].set_title(
+    'Correlation Matrix: Key Variable Relationships', 
+    fontsize=14, 
+    fontweight='bold'
+)
 axes[0, 0].tick_params(axis='y', rotation=0)   # Horizontal y-axis labels
 axes[0, 0].tick_params(axis='x', rotation=45)  # Angled x-axis labels for readability
 
@@ -461,11 +528,26 @@ sns.barplot(
     legend=False             # Redundant legend (x-axis already labeled)
 )
 
-axes[0, 1].set_title('Average Calories Burned by Workout Type', 
-                     fontsize=14, fontweight='bold')
-axes[0, 1].set_xlabel('Workout Type', fontsize=12)
-axes[0, 1].set_ylabel('Average Calories Burned', fontsize=12)
-axes[0, 1].tick_params(axis='x', rotation=45)
+axes[0, 1].set_title(
+    'Average Calories Burned by Workout Type', 
+    fontsize=14, 
+    fontweight='bold'
+)
+
+axes[0, 1].set_xlabel(
+    'Workout Type', 
+    fontsize=12
+)
+
+axes[0, 1].set_ylabel(
+    'Average Calories Burned', 
+    fontsize=12
+)
+
+axes[0, 1].tick_params(
+    axis='x', 
+    rotation=45
+)
 
 # Add value labels inside each bar for precise reading
 for patch in axes[0, 1].patches:
@@ -474,8 +556,11 @@ for patch in axes[0, 1].patches:
         patch.get_x() + patch.get_width() / 2,  # Center horizontally
         height / 2,                              # Center vertically within bar
         f'{int(height)}',                        # Display as whole number
-        ha='center', va='center',
-        fontsize=11, fontweight='bold', color='white'
+        ha='center', 
+        va='center',
+        fontsize=11, 
+        fontweight='bold', 
+        color='white'
     )
 
 ## Plot 3 (Bottom-Left): BOX PLOT - CALORIES BY EXPERIENCE LEVEL
@@ -497,17 +582,22 @@ axes[1, 0].set_title(
     'Calories Burned Distribution by Experience Level', 
     fontsize=14, 
     fontweight='bold'
-    )
+)
+
 axes[1, 0].set_xlabel(
     'Experience Level (3=Advanced, 2=Intermediate, 1=Beginner)', 
     fontsize=12
-    )
-axes[1, 0].set_ylabel('Calories Burned', fontsize=12)
+)
+
+axes[1, 0].set_ylabel(
+    'Calories Burned', 
+    fontsize=12
+)
 
 ## Plot 4 (Bottom-Right): SCATTER PLOT - BPM VS CALORIES
 # Purpose: Explore relationship between heart rate intensity and calorie burn
 # Design choice: Point size AND color both encode session duration to emphasize
-#   its role as the dominant predictor of calories burned (r = 0.91)
+# its role as the dominant predictor of calories burned (r = 0.91)
 
 scatter = sns.scatterplot(
     data=df,
@@ -526,23 +616,38 @@ axes[1, 1].set_title(
     fontsize=14, 
     fontweight='bold'
 )
-axes[1, 1].set_xlabel('Average BPM', fontsize=12)
-axes[1, 1].set_ylabel('Calories Burned', fontsize=12)
-axes[1, 1].legend(
-    title='Duration (hrs)', loc='lower right', fontsize=9)
 
-# -----------------------------------------------------------------------------
-# FINAL FORMATTING & OUTPUT
-# -----------------------------------------------------------------------------
+axes[1, 1].set_xlabel(
+    'Average BPM', 
+    fontsize=12
+)
+
+axes[1, 1].set_ylabel(
+    'Calories Burned', 
+    fontsize=12
+)
+
+axes[1, 1].legend(
+    title='Duration (hrs)', 
+    loc='lower right', 
+    fontsize=9
+)
+
+
+###  Formatting  ###
 
 # Add overarching title for the entire figure
-fig.suptitle('Key Bivariate Relationships', 
-             fontsize=18, fontweight='bold', y=0.995)
+fig.suptitle(
+    'Key Bivariate Relationships', 
+    fontsize=18, 
+    fontweight='bold', 
+    y=0.995
+)
 
 # Prevent label overlap between subplots
 plt.tight_layout()
 
-# Render the figure in the notebook
+# Render figure in notebook
 plt.show()
 
 # %% [markdown]
@@ -580,7 +685,9 @@ plt.show()
 
 # %%
 # Calculate calorie efficiency (calories burned per hour)
-df['Calorie_Efficiency'] = round(df['Calories_Burned'] / df['Session_Duration (hours)'], 2)
+df['Calorie_Efficiency'] = round(
+    df['Calories_Burned'] / df['Session_Duration (hours)'], 2
+)
 
 # Create BMI categories based on standard WHO classifications
 df['BMI_Category'] = pd.cut(
@@ -597,9 +704,9 @@ df['Age_Group'] = pd.cut(
 )
 
 # Create Intensity Score (normalized combination of heart rate metrics)
-df['Intensity_Score'] = round((
-    (df['Avg_BPM'] - df['Resting_BPM']) / df['Max_BPM']
-) * 100, 2)
+df['Intensity_Score'] = round(
+    ((df['Avg_BPM'] - df['Resting_BPM']) / df['Max_BPM']) * 100, 2
+)
 
 
 # Verify new features were created successfully
@@ -654,8 +761,7 @@ experience_summary = df.groupby('Experience_Level').agg({
     'Calories_Burned': ['mean', 'median', 'std'],
     'Session_Duration (hours)': 'mean',
     'Calorie_Efficiency': 'mean',
-    'Workout_Frequency (days/week)': 'mean'
-}).round(2)
+    'Workout_Frequency (days/week)': 'mean'}).round(2)
 
 print("=== PERFORMANCE BY EXPERIENCE LEVEL ===")
 print("(1 = Beginner, 2 = Intermediate, 3 = Advanced)\n")
@@ -665,8 +771,7 @@ display(experience_summary)
 gender_workout_summary = df.groupby(['Gender', 'Workout_Type']).agg({
     'Calories_Burned': 'mean',
     'Session_Duration (hours)': 'mean',
-    'Intensity_Score': 'mean'
-}).round(2)
+    'Intensity_Score': 'mean'}).round(2)
 
 print("\n=== PERFORMANCE BY GENDER AND WORKOUT TYPE ===\n")
 display(gender_workout_summary)
@@ -676,8 +781,7 @@ age_group_summary = df.groupby('Age_Group', observed=True).agg({
     'Calories_Burned': 'mean',
     'BMI': 'mean',
     'Resting_BPM': 'mean',
-    'Workout_Frequency (days/week)': 'mean'
-}).round(2)
+    'Workout_Frequency (days/week)': 'mean'}).round(2)
 
 print("\n=== HEALTH METRICS BY AGE GROUP ===\n")
 display(age_group_summary)
@@ -706,9 +810,8 @@ display(age_group_summary)
 # %%
 from scipy import stats
 
-# ============================================================
-# TEST 1: Independent Samples T-Test (Gender vs Calories Burned)
-# ============================================================
+##  TEST 1: Independent Samples T-Test (Gender vs Calories Burned)  ##
+
 # H₀: No significant difference in calories burned between males and females
 # H₁: Significant difference exists in calories burned between males and females
 
@@ -721,18 +824,18 @@ print("=" * 60)
 print("TEST 1: INDEPENDENT SAMPLES T-TEST")
 print("Question: Do males and females burn significantly different calories?")
 print("=" * 60)
-print(f"Male mean:    {male_calories.mean():.2f} calories")
-print(f"Female mean:  {female_calories.mean():.2f} calories")
+print(f"Male mean: {male_calories.mean():.2f} calories")
+print(f"Female mean: {female_calories.mean():.2f} calories")
 print(
-    f"Difference:   {abs(male_calories.mean() - female_calories.mean()):.2f} calories")
-print(f"\nT-statistic:  {t_stat:.4f}")
-print(f"P-value:      {t_pvalue:.4f}")
+    f"Difference: {abs(male_calories.mean() - female_calories.mean()):.2f} calories")
+print(f"\nT-statistic: {t_stat:.4f}")
+print(f"P-value: {t_pvalue:.4f}")
 print(
     f"\nResult: {'SIGNIFICANT' if t_pvalue < 0.05 else 'NOT SIGNIFICANT'} (α = 0.05)")
 
-# ============================================================
-# TEST 2: One-Way ANOVA (Workout Type vs Calories Burned)
-# ============================================================
+
+##  TEST 2: One-Way ANOVA (Workout Type vs Calories Burned)  ##
+
 # H₀: No significant difference in calories burned across workout types
 # H₁: At least one workout type differs significantly in calories burned
 
@@ -747,12 +850,12 @@ print("\n" + "=" * 60)
 print("TEST 2: ONE-WAY ANOVA")
 print("Question: Do workout types differ significantly in calories burned?")
 print("=" * 60)
-print(f"Cardio mean:   {cardio.mean():.2f} calories")
+print(f"Cardio mean: {cardio.mean():.2f} calories")
 print(f"Strength mean: {strength.mean():.2f} calories")
-print(f"HIIT mean:     {hiit.mean():.2f} calories")
-print(f"Yoga mean:     {yoga.mean():.2f} calories")
-print(f"\nF-statistic:   {f_stat:.4f}")
-print(f"P-value:       {anova_pvalue:.4f}")
+print(f"HIIT mean: {hiit.mean():.2f} calories")
+print(f"Yoga mean: {yoga.mean():.2f} calories")
+print(f"\nF-statistic: {f_stat:.4f}")
+print(f"P-value: {anova_pvalue:.4f}")
 print(
     f"\nResult: {'SIGNIFICANT' if anova_pvalue < 0.05 else 'NOT SIGNIFICANT'} (α = 0.05)")
 
