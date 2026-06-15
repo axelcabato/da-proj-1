@@ -1,12 +1,12 @@
 # Gym Members Exercise Analysis
 
-A comprehensive data analysis project exploring gym member workout patterns, physical attributes, and fitness metrics. This project demonstrates the complete data analysis workflow from exploratory analysis through statistical validation to actionable business insights.
+A data analysis project exploring gym member workout patterns, physical attributes, and fitness metrics. This project demonstrates the complete data analysis workflow from exploratory analysis through statistical testing to actionable business recommendations.
 
 ## Project Status
 
-**In Progress**
+**Complete**
 
-This is my first data analysis portfolio project, developed as I transition into the data science field. The project intentionally follows industry-standard practices and demonstrates a methodical approach to extracting insights from data.
+This is my first data analysis portfolio project, developed as I transition into the data science field. The project follows industry-standard practices and demonstrates a methodical approach to extracting insights from data.
 
 | Phase | Status |
 |-------|--------|
@@ -14,9 +14,9 @@ This is my first data analysis portfolio project, developed as I transition into
 | Data Visualization | Complete |
 | Feature Engineering | Complete |
 | Data Standardization | Complete |
-| Aggregated Statistics | In Progress |
-| Hypothesis Testing | In Progress |
-| Business Recommendations | Planned |
+| Aggregated Statistics | Complete |
+| Hypothesis Testing | Complete |
+| Business Recommendations | Complete |
 
 ## Project Overview
 
@@ -28,27 +28,27 @@ This analysis examines a dataset of 973 gym members, investigating relationships
 
 ### Key Finding
 
-Session duration emerges as the dominant predictor of calories burned, with a correlation coefficient of 0.91, accounting for approximately 83% of the variance in caloric expenditure. Experience level shows systematic progression in energy output, while workout type demonstrates modest differentiation within a 41-calorie range.
+Session duration emerges as the dominant predictor of calories burned, with a correlation coefficient of 0.91, accounting for approximately 83% of the variance in caloric expenditure. Experience level shows systematic progression in energy output, while workout type demonstrates no statistically significant difference in calorie burn.
 
 ## Technical Approach
 
 ### Data Quality Assessment
 
-The analysis begins with rigorous data profiling, including structural validation, missing value detection, and categorical integrity checks. Notably, I identified and documented that this dataset is synthetic, generated from published research averages. This recognition informed all subsequent analysis and conclusions, demonstrating awareness that real-world data would require additional validation.
+The analysis begins with data profiling, including structural validation, missing value detection, and categorical integrity checks. I identified and documented that this dataset is synthetic, generated from published research averages. This recognition informed all subsequent analysis and conclusions.
 
 ### Exploratory Data Analysis
 
-The EDA phase encompasses three analytical dimensions:
+The EDA phase covers three areas:
 
-**Univariate Analysis**: Distribution examination of numerical features including age, weight, calories burned, session duration, and body composition metrics. Identified right-skewed BMI distribution with values extending to approximately 50.
+**Univariate Analysis**: Distribution examination of numerical features including age, weight, calories burned, session duration, and body composition metrics.
 
 **Categorical Analysis**: Frequency distributions across gender, workout type, experience level, and workout frequency. Confirmed balanced representation across categories.
 
-**Bivariate Analysis**: Correlation analysis and relationship mapping between variables, including correlation matrices, grouped comparisons, and scatter plot visualizations with multi-dimensional encoding.
+**Bivariate Analysis**: Correlation analysis and relationship mapping between variables, including correlation matrices, grouped comparisons, and scatter plot visualizations.
 
 ### Feature Engineering
 
-Created four derived features to enhance analytical depth:
+Created four derived features to support deeper analysis:
 
 | Feature | Description | Purpose |
 |---------|-------------|---------|
@@ -62,10 +62,11 @@ Created four derived features to enhance analytical depth:
 - Descriptive statistics and distribution analysis
 - Correlation analysis (Pearson)
 - Data standardization (StandardScaler)
-- Independent samples t-test (planned)
-- One-way ANOVA (planned)
+- Independent samples t-test
+- One-way ANOVA
 
 ## Repository Structure
+
 ```
 ├── 1stDAProject.ipynb    # Main analysis notebook
 ├── 1stDAProject.py       # Python script version (Jupytext sync)
@@ -96,21 +97,17 @@ The dataset is synthetic, generated using averages from publicly available fitne
 
 ## What This Project Demonstrates
 
-**Analytical Rigor**: Systematic approach to data exploration with documented methodology and reproducible analysis.
-
-**Critical Thinking**: Recognition of data limitations and appropriate caveats on conclusions drawn from synthetic data.
-
-**Technical Proficiency**: Application of Python data science stack including pandas, seaborn, matplotlib, and scikit-learn.
-
-**Communication**: Clear documentation of findings with visualizations designed for both technical and non-technical audiences.
-
-**Professional Standards**: Version control with Git, organized project structure, and comprehensive documentation.
+- Systematic approach to data exploration with documented methodology
+- Recognition of data limitations and appropriate caveats on conclusions
+- Application of Python data science tools including pandas, seaborn, matplotlib, and scikit-learn
+- Clear documentation of findings with visualizations designed for both technical and general audiences
+- Version control with Git and organized project structure
 
 ## About the Author
 
-I am building expertise in data analysis with a foundation in business administration and marketing. This project represents my commitment to developing rigorous analytical skills and my approach to learning: methodical, well-documented, and focused on industry-relevant practices.
+I am building skills in data analysis with a background in business administration and marketing. This project represents my first step into the data science field and my approach to learning: methodical, well-documented, and focused on practical skills.
 
-I welcome feedback from experienced data professionals and am eager to discuss the analytical approaches demonstrated in this project.
+I welcome feedback from experienced data professionals.
 
 ## Connect
 
@@ -120,4 +117,4 @@ I welcome feedback from experienced data professionals and am eager to discuss t
 
 ---
 
-*This project is actively maintained. Last updated: March 2026*
+*Last updated: June 2026*
