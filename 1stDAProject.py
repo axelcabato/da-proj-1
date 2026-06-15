@@ -14,19 +14,18 @@
 # ---
 
 # %% [markdown]
-# # Project Title
-# *(all language subject to change)*
+# # Gym Members Exercise Analysis
 #
 # **Author:** Axel Christian Cabato
 #
-# **Date:** [Date]
+# **Date:** June 2026
 
 # %% [markdown]
 # # 1. Introduction
 # The goal of this project is to utilize a [Kaggle](https://www.kaggle.com) dataset to perform data analysis and generate a report. Documenting my processes, insights, and conclusions within this Jupyter Notebook.
 
 # %% [markdown]
-# This analysis...
+# This analysis explores the relationships between workout characteristics, physical attributes, and fitness outcomes using a dataset of 973 gym members. Through statistical testing and visualization, it identifies session duration as the dominant predictor of caloric expenditure and provides evidence-based recommendations for fitness program design.
 
 # %% [markdown]
 # ## 2. Dataset Loading & Exploratory Data Analysis
@@ -878,3 +877,46 @@ print(
 
 # %% [markdown]
 # #### Business Insights & Recommendations
+
+# %% [markdown]
+# The preceding analysis identified several patterns in gym member behavior and performance. This section translates those statistical findings into actionable recommendations for fitness facility operators, program designers, or wellness professionals.
+#
+# These insights are framed around three strategic priorities:
+# 1. **Maximizing caloric expenditure** — helping members achieve their fitness goals
+# 2. **Supporting member progression** — facilitating advancement from beginner to advanced levels
+# 3. **Optimizing program design** — informing workout scheduling and class offerings
+#
+# > **Important caveat**: These recommendations are derived from synthetic data. While the patterns are internally consistent, any real-world implementation would require validation against actual member data.
+
+# %% [markdown]
+# **Insight #1:** Male members burned an average of 82 more calories per session than female members (944 vs 862 calories, p < 0.001).
+# - **Recommendation:** While this difference is statistically significant, it likely reflects physiological factors rather than programming gaps. Business owners looking to act on this insight should consider ensuring diverse equipment options across all their facilities that support varied fitness goals across all members.
+
+# %% [markdown]
+# **Insight #2:** Advanced members (Level 3) burn approximately 400 more calories per session than beginners, exercise more frequently (4 vs 3 days/week), and maintain longer session durations.
+# - **Recommendation:** Consider developing structured progression pathways that help intermediate members build toward advanced habits. Particularly focusing on gradually increasing session duration, which correlates most strongly with caloric output (r = 0.91).
+
+# %% [markdown]
+# **Insight #3:** The most common workout frequency in the dataset is 3 days per week, representing the largest member segment.
+# - **Recommendation:** Aligning core class offerings with a 3x/week schedule to match prevailing member behavior can prove beneficial for businesses. Gym owners can consider offering "3-day program" packages that provide structure for this majority segment.
+
+# %% [markdown]
+# **Insight #4:** Session duration is the strongest predictor of calories burned, with a correlation coefficient of 0.91 meaning it accounts for approximately 83% of the variance in caloric expenditure. No other variable approaches this level of influence.
+#
+# - **Recommendation:** Prioritize strategies that encourage longer workout sessions over those promoting specific exercise types. This could include extending facility hours, offering amenities that make longer visits comfortable (e.g., locker rooms, hydration stations), or designing programs with built-in warm-up and cool-down segments that naturally extend session length.
+
+# %% [markdown]
+# **Insight #5:** The one-way ANOVA found no statistically significant difference in calories burned across the four workout types (p = 0.416). The 41-calorie spread between the highest (HIIT: 926 calories) and lowest (Cardio: 885 calories) modalities is not large enough to rule out random variation.
+#
+# - **Recommendation:** Avoid marketing any single workout type as superior for calorie burning. Instead, encourage members to choose modalities based on personal preference, sustainability, and enjoyment. Factors that are more likely to drive adherence and, consequently, longer session durations.
+
+# %% [markdown]
+# ##### Summary
+#
+# This analysis demonstrates that **session duration is the single most influential factor** in caloric expenditure, outweighing workout type, demographic characteristics, and even exercise intensity. For gym operators, this suggests that strategies encouraging longer, consistent workout sessions may yield greater member outcomes than promoting specific exercise modalities.
+#
+# The observed progression across experience levels — with advanced members burning approximately 400 more calories per session than beginners — highlights the value of structured advancement pathways and intermediate milestone programming.
+#
+# While gender differences in calorie expenditure reached statistical significance, the practical magnitude (82 calories) is modest and likely reflects physiological factors rather than actionable programming opportunities.
+#
+# These findings provide a data-informed foundation for evidence-based fitness programming, though validation against real-world data remains essential before operational implementation.
