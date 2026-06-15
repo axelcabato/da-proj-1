@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.17.3
+#       jupytext_version: 1.19.1
 #   kernelspec:
 #     display_name: .venv
 #     language: python
@@ -22,7 +22,7 @@
 
 # %% [markdown]
 # # 1. Introduction
-# The goal of this project is to utilize a [Kaggle](https://www.kaggle.com) dataset to perform data analysis and generate a report. Documenting my processes, insights, and conclusions within this Jupyter Notebook.
+# The goal of this project is to utilize a [Kaggle](https://www.kaggle.com) dataset to perform data analysis and generate a report, documenting my processes, insights, and conclusions within this Jupyter Notebook.
 
 # %% [markdown]
 # This analysis explores the relationships between workout characteristics, physical attributes, and fitness outcomes using a dataset of 973 gym members. Through statistical testing and visualization, it identifies session duration as the dominant predictor of caloric expenditure and provides evidence-based recommendations for fitness program design.
@@ -86,8 +86,8 @@ df[["Gender", "Workout_Type"]].value_counts()
 
 # %% [markdown]
 # The categorical features of `Gender` and `Workout_Type` contain a small and consistent set of unique values:
-# - For `Gender`, it is a binary categorical value with only two disctinct classes ("Male" and "Female"). The absence of additional unique values, such as inconsistent spellings, abbreviations, or missing value placeholders, confirms the high degree of data consistency for this feature.
-# - Similarly, `Workout_Type` also has a small amount of disctinct and consistently labeled classes: "Cardio", "Strength", "HIIT" and "Yoga". This categorical integrity ensures that the variable is ready for direct use in analysis or for a simple transformation into a quantitative format, such as one-hot encoding, without requiring a separate data cleaning stage.
+# - For `Gender`, it is a binary categorical value with only two distinct classes ("Male" and "Female"). The absence of additional unique values, such as inconsistent spellings, abbreviations, or missing value placeholders, confirms the high degree of data consistency for this feature.
+# - Similarly, `Workout_Type` also has a small number of distinct and consistently labeled classes: "Cardio", "Strength", "HIIT" and "Yoga". This categorical integrity ensures that the variable is ready for direct use in analysis or for a simple transformation into a quantitative format, such as one-hot encoding, without requiring a separate data cleaning stage.
 #
 # The counts across all combinations (`Gender` × `Workout_Type`) range from 106 to 135 also, indicating a relatively balanced representation across groups. A favorable characteristic for subsequent comparative analyses.
 
