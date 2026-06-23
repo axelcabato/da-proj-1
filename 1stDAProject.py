@@ -6,7 +6,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.19.1
+#       jupytext_version: 1.17.3
 #   kernelspec:
 #     display_name: .venv
 #     language: python
@@ -25,15 +25,15 @@
 # The goal of this project is to utilize a [Kaggle](https://www.kaggle.com) dataset to perform data analysis and generate a report, documenting my processes, insights, and conclusions within this Jupyter Notebook.
 
 # %% [markdown]
-# This analysis explores the relationships between workout characteristics, physical attributes, and fitness outcomes using a dataset of 973 gym members. Through statistical testing and visualization, it identifies session duration as the dominant predictor of caloric expenditure and provides evidence-based recommendations for fitness program design.
+# This analysis explores the relationships between workout characteristics, physical attributes, and fitness outcomes using a dataset of 973 gym members. Through statistical testing and visualization, it identifies `Session_Duration` as the dominant predictor of caloric expenditure and provides evidence-based recommendations for fitness program design.
 
 # %% [markdown]
 # ## 2. Dataset Loading & Exploratory Data Analysis
 
 # %% [markdown]
-# - Data Source: https://www.kaggle.com/datasets/valakhorasani/gym-members-exercise-dataset?select=gym_members_exercise_tracking.csv
+# - [Data Source](https://www.kaggle.com/datasets/valakhorasani/gym-members-exercise-dataset?select=gym_members_exercise_tracking.csv)
 # - Data Format: Comma-separated values (CSV)
-# - [Kaggle](https://www.kaggle.com/datasets/valakhorasani/gym-members-exercise-dataset?select=gym_members_exercise_tracking.csv) Description: This dataset provides a detailed overview of gym members' exercise routines, physical attributes, and fitness metrics, including key performance indicators such as heart rate, calories burned, and workout duration.
+# - Description (from [Kaggle](https://www.kaggle.com/datasets/valakhorasani/gym-members-exercise-dataset?select=gym_members_exercise_tracking.csv)): This dataset provides a detailed overview of gym members' exercise routines, physical attributes, and fitness metrics, including key performance indicators such as heart rate, calories burned, and workout duration.
 
 # %%
 # Import pathlib and pandas libraries
@@ -78,7 +78,7 @@ print(df.isnull().sum())
 df.describe()
 
 # %% [markdown]
-# This initial inspection showed no obvious data entry errors; however, further univariate analysis will reveal a critical positive skew and extreme outliers in `BMI` and `Weight` which will be analyzed as a high-risk cohort.
+# This initial inspection showed no obvious data entry errors; however, further Univariate Analysis will reveal a critical positive skew and extreme outliers in `BMI` and `Weight` which will be analyzed as a high-risk cohort.
 
 # %%
 # Display the total count of each distinct row under "Gender" and "Workout_Type"
@@ -98,16 +98,16 @@ df[["Gender", "Workout_Type"]].value_counts()
 # #### Recognizing the Data Source & Context
 
 # %% [markdown]
-# While clean in structure, the dataset contains several potential biases, limitations, and quirks that a data analyst must consider. The primary bias is that the dataset was simulated and generated using averages from publicly available studies and industry reports. This means the data may under- or over-represent certain behaviors or characteristics.
+# While clean in structure, the dataset contains several potential biases, limitations, and quirks that a Data Analyst must consider. The primary bias is that the dataset was *simulated and generated* using averages from publicly available studies and industry reports. This means the data may under- or over-represent certain behaviors or characteristics.
 # - For instance, the randomization of `Experience_Level` and `Workout_Frequency` might not perfectly reflect the actual distribution of gym members, where, for example, a large number might be beginners who work out less frequently. This synthetic nature is *the most significant limitation*, as it lacks the unpredictable and messy nuances of real human behavior.
 #
 # **Any insights or models derived from this dataset would need to be validated with *actual, real-world data* before being applied to a genuine scenario.**
 #
 # The dataset also has a few quirks that are uncommon in real-world data:
-# - It **has no missing values** and **all categorical values are perfectly consistent**, *which is highly unusual*.
-#
-# Furthermore, the data is simplified and contains only the variables that were explicitly defined in the generation process. 
-# - For example, the `Workout_Type` column is limited to a small, consistent set of categories (*Cardio*, *Strength*, *Yoga*, *HIIT*), and does not reflect the full range of possible exercises performed by gym members.
+# - It has no missing values.
+# - All categorical values are perfectly consistent, *which is highly unusual*.
+# - The data is simplified and contains only the variables that were explicitly defined in the generation process. 
+#     - For example, the `Workout_Type` column is limited to a small, consistent set of categories (*Cardio*, *Strength*, *Yoga*, *HIIT*), and does not reflect the full range of possible exercises performed by gym members.
 
 # %% [markdown]
 # > This foundational understanding will serve as a solid basis for our deeper exploratory data analysis of this dataset.
