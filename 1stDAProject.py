@@ -153,7 +153,7 @@ df[["Height (ft)", "Weight (lb)"]].describe()
 # ##### Univariate Analysis
 
 # %% [markdown]
-# This type of analysis will allow me to understand their individual distributions, central tendencies, and potential outliers. To accomplish this, I will generate histograms for each of the key numerical columns with a KDE (Kernal Density Estimate) curve to overlay each to show the smoothed distribution shape.
+# This type of analysis will allow me to understand their individual distributions, central tendencies, and potential outliers. To accomplish this, I will generate histograms for each of the key numerical columns with a Kernal Density Estimate (KDE) Curve to overlay each to show the smoothed distribution shape.
 
 # %%
 import pandas as pd
@@ -248,10 +248,10 @@ plt.show()
 # 3. `Calories_Burned`
 #     - The values exhibit substantial variation, ranging from approximately 300 to 1,700 calories per session, yet this variation shows an exceptionally strong positive correlation of 0.91 with `Session_Duration`, confirming that the data generation algorithm primarily tied caloric expenditure to workout length. While the simulation incorporated some additional variance beyond pure time-based calculation (likely representing programmed influences of workout intensity, type, and individual metabolic factors), approximately 83 percent of the calorie variation can be explained by session duration alone, with the remaining 17 percent reflecting other parameters built into the simulation model.
 # 4. `BMI` & `Fat_Percentage`
-#     - The values for each exhibit a relatively balanced spread from 10 percent to 35 percent around a mean of approximately 25 percent, while the BMI distribution displays a modest positive skew with most values concentrated in the 20 to 30 range and a tail extending toward higher values reaching approximately 50. This difference in distributional shapes suggests that the data generation process applied different randomization or constraint parameters to these two body composition metrics, with `Fat_Percentage` following a more symmetrical generation pattern while BMI incorporated a right-skewed distribution that produces occasional higher values within the simulated sample.
+#     - The values for each exhibit a relatively balanced spread from 10 to 35 percent around a mean of approximately 25 percent for `Fat_Percentage`, while the `BMI` distribution displays a modest positive skew with most values concentrated in the 20 to 30 range and a tail extending toward higher values reaching approximately 50. This difference in distributional shapes suggests that the data generation process applied different randomization or constraint parameters to these two body composition metrics, with `Fat_Percentage` following a more symmetrical generation pattern while `BMI` incorporated a right-skewed distribution that produces occasional higher values within the simulated sample.
 
 # %% [markdown]
-# In conclusion, this simulated dataset models a prototypical individual centered around 39 years of age who completes workout sessions averaging 1.26 hours in duration and expends approximately 905 calories per session. The simulated population exhibits cardiovascular metrics consistent with moderate fitness levels, with Resting BPM values tightly clustered around 62 beats per minute. The dataset incorporates substantial variation in body composition, with `Weight (lb)` values spanning from 88 pounds to 285.8 pounds, reflecting the simulation's design to represent individuals across a wide spectrum of body sizes. Notably, the strong positive correlation of 0.91 between `Session_Duration` and `Calories_Burned` demonstrates that the data generation algorithm primarily modeled energy expenditure as a function of workout length, with session duration explaining approximately 83 percent of caloric variation while the remaining variance reflects programmed influences of intensity, workout type, and simulated individual differences.
+# In conclusion, this simulated dataset models a prototypical individual centered around 39 years of age who completes workout sessions averaging 1.26 hours in duration and expends approximately 905 calories per session. The simulated population exhibits cardiovascular metrics consistent with moderate fitness levels, with `Resting_BPM` values clustered around 62 beats per minute. The dataset incorporates substantial variation in body composition, with `Weight (lb)` values spanning from 88 pounds to 285.8 pounds, reflecting the simulation's design to represent individuals across a wide spectrum of body sizes. Notably, the strong positive correlation of 0.91 between `Session_Duration` and `Calories_Burned` demonstrates that the data generation algorithm primarily modeled energy expenditure as a function of workout length, with session duration explaining approximately 83 percent of caloric variation while the remaining variance reflects programmed influences of intensity, workout type, and simulated individual differences.
 
 # %% [markdown]
 # ##### Categorical Analysis
@@ -268,9 +268,6 @@ sns.set_style("whitegrid")
 def add_value_labels_inside(ax):
     """
     Adds count labels inside each bar of a bar plot.
-    
-    Placing labels inside bars (rather than above) keeps the visualization
-    compact and makes values immediately readable without eye movement.
     
     Parameters:
         ax: matplotlib Axes object containing the bar plot
@@ -311,7 +308,7 @@ sns.countplot(
     hue='Gender',
     ax=axes[0],
     palette='viridis',
-    legend=False           # Legend redundant when x-axis shows categories
+    legend=False
 )
 
 axes[0].set_title(
@@ -331,6 +328,7 @@ axes[0].set_ylabel(
 )
 
 add_value_labels_inside(axes[0])
+
 
 ## Plot 2 (Top-Right): WORKOUT TYPE DISTRIBUTION
 # Purpose: Check representation across exercise modalities
@@ -360,17 +358,12 @@ axes[1].set_ylabel(
     fontsize=12
 )
 
-# Angle labels to prevent overlap
-axes[1].tick_params(
-    axis='x', 
-    rotation=45
-)  
-
 add_value_labels_inside(axes[1])
+
 
 ## Plot 3 (Bottom-Left): EXPERIENCE LEVEL DISTRIBUTION
 # Purpose: Understand skill level composition of gym membership
-# Order: 1 → 2 → 3 (Beginner to Advanced) for intuitive left-to-right reading
+# Order: 1 → 2 → 3 (Beginner to Advanced)
 
 sns.countplot(
     data=df,
@@ -399,6 +392,7 @@ axes[2].set_ylabel(
 )
 
 add_value_labels_inside(axes[2])
+
 
 ## Plot 4 (Bottom-Right): WORKOUT FREQUENCY DISTRIBUTION
 # Purpose: Examine how often members exercise per week
