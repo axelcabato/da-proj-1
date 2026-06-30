@@ -14,27 +14,26 @@
 # ---
 
 # %% [markdown]
-# # Project Title
-# *(all language subject to change)*
+# # Gym Members Exercise Analysis
 #
 # **Author:** Axel Christian Cabato
 #
-# **Date:** [Date]
+# **Date:** June 2026
 
 # %% [markdown]
 # # 1. Introduction
-# The goal of this project is to utilize a [Kaggle](https://www.kaggle.com) dataset to perform data analysis and generate a report. Documenting my processes, insights, and conclusions within this Jupyter Notebook.
+# The goal of this project is to utilize a [Kaggle](https://www.kaggle.com) dataset to perform data analysis and generate a report, documenting my processes, insights, and conclusions within this Jupyter Notebook.
 
 # %% [markdown]
-# This analysis...
+# This analysis explores the relationships between workout characteristics, physical attributes, and fitness outcomes using a dataset of 973 gym members. Through statistical testing and visualization, it identifies `Session_Duration` as the dominant predictor of caloric expenditure and provides evidence-based recommendations for fitness program design.
 
 # %% [markdown]
 # ## 2. Dataset Loading & Exploratory Data Analysis
 
 # %% [markdown]
-# - Data Source: https://www.kaggle.com/datasets/valakhorasani/gym-members-exercise-dataset?select=gym_members_exercise_tracking.csv
+# - [Data Source](https://www.kaggle.com/datasets/valakhorasani/gym-members-exercise-dataset?select=gym_members_exercise_tracking.csv)
 # - Data Format: Comma-separated values (CSV)
-# - [Kaggle](https://www.kaggle.com/datasets/valakhorasani/gym-members-exercise-dataset?select=gym_members_exercise_tracking.csv) Description: This dataset provides a detailed overview of gym members' exercise routines, physical attributes, and fitness metrics, including key performance indicators such as heart rate, calories burned, and workout duration.
+# - Description (from [Kaggle](https://www.kaggle.com/datasets/valakhorasani/gym-members-exercise-dataset?select=gym_members_exercise_tracking.csv)): This dataset provides a detailed overview of gym members' exercise routines, physical attributes, and fitness metrics, including key performance indicators such as heart rate, calories burned, and workout duration.
 
 # %%
 # Import pathlib and pandas libraries
@@ -79,7 +78,7 @@ print(df.isnull().sum())
 df.describe()
 
 # %% [markdown]
-# This initial inspection showed no obvious data entry errors; however, further univariate analysis will reveal a critical positive skew and extreme outliers in `BMI` and `Weight` which will be analyzed as a high-risk cohort.
+# This initial inspection showed no obvious data entry errors; however, further Univariate Analysis will reveal a critical positive skew and extreme outliers in `BMI` and `Weight` which will be analyzed as a high-risk cohort.
 
 # %%
 # Display the total count of each distinct row under "Gender" and "Workout_Type"
@@ -87,8 +86,8 @@ df[["Gender", "Workout_Type"]].value_counts()
 
 # %% [markdown]
 # The categorical features of `Gender` and `Workout_Type` contain a small and consistent set of unique values:
-# - For `Gender`, it is a binary categorical value with only two disctinct classes ("Male" and "Female"). The absence of additional unique values, such as inconsistent spellings, abbreviations, or missing value placeholders, confirms the high degree of data consistency for this feature.
-# - Similarly, `Workout_Type` also has a small amount of disctinct and consistently labeled classes: "Cardio", "Strength", "HIIT" and "Yoga". This categorical integrity ensures that the variable is ready for direct use in analysis or for a simple transformation into a quantitative format, such as one-hot encoding, without requiring a separate data cleaning stage.
+# - For `Gender`, it is a binary categorical value with only two distinct classes ("Male" and "Female"). The absence of additional unique values, such as inconsistent spellings, abbreviations, or missing value placeholders, confirms the high degree of data consistency for this feature.
+# - Similarly, `Workout_Type` also has a small number of distinct and consistently labeled classes: "Cardio", "Strength", "HIIT" and "Yoga". This categorical integrity ensures that the variable is ready for direct use in analysis or for a simple transformation into a quantitative format, such as one-hot encoding, without requiring a separate data cleaning stage.
 #
 # The counts across all combinations (`Gender` × `Workout_Type`) range from 106 to 135 also, indicating a relatively balanced representation across groups. A favorable characteristic for subsequent comparative analyses.
 
@@ -99,16 +98,16 @@ df[["Gender", "Workout_Type"]].value_counts()
 # #### Recognizing the Data Source & Context
 
 # %% [markdown]
-# While clean in structure, the dataset contains several potential biases, limitations, and quirks that a data analyst must consider. The primary bias is that the dataset was simulated and generated using averages from publicly available studies and industry reports. This means the data may under- or over-represent certain behaviors or characteristics.
+# While clean in structure, the dataset contains several potential biases, limitations, and quirks that a Data Analyst must consider. The primary bias is that the dataset was *simulated and generated* using averages from publicly available studies and industry reports. This means the data may under- or over-represent certain behaviors or characteristics.
 # - For instance, the randomization of `Experience_Level` and `Workout_Frequency` might not perfectly reflect the actual distribution of gym members, where, for example, a large number might be beginners who work out less frequently. This synthetic nature is *the most significant limitation*, as it lacks the unpredictable and messy nuances of real human behavior.
 #
 # **Any insights or models derived from this dataset would need to be validated with *actual, real-world data* before being applied to a genuine scenario.**
 #
 # The dataset also has a few quirks that are uncommon in real-world data:
-# - It **has no missing values** and **all categorical values are perfectly consistent**, *which is highly unusual*.
-#
-# Furthermore, the data is simplified and contains only the variables that were explicitly defined in the generation process. 
-# - For example, the `Workout_Type` column is limited to a small, consistent set of categories (*Cardio*, *Strength*, *Yoga*, *HIIT*), and does not reflect the full range of possible exercises performed by gym members.
+# - It has no missing values.
+# - All categorical values are perfectly consistent, *which is highly unusual*.
+# - The data is simplified and contains only the variables that were explicitly defined in the generation process. 
+#     - For example, the `Workout_Type` column is limited to a small, consistent set of categories (*Cardio*, *Strength*, *Yoga*, *HIIT*), and does not reflect the full range of possible exercises performed by gym members.
 
 # %% [markdown]
 # > This foundational understanding will serve as a solid basis for our deeper exploratory data analysis of this dataset.
@@ -154,7 +153,7 @@ df[["Height (ft)", "Weight (lb)"]].describe()
 # ##### Univariate Analysis
 
 # %% [markdown]
-# This type of analysis will allow me to understand their individual distributions, central tendencies, and potential outliers. To accomplish this, I will generate histograms for each of the key numerical columns with a KDE (Kernal Density Estimate) curve to overlay each to show the smoothed distribution shape.
+# This type of analysis will allow me to understand their individual distributions, central tendencies, and potential outliers. To accomplish this, I will generate histograms for each of the key numerical columns with a Kernal Density Estimate (KDE) Curve to overlay each to show the smoothed distribution shape.
 
 # %%
 import pandas as pd
@@ -249,10 +248,10 @@ plt.show()
 # 3. `Calories_Burned`
 #     - The values exhibit substantial variation, ranging from approximately 300 to 1,700 calories per session, yet this variation shows an exceptionally strong positive correlation of 0.91 with `Session_Duration`, confirming that the data generation algorithm primarily tied caloric expenditure to workout length. While the simulation incorporated some additional variance beyond pure time-based calculation (likely representing programmed influences of workout intensity, type, and individual metabolic factors), approximately 83 percent of the calorie variation can be explained by session duration alone, with the remaining 17 percent reflecting other parameters built into the simulation model.
 # 4. `BMI` & `Fat_Percentage`
-#     - The values for each exhibit a relatively balanced spread from 10 percent to 35 percent around a mean of approximately 25 percent, while the BMI distribution displays a modest positive skew with most values concentrated in the 20 to 30 range and a tail extending toward higher values reaching approximately 50. This difference in distributional shapes suggests that the data generation process applied different randomization or constraint parameters to these two body composition metrics, with `Fat_Percentage` following a more symmetrical generation pattern while BMI incorporated a right-skewed distribution that produces occasional higher values within the simulated sample.
+#     - The values for each exhibit a relatively balanced spread from 10 to 35 percent around a mean of approximately 25 percent for `Fat_Percentage`, while the `BMI` distribution displays a modest positive skew with most values concentrated in the 20 to 30 range and a tail extending toward higher values reaching approximately 50. This difference in distributional shapes suggests that the data generation process applied different randomization or constraint parameters to these two body composition metrics, with `Fat_Percentage` following a more symmetrical generation pattern while `BMI` incorporated a right-skewed distribution that produces occasional higher values within the simulated sample.
 
 # %% [markdown]
-# In conclusion, this simulated dataset models a prototypical individual centered around 39 years of age who completes workout sessions averaging 1.26 hours in duration and expends approximately 905 calories per session. The simulated population exhibits cardiovascular metrics consistent with moderate fitness levels, with Resting BPM values tightly clustered around 62 beats per minute. The dataset incorporates substantial variation in body composition, with `Weight (lb)` values spanning from 88 pounds to 285.8 pounds, reflecting the simulation's design to represent individuals across a wide spectrum of body sizes. Notably, the strong positive correlation of 0.91 between `Session_Duration` and `Calories_Burned` demonstrates that the data generation algorithm primarily modeled energy expenditure as a function of workout length, with session duration explaining approximately 83 percent of caloric variation while the remaining variance reflects programmed influences of intensity, workout type, and simulated individual differences.
+# In conclusion, this simulated dataset models a prototypical individual centered around 39 years of age who completes workout sessions averaging 1.26 hours in duration and expends approximately 905 calories per session. The simulated population exhibits cardiovascular metrics consistent with moderate fitness levels, with `Resting_BPM` values clustered around 62 beats per minute. The dataset incorporates substantial variation in body composition, with `Weight (lb)` values spanning from 88 pounds to 285.8 pounds, reflecting the simulation's design to represent individuals across a wide spectrum of body sizes. Notably, the strong positive correlation of 0.91 between `Session_Duration` and `Calories_Burned` demonstrates that the data generation algorithm primarily modeled energy expenditure as a function of workout length, with session duration explaining approximately 83 percent of caloric variation while the remaining variance reflects programmed influences of intensity, workout type, and simulated individual differences.
 
 # %% [markdown]
 # ##### Categorical Analysis
@@ -270,9 +269,6 @@ def add_value_labels_inside(ax):
     """
     Adds count labels inside each bar of a bar plot.
     
-    Placing labels inside bars (rather than above) keeps the visualization
-    compact and makes values immediately readable without eye movement.
-    
     Parameters:
         ax: matplotlib Axes object containing the bar plot
     """
@@ -285,12 +281,12 @@ def add_value_labels_inside(ax):
         
         ax.text(
             x, y,
-            f'{int(height)}',    # Display count as whole number
-            ha='center',         # Horizontal alignment
-            va='center',         # Vertical alignment
+            f"{int(height)}",    # Display count as whole number
+            ha="center",         # Horizontal alignment
+            va="center",         # Vertical alignment
             fontsize=11,
-            fontweight='bold',
-            color='white'        # White text for contrast on colored bars
+            fontweight="bold",
+            color="white"        # White text for contrast on colored bars
         )
 
 
@@ -308,98 +304,95 @@ axes = axes.flatten()
 
 sns.countplot(
     data=df,
-    x='Gender',
-    hue='Gender',
+    x="Gender",
+    hue="Gender",
     ax=axes[0],
-    palette='viridis',
-    legend=False           # Legend redundant when x-axis shows categories
+    palette="viridis",
+    legend=False
 )
 
 axes[0].set_title(
-    'Gender Distribution', 
+    "Gender Distribution", 
     fontsize=14, 
-    fontweight='bold'
+    fontweight="bold"
 )
 
 axes[0].set_xlabel(
-    'Gender', 
+    "Gender", 
     fontsize=12
 )
 
 axes[0].set_ylabel(
-    'Count', 
+    "Count", 
     fontsize=12
 )
 
 add_value_labels_inside(axes[0])
+
 
 ## Plot 2 (Top-Right): WORKOUT TYPE DISTRIBUTION
 # Purpose: Check representation across exercise modalities
 
 sns.countplot(
     data=df,
-    x='Workout_Type',
-    hue='Workout_Type',
+    x="Workout_Type",
+    hue="Workout_Type",
     ax=axes[1],
-    palette='plasma',
+    palette="plasma",
     legend=False
 )
 
 axes[1].set_title(
-    'Workout Types Distribution', 
+    "Workout Types Distribution", 
     fontsize=14, 
-    fontweight='bold'
+    fontweight="bold"
 )
 
 axes[1].set_xlabel(
-    'Workout Type', 
+    "Workout_Type", 
     fontsize=12
 )
 
 axes[1].set_ylabel(
-    'Count', 
+    "Count", 
     fontsize=12
 )
 
-# Angle labels to prevent overlap
-axes[1].tick_params(
-    axis='x', 
-    rotation=45
-)  
-
 add_value_labels_inside(axes[1])
+
 
 ## Plot 3 (Bottom-Left): EXPERIENCE LEVEL DISTRIBUTION
 # Purpose: Understand skill level composition of gym membership
-# Order: 1 → 2 → 3 (Beginner to Advanced) for intuitive left-to-right reading
+# Order: 1 → 2 → 3 (Beginner to Advanced)
 
 sns.countplot(
     data=df,
-    x='Experience_Level',
-    hue='Experience_Level',
+    x="Experience_Level",
+    hue="Experience_Level",
     ax=axes[2],
-    palette='magma',
+    palette="magma",
     legend=False,
     order=[1, 2, 3]     # Explicit ordering: Beginner → Intermediate → Advanced
 )
 
 axes[2].set_title(
-    'Experience Level Distribution', 
+    "Experience Level Distribution", 
     fontsize=14, 
-    fontweight='bold'
+    fontweight="bold"
 )
 
 axes[2].set_xlabel(
-    'Experience Level (1=Beginner, 2=Intermediate, 3=Advanced)', 
+    "Experience Level (1=Beginner, 2=Intermediate, 3=Advanced)", 
     fontsize=12
 )
 
 axes[2].set_ylabel(
-    'Count', 
+    "Count", 
     fontsize=12
 )
 
 add_value_labels_inside(axes[2])
+
 
 ## Plot 4 (Bottom-Right): WORKOUT FREQUENCY DISTRIBUTION
 # Purpose: Examine how often members exercise per week
@@ -407,27 +400,27 @@ add_value_labels_inside(axes[2])
 
 sns.countplot(
     data=df,
-    x='Workout_Frequency (days/week)',
-    hue='Workout_Frequency (days/week)',
+    x="Workout_Frequency (days/week)",
+    hue="Workout_Frequency (days/week)",
     ax=axes[3],
-    palette='cividis',
+    palette="cividis",
     legend=False,
     order=[2, 3, 4, 5]     # Ascending order of workout frequency
 )
 
 axes[3].set_title(
-    'Workout Frequency Distribution', 
+    "Workout Frequency Distribution", 
     fontsize=14, 
-    fontweight='bold'
+    fontweight="bold"
 )
 
 axes[3].set_xlabel(
-    'Workout Frequency (days/week)', 
+    "Workout Frequency (days/week)", 
     fontsize=12
 )
 
 axes[3].set_ylabel(
-    'Count', 
+    "Count", 
     fontsize=12
 )
 
@@ -438,9 +431,9 @@ add_value_labels_inside(axes[3])
 
 # Add overarching title for the entire figure
 fig.suptitle(
-    'Categorical Analysis: Distribution of Key Features',
+    "Categorical Analysis: Distribution of Key Features",
     fontsize=18,
-    fontweight='bold',
+    fontweight="bold",
     y=0.995
 )
 
@@ -449,6 +442,25 @@ plt.tight_layout()
 
 # Render figure in notebook
 plt.show()
+
+# %% [markdown]
+# ##### Key Insights
+
+# %% [markdown]
+# 1. Gender distribution is roughly balanced.
+#     - Male members (511) slightly outnumber female members (462), representing approximately a 52/48 split. This near-parity means gender-based comparisons in later analyses are unlikely to be skewed by severe class imbalance.
+#
+# 2. Workout types are evenly represented.
+#     - All four modalities fall within a narrow range: Strength (258), Cardio (255), Yoga (239), and HIIT (221). The 37-count spread between the most and least common types suggests the dataset was intentionally balanced, consistent with its synthetic origin.
+#
+# 3. Beginners and intermediates dominate the membership base. 
+#     - Level 2 (Intermediate) is the largest group at 406 members, followed by Level 1 (Beginner) at 376. Advanced members (Level 3) represent only 191 individuals, roughly 20% of the dataset. This distribution may reflect real-world gym populations, where member retention to advanced stages is relatively uncommon.
+#
+# 4. Three days per week is the most common workout frequency.
+#     - The distribution peaks at 3 days/week (368 members), followed by 4 days/week (306). Members working out 2 days/week (197) or 5 days/week (102) represent smaller segments at the extremes.
+
+# %% [markdown]
+# These distributions confirm that the categorical variables are well-balanced and suitable for comparative analysis. The absence of severely underrepresented categories reduces the risk of unreliable statistical comparisons in subsequent hypothesis testing.
 
 # %% [markdown]
 # ##### Bivariate Analysis
@@ -461,7 +473,7 @@ plt.show()
 sns.set_style("whitegrid")
 
 
-####  Data Preparation  ###
+####  Data Preparation  ####
 
 # Define numerical columns for correlation analysis
 numerical_cols = [
@@ -490,19 +502,18 @@ fig, axes = plt.subplots(2, 2, figsize=(16, 12))
 
 # Plot 1 (Top-Left): CORRELATION HEATMAP
 # Purpose: Show how strongly each variable correlates with key metrics
-# Design choice: Transpose (.T) places target variables as rows for easier reading
 
 # Select only the most analytically relevant variables for focused comparison
 key_variables = ['Calories_Burned', 'Session_Duration (hours)', 'Avg_BPM', 'Fat_Percentage']
 
 sns.heatmap(
-    correlation_matrix[key_variables].T,  # Transpose: key vars as rows
+    correlation_matrix[key_variables].T,   # Transpose: key variables as rows
     annot=True,                            # Display correlation coefficients
     fmt='.2f',                             # Two decimal places
     cmap='coolwarm',                       # Red = positive, Blue = negative    correlation
-    cbar=True,                             # Include color scale reference
-    linewidths=0.5,                        # Grid line thickness
-    linecolor='black',                     # Grid line color
+    cbar=True,                             
+    linewidths=0.5,                        
+    linecolor='black',                     
     ax=axes[0, 0]
 )
 
@@ -516,7 +527,6 @@ axes[0, 0].tick_params(axis='x', rotation=45)  # Angled x-axis labels for readab
 
 ## Plot 2 (Top-Right): BAR CHART - CALORIES BY WORKOUT TYPE
 # Purpose: Compare average calorie expenditure across workout modalities
-# Design choice: Sorted descending to quickly identify highest-burning activities
 
 sns.barplot(
     data=workout_type_summary,
@@ -525,7 +535,7 @@ sns.barplot(
     hue='Workout_Type',      # Color-code by workout type
     ax=axes[0, 1],
     palette='viridis',       # Colorblind-friendly palette
-    legend=False             # Redundant legend (x-axis already labeled)
+    legend=False             
 )
 
 axes[0, 1].set_title(
@@ -549,13 +559,13 @@ axes[0, 1].tick_params(
     rotation=45
 )
 
-# Add value labels inside each bar for precise reading
+# Add value labels inside each bar
 for patch in axes[0, 1].patches:
     height = patch.get_height()
     axes[0, 1].text(
-        patch.get_x() + patch.get_width() / 2,  # Center horizontally
-        height / 2,                              # Center vertically within bar
-        f'{int(height)}',                        # Display as whole number
+        patch.get_x() + patch.get_width() / 2,  
+        height / 2,                              
+        f'{int(height)}',                        
         ha='center', 
         va='center',
         fontsize=11, 
@@ -565,7 +575,6 @@ for patch in axes[0, 1].patches:
 
 ## Plot 3 (Bottom-Left): BOX PLOT - CALORIES BY EXPERIENCE LEVEL
 # Purpose: Show distribution and spread of calories burned across skill levels
-# Design choice: Ordered 3→2→1 (Advanced first) to show progression visually
 
 sns.boxplot(
     data=df,
@@ -605,7 +614,7 @@ scatter = sns.scatterplot(
     y='Calories_Burned',
     hue='Session_Duration (hours)',   # Color gradient by duration
     size='Session_Duration (hours)',  # Larger points = longer sessions
-    sizes=(20, 200),                  # Size range (min, max)
+    sizes=(20, 200),                  
     palette='viridis',
     ax=axes[1, 1],
     alpha=0.6                         # Transparency to show overlapping points
@@ -878,3 +887,46 @@ print(
 
 # %% [markdown]
 # #### Business Insights & Recommendations
+
+# %% [markdown]
+# The preceding analysis identified several patterns in gym member behavior and performance. This section translates those statistical findings into actionable recommendations for fitness facility operators, program designers, or wellness professionals.
+#
+# These insights are framed around three strategic priorities:
+# 1. **Maximizing caloric expenditure** — helping members achieve their fitness goals
+# 2. **Supporting member progression** — facilitating advancement from beginner to advanced levels
+# 3. **Optimizing program design** — informing workout scheduling and class offerings
+#
+# > **Important caveat**: These recommendations are derived from synthetic data. While the patterns are internally consistent, any real-world implementation would require validation against actual member data.
+
+# %% [markdown]
+# **Insight #1:** Male members burned an average of 82 more calories per session than female members (944 vs 862 calories, p < 0.001).
+# - **Recommendation:** While this difference is statistically significant, it likely reflects physiological factors rather than programming gaps. Business owners looking to act on this insight should consider ensuring diverse equipment options across all their facilities that support varied fitness goals across all members.
+
+# %% [markdown]
+# **Insight #2:** Advanced members (Level 3) burn approximately 400 more calories per session than beginners, exercise more frequently (4 vs 3 days/week), and maintain longer session durations.
+# - **Recommendation:** Consider developing structured progression pathways that help intermediate members build toward advanced habits. Particularly focusing on gradually increasing session duration, which correlates most strongly with caloric output (r = 0.91).
+
+# %% [markdown]
+# **Insight #3:** The most common workout frequency in the dataset is 3 days per week, representing the largest member segment.
+# - **Recommendation:** Aligning core class offerings with a 3x/week schedule to match prevailing member behavior can prove beneficial for businesses. Gym owners can consider offering "3-day program" packages that provide structure for this majority segment.
+
+# %% [markdown]
+# **Insight #4:** Session duration is the strongest predictor of calories burned, with a correlation coefficient of 0.91 meaning it accounts for approximately 83% of the variance in caloric expenditure. No other variable approaches this level of influence.
+#
+# - **Recommendation:** Prioritize strategies that encourage longer workout sessions over those promoting specific exercise types. This could include extending facility hours, offering amenities that make longer visits comfortable (e.g., locker rooms, hydration stations), or designing programs with built-in warm-up and cool-down segments that naturally extend session length.
+
+# %% [markdown]
+# **Insight #5:** The one-way ANOVA found no statistically significant difference in calories burned across the four workout types (p = 0.416). The 41-calorie spread between the highest (HIIT: 926 calories) and lowest (Cardio: 885 calories) modalities is not large enough to rule out random variation.
+#
+# - **Recommendation:** Avoid marketing any single workout type as superior for calorie burning. Instead, encourage members to choose modalities based on personal preference, sustainability, and enjoyment. Factors that are more likely to drive adherence and, consequently, longer session durations.
+
+# %% [markdown]
+# ##### Summary
+#
+# This analysis demonstrates that **session duration is the single most influential factor** in caloric expenditure, outweighing workout type, demographic characteristics, and even exercise intensity. For gym operators, this suggests that strategies encouraging longer, consistent workout sessions may yield greater member outcomes than promoting specific exercise modalities.
+#
+# The observed progression across experience levels — with advanced members burning approximately 400 more calories per session than beginners — highlights the value of structured advancement pathways and intermediate milestone programming.
+#
+# While gender differences in calorie expenditure reached statistical significance, the practical magnitude (82 calories) is modest and likely reflects physiological factors rather than actionable programming opportunities.
+#
+# These findings provide a data-informed foundation for evidence-based fitness programming, though validation against real-world data remains essential before operational implementation.
