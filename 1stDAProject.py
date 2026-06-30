@@ -281,12 +281,12 @@ def add_value_labels_inside(ax):
         
         ax.text(
             x, y,
-            f'{int(height)}',    # Display count as whole number
-            ha='center',         # Horizontal alignment
-            va='center',         # Vertical alignment
+            f"{int(height)}",    # Display count as whole number
+            ha="center",         # Horizontal alignment
+            va="center",         # Vertical alignment
             fontsize=11,
-            fontweight='bold',
-            color='white'        # White text for contrast on colored bars
+            fontweight="bold",
+            color="white"        # White text for contrast on colored bars
         )
 
 
@@ -304,26 +304,26 @@ axes = axes.flatten()
 
 sns.countplot(
     data=df,
-    x='Gender',
-    hue='Gender',
+    x="Gender",
+    hue="Gender",
     ax=axes[0],
-    palette='viridis',
+    palette="viridis",
     legend=False
 )
 
 axes[0].set_title(
-    'Gender Distribution', 
+    "Gender Distribution", 
     fontsize=14, 
-    fontweight='bold'
+    fontweight="bold"
 )
 
 axes[0].set_xlabel(
-    'Gender', 
+    "Gender", 
     fontsize=12
 )
 
 axes[0].set_ylabel(
-    'Count', 
+    "Count", 
     fontsize=12
 )
 
@@ -335,26 +335,26 @@ add_value_labels_inside(axes[0])
 
 sns.countplot(
     data=df,
-    x='Workout_Type',
-    hue='Workout_Type',
+    x="Workout_Type",
+    hue="Workout_Type",
     ax=axes[1],
-    palette='plasma',
+    palette="plasma",
     legend=False
 )
 
 axes[1].set_title(
-    'Workout Types Distribution', 
+    "Workout Types Distribution", 
     fontsize=14, 
-    fontweight='bold'
+    fontweight="bold"
 )
 
 axes[1].set_xlabel(
-    'Workout Type', 
+    "Workout_Type", 
     fontsize=12
 )
 
 axes[1].set_ylabel(
-    'Count', 
+    "Count", 
     fontsize=12
 )
 
@@ -367,27 +367,27 @@ add_value_labels_inside(axes[1])
 
 sns.countplot(
     data=df,
-    x='Experience_Level',
-    hue='Experience_Level',
+    x="Experience_Level",
+    hue="Experience_Level",
     ax=axes[2],
-    palette='magma',
+    palette="magma",
     legend=False,
     order=[1, 2, 3]     # Explicit ordering: Beginner → Intermediate → Advanced
 )
 
 axes[2].set_title(
-    'Experience Level Distribution', 
+    "Experience Level Distribution", 
     fontsize=14, 
-    fontweight='bold'
+    fontweight="bold"
 )
 
 axes[2].set_xlabel(
-    'Experience Level (1=Beginner, 2=Intermediate, 3=Advanced)', 
+    "Experience Level (1=Beginner, 2=Intermediate, 3=Advanced)", 
     fontsize=12
 )
 
 axes[2].set_ylabel(
-    'Count', 
+    "Count", 
     fontsize=12
 )
 
@@ -400,27 +400,27 @@ add_value_labels_inside(axes[2])
 
 sns.countplot(
     data=df,
-    x='Workout_Frequency (days/week)',
-    hue='Workout_Frequency (days/week)',
+    x="Workout_Frequency (days/week)",
+    hue="Workout_Frequency (days/week)",
     ax=axes[3],
-    palette='cividis',
+    palette="cividis",
     legend=False,
     order=[2, 3, 4, 5]     # Ascending order of workout frequency
 )
 
 axes[3].set_title(
-    'Workout Frequency Distribution', 
+    "Workout Frequency Distribution", 
     fontsize=14, 
-    fontweight='bold'
+    fontweight="bold"
 )
 
 axes[3].set_xlabel(
-    'Workout Frequency (days/week)', 
+    "Workout Frequency (days/week)", 
     fontsize=12
 )
 
 axes[3].set_ylabel(
-    'Count', 
+    "Count", 
     fontsize=12
 )
 
@@ -431,9 +431,9 @@ add_value_labels_inside(axes[3])
 
 # Add overarching title for the entire figure
 fig.suptitle(
-    'Categorical Analysis: Distribution of Key Features',
+    "Categorical Analysis: Distribution of Key Features",
     fontsize=18,
-    fontweight='bold',
+    fontweight="bold",
     y=0.995
 )
 
@@ -442,6 +442,25 @@ plt.tight_layout()
 
 # Render figure in notebook
 plt.show()
+
+# %% [markdown]
+# ##### Key Insights
+
+# %% [markdown]
+# 1. Gender distribution is roughly balanced.
+#     - Male members (511) slightly outnumber female members (462), representing approximately a 52/48 split. This near-parity means gender-based comparisons in later analyses are unlikely to be skewed by severe class imbalance.
+#
+# 2. Workout types are evenly represented.
+#     - All four modalities fall within a narrow range: Strength (258), Cardio (255), Yoga (239), and HIIT (221). The 37-count spread between the most and least common types suggests the dataset was intentionally balanced, consistent with its synthetic origin.
+#
+# 3. Beginners and intermediates dominate the membership base. 
+#     - Level 2 (Intermediate) is the largest group at 406 members, followed by Level 1 (Beginner) at 376. Advanced members (Level 3) represent only 191 individuals, roughly 20% of the dataset. This distribution may reflect real-world gym populations, where member retention to advanced stages is relatively uncommon.
+#
+# 4. Three days per week is the most common workout frequency.
+#     - The distribution peaks at 3 days/week (368 members), followed by 4 days/week (306). Members working out 2 days/week (197) or 5 days/week (102) represent smaller segments at the extremes.
+
+# %% [markdown]
+# These distributions confirm that the categorical variables are well-balanced and suitable for comparative analysis. The absence of severely underrepresented categories reduces the risk of unreliable statistical comparisons in subsequent hypothesis testing.
 
 # %% [markdown]
 # ##### Bivariate Analysis
@@ -454,7 +473,7 @@ plt.show()
 sns.set_style("whitegrid")
 
 
-####  Data Preparation  ###
+####  Data Preparation  ####
 
 # Define numerical columns for correlation analysis
 numerical_cols = [
@@ -483,19 +502,18 @@ fig, axes = plt.subplots(2, 2, figsize=(16, 12))
 
 # Plot 1 (Top-Left): CORRELATION HEATMAP
 # Purpose: Show how strongly each variable correlates with key metrics
-# Design choice: Transpose (.T) places target variables as rows for easier reading
 
 # Select only the most analytically relevant variables for focused comparison
 key_variables = ['Calories_Burned', 'Session_Duration (hours)', 'Avg_BPM', 'Fat_Percentage']
 
 sns.heatmap(
-    correlation_matrix[key_variables].T,  # Transpose: key vars as rows
+    correlation_matrix[key_variables].T,   # Transpose: key variables as rows
     annot=True,                            # Display correlation coefficients
     fmt='.2f',                             # Two decimal places
     cmap='coolwarm',                       # Red = positive, Blue = negative    correlation
-    cbar=True,                             # Include color scale reference
-    linewidths=0.5,                        # Grid line thickness
-    linecolor='black',                     # Grid line color
+    cbar=True,                             
+    linewidths=0.5,                        
+    linecolor='black',                     
     ax=axes[0, 0]
 )
 
@@ -509,7 +527,6 @@ axes[0, 0].tick_params(axis='x', rotation=45)  # Angled x-axis labels for readab
 
 ## Plot 2 (Top-Right): BAR CHART - CALORIES BY WORKOUT TYPE
 # Purpose: Compare average calorie expenditure across workout modalities
-# Design choice: Sorted descending to quickly identify highest-burning activities
 
 sns.barplot(
     data=workout_type_summary,
@@ -518,7 +535,7 @@ sns.barplot(
     hue='Workout_Type',      # Color-code by workout type
     ax=axes[0, 1],
     palette='viridis',       # Colorblind-friendly palette
-    legend=False             # Redundant legend (x-axis already labeled)
+    legend=False             
 )
 
 axes[0, 1].set_title(
@@ -542,13 +559,13 @@ axes[0, 1].tick_params(
     rotation=45
 )
 
-# Add value labels inside each bar for precise reading
+# Add value labels inside each bar
 for patch in axes[0, 1].patches:
     height = patch.get_height()
     axes[0, 1].text(
-        patch.get_x() + patch.get_width() / 2,  # Center horizontally
-        height / 2,                              # Center vertically within bar
-        f'{int(height)}',                        # Display as whole number
+        patch.get_x() + patch.get_width() / 2,  
+        height / 2,                              
+        f'{int(height)}',                        
         ha='center', 
         va='center',
         fontsize=11, 
@@ -558,7 +575,6 @@ for patch in axes[0, 1].patches:
 
 ## Plot 3 (Bottom-Left): BOX PLOT - CALORIES BY EXPERIENCE LEVEL
 # Purpose: Show distribution and spread of calories burned across skill levels
-# Design choice: Ordered 3→2→1 (Advanced first) to show progression visually
 
 sns.boxplot(
     data=df,
@@ -598,7 +614,7 @@ scatter = sns.scatterplot(
     y='Calories_Burned',
     hue='Session_Duration (hours)',   # Color gradient by duration
     size='Session_Duration (hours)',  # Larger points = longer sessions
-    sizes=(20, 200),                  # Size range (min, max)
+    sizes=(20, 200),                  
     palette='viridis',
     ax=axes[1, 1],
     alpha=0.6                         # Transparency to show overlapping points
