@@ -25,7 +25,7 @@
 # The goal of this project is to utilize a [Kaggle](https://www.kaggle.com) dataset to perform data analysis and generate a report, documenting my processes, insights, and conclusions within this Jupyter Notebook.
 
 # %% [markdown]
-# This analysis explores the relationships between workout characteristics, physical attributes, and fitness outcomes using a dataset of 973 gym members. Through statistical testing and visualization, it identifies `Session_Duration` as the dominant predictor of caloric expenditure and provides evidence-based recommendations for fitness program design.
+# This analysis explores the relationships between workout characteristics, physical attributes, and fitness outcomes using a dataset of 973 gym members, with particular focus on identifying factors that influence caloric expenditure. Through statistical testing and visualization, it identifies `Session_Duration` as the dominant predictor of caloric expenditure and provides evidence-based recommendations for fitness program design.
 
 # %% [markdown]
 # ## 2. Dataset Loading & Exploratory Data Analysis
@@ -466,7 +466,7 @@ plt.show()
 # ##### Bivariate Analysis
 
 # %% [markdown]
-# Finally, I have decided to perform Bivariate Analysis to uncover potential correlations and dependencies within the dataset. By examining how one variable (like `Workout_Type`) relates to another (such as `Calories_Burned`), I can identify the mathematical relationships programmed into the data generation process. The following visualizations and statistical comparisons highlight key relationships embedded in the dataset structure.
+# Finally, I have decided to perform Bivariate Analysis to uncover potential correlations and dependencies within the dataset. By examining how one variable relates to another, I can identify the mathematical relationships programmed into the data generation process. This section focuses on `Calories_Burned` as the primary outcome of interest, a natural choice given its relevance to gym member fitness goals. The following visualizations and statistical comparisons highlight key relationships embedded in the dataset structure. 
 
 # %%
 # Set the visual style for all plots in this cell
@@ -477,9 +477,9 @@ sns.set_style("whitegrid")
 
 # Define numerical columns for correlation analysis
 numerical_cols = [
-    'Age', 'Weight (lb)', 'Height (ft)', 'Max_BPM', 'Avg_BPM', 
-    'Resting_BPM', 'Session_Duration (hours)', 'Calories_Burned', 
-    'Water_Intake (liters)', 'BMI', 'Fat_Percentage'
+    "Age", "Weight (lb)", "Height (ft)", "Max_BPM", "Avg_BPM", 
+    "Resting_BPM", "Session_Duration (hours)", "Calories_Burned", 
+    "Water_Intake (liters)", "BMI", "Fat_Percentage"
 ]
 
 # Calculate correlation matrix for all numerical features
@@ -487,7 +487,7 @@ correlation_matrix = df[numerical_cols].corr()
 
 # Aggregate calories burned by workout type for bar chart comparison
 workout_type_summary = (
-    df.groupby('Workout_Type')['Calories_Burned']
+    df.groupby("Workout_Type")["Calories_Burned"]
     .mean()
     .sort_values(ascending=False)  # Highest calorie-burning workout first
     .reset_index()
@@ -504,58 +504,64 @@ fig, axes = plt.subplots(2, 2, figsize=(16, 12))
 # Purpose: Show how strongly each variable correlates with key metrics
 
 # Select only the most analytically relevant variables for focused comparison
-key_variables = ['Calories_Burned', 'Session_Duration (hours)', 'Avg_BPM', 'Fat_Percentage']
+key_variables = [
+    "Calories_Burned", "Session_Duration (hours)", "Avg_BPM", "Fat_Percentage"
+]
 
 sns.heatmap(
     correlation_matrix[key_variables].T,   # Transpose: key variables as rows
     annot=True,                            # Display correlation coefficients
-    fmt='.2f',                             # Two decimal places
-    cmap='coolwarm',                       # Red = positive, Blue = negative    correlation
+    fmt=".2f",                             # Two decimal places
+    cmap="coolwarm",                       # Red = positive, Blue = negative    correlation
     cbar=True,                             
     linewidths=0.5,                        
-    linecolor='black',                     
+    linecolor="black",                     
     ax=axes[0, 0]
 )
 
 axes[0, 0].set_title(
-    'Correlation Matrix: Key Variable Relationships', 
+    "Correlation Matrix: Key Variable Relationships", 
     fontsize=14, 
-    fontweight='bold'
+    fontweight="bold"
 )
-axes[0, 0].tick_params(axis='y', rotation=0)   # Horizontal y-axis labels
-axes[0, 0].tick_params(axis='x', rotation=45)  # Angled x-axis labels for readability
+axes[0, 0].tick_params(axis="y", rotation=0)   # Horizontal y-axis labels
+axes[0, 0].set_xticklabels(
+    axes[0, 0].get_xticklabels(),
+    rotation=45,
+    ha='right'  # Aligns the RIGHT edge of each label with its column
+)
 
 ## Plot 2 (Top-Right): BAR CHART - CALORIES BY WORKOUT TYPE
 # Purpose: Compare average calorie expenditure across workout modalities
 
 sns.barplot(
     data=workout_type_summary,
-    x='Workout_Type',
-    y='Calories_Burned',
-    hue='Workout_Type',      # Color-code by workout type
+    x="Workout_Type",
+    y="Calories_Burned",
+    hue="Workout_Type",      # Color-code by workout type
     ax=axes[0, 1],
-    palette='viridis',       # Colorblind-friendly palette
+    palette="viridis",       # Colorblind-friendly palette
     legend=False             
 )
 
 axes[0, 1].set_title(
-    'Average Calories Burned by Workout Type', 
+    "Average Calories Burned by Workout Type", 
     fontsize=14, 
-    fontweight='bold'
+    fontweight="bold"
 )
 
 axes[0, 1].set_xlabel(
-    'Workout Type', 
+    "Workout_Type", 
     fontsize=12
 )
 
 axes[0, 1].set_ylabel(
-    'Average Calories Burned', 
+    "Average Calories Burned", 
     fontsize=12
 )
 
 axes[0, 1].tick_params(
-    axis='x', 
+    axis="x", 
     rotation=45
 )
 
@@ -566,11 +572,11 @@ for patch in axes[0, 1].patches:
         patch.get_x() + patch.get_width() / 2,  
         height / 2,                              
         f'{int(height)}',                        
-        ha='center', 
-        va='center',
+        ha="center", 
+        va="center",
         fontsize=11, 
-        fontweight='bold', 
-        color='white'
+        fontweight="bold", 
+        color="white"
     )
 
 ## Plot 3 (Bottom-Left): BOX PLOT - CALORIES BY EXPERIENCE LEVEL
@@ -578,28 +584,28 @@ for patch in axes[0, 1].patches:
 
 sns.boxplot(
     data=df,
-    x='Experience_Level',
-    y='Calories_Burned',
+    x="Experience_Level",
+    y="Calories_Burned",
     order=[3, 2, 1],          # Display: Advanced → Intermediate → Beginner
-    hue='Experience_Level',
+    hue="Experience_Level",
     ax=axes[1, 0],
-    palette='magma',
+    palette="magma",
     legend=False
 )
 
 axes[1, 0].set_title(
-    'Calories Burned Distribution by Experience Level', 
+    "Calories Burned Distribution by Experience Level", 
     fontsize=14, 
-    fontweight='bold'
+    fontweight="bold"
 )
 
 axes[1, 0].set_xlabel(
-    'Experience Level (3=Advanced, 2=Intermediate, 1=Beginner)', 
+    "Experience Level (3=Advanced, 2=Intermediate, 1=Beginner)", 
     fontsize=12
 )
 
 axes[1, 0].set_ylabel(
-    'Calories Burned', 
+    "Calories_Burned", 
     fontsize=12
 )
 
@@ -611,7 +617,7 @@ axes[1, 0].set_ylabel(
 scatter = sns.scatterplot(
     data=df,
     x='Avg_BPM',
-    y='Calories_Burned',
+    y="Calories_Burned",
     hue='Session_Duration (hours)',   # Color gradient by duration
     size='Session_Duration (hours)',  # Larger points = longer sessions
     sizes=(20, 200),                  
@@ -621,24 +627,24 @@ scatter = sns.scatterplot(
 )
 
 axes[1, 1].set_title(
-    'Average BPM vs Calories Burned (by Session Duration)', 
+    "Average BPM vs Calories Burned (by Session Duration)", 
     fontsize=14, 
-    fontweight='bold'
+    fontweight="bold"
 )
 
 axes[1, 1].set_xlabel(
-    'Average BPM', 
+    "Average BPM", 
     fontsize=12
 )
 
 axes[1, 1].set_ylabel(
-    'Calories Burned', 
+    "Calories_Burned", 
     fontsize=12
 )
 
 axes[1, 1].legend(
-    title='Duration (hrs)', 
-    loc='lower right', 
+    title="Duration (hrs)", 
+    loc="lower right", 
     fontsize=9
 )
 
@@ -647,9 +653,9 @@ axes[1, 1].legend(
 
 # Add overarching title for the entire figure
 fig.suptitle(
-    'Key Bivariate Relationships', 
+    "Key Bivariate Relationships", 
     fontsize=18, 
-    fontweight='bold', 
+    fontweight="bold", 
     y=0.995
 )
 
@@ -684,42 +690,42 @@ plt.show()
 # #### Data Transformation & Feature Engineering
 
 # %% [markdown]
-# Having completed the exploratory data analysis and visualization phases, I now move into data transformation to enhance the analytical value of this simulated dataset. This phase involves creating derived features that provide new perspectives on the data, standardizing measurements for fair comparison across different scales, and generating aggregated statistics that reveal patterns at the group level. These transformation steps prepare the dataset for deeper statistical analysis and demonstrate techniques commonly used in data analysis and engineering workflows to extract maximum insight from raw data.
+# Having completed the exploratory data analysis and visualization phases, I now move onto transforming the data to enhance the analytical value of this simulated dataset. This phase involves creating derived features that provide new perspectives on the data, standardizing measurements for fair comparison across different scales, and generating aggregated statistics that reveal patterns at the group level. These transformation steps prepare the dataset for deeper statistical analysis and demonstrate techniques commonly used in data analysis and engineering workflows to extract maximum insight from raw data.
 
 # %% [markdown]
 # ##### Creating Derived Features
 
 # %% [markdown]
-# Feature engineering involves creating new calculated columns from existing variables to provide additional analytical perspectives and answer specific business questions. By constructing metrics such as "Calorie Efficiency", BMI Classifications, and Composite Intensity Scores, I can transform raw measurements into meaningful indicators that support more nuanced analysis of workout performance and member characteristics.
+# Feature engineering involves creating new calculated columns from existing variables to provide additional analytical perspectives and answer specific business questions. By constructing metrics such as `Calorie_Efficiency`, BMI Classifications, and Composite Intensity Scores, I can transform raw measurements into meaningful indicators that support more nuanced analysis of workout performance and member characteristics.
 
 # %%
 # Calculate calorie efficiency (calories burned per hour)
-df['Calorie_Efficiency'] = round(
-    df['Calories_Burned'] / df['Session_Duration (hours)'], 2
+df["Calorie_Efficiency"] = round(
+    df["Calories_Burned"] / df["Session_Duration (hours)"], 2
 )
 
 # Create BMI categories based on standard WHO classifications
-df['BMI_Category'] = pd.cut(
-    df['BMI'],
+df["BMI_Category"] = pd.cut(
+    df["BMI"],
     bins=[0, 18.5, 24.9, 29.9, 100],
-    labels=['Underweight', 'Normal', 'Overweight', 'Obese']
+    labels=["Underweight", "Normal", "Overweight", "Obese"]
 )
 
 # Create Age Group categories
-df['Age_Group'] = pd.cut(
-    df['Age'],
+df["Age_Group"] = pd.cut(
+    df["Age"],
     bins=[0, 29, 44, 59],
-    labels=['Young Adult (18-29)', 'Middle-Aged (30-44)', 'Senior (45-59)']
+    labels=["Young Adult (18-29)", "Middle-Aged (30-44)", "Senior (45-59)"]
 )
 
 # Create Intensity Score (normalized combination of heart rate metrics)
-df['Intensity_Score'] = round(
-    ((df['Avg_BPM'] - df['Resting_BPM']) / df['Max_BPM']) * 100, 2
+df["Intensity_Score"] = round(
+    ((df["Avg_BPM"] - df["Resting_BPM"]) / df["Max_BPM"]) * 100, 2
 )
 
 
 # Verify new features were created successfully
-df[['Calorie_Efficiency', 'BMI_Category', 'Age_Group', 'Intensity_Score']].head(10)
+df[["Calorie_Efficiency", "BMI_Category", "Age_Group", "Intensity_Score"]].head(10)
 
 # %% [markdown]
 # **Features Created:**
